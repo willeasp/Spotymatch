@@ -7,9 +7,12 @@ If you want to use vue tools
 ```
 npm install -g @vue/cli
 ```
-### 3. pull git repo
-### 4. npm install in git repo position
-### 5. use either vue ui or vue cli to launch development enviorment
+### 3. Pull git repo
+### 4. In git repo locally
+```
+npm install
+```
+### 5. Use either vue ui or vue cli to launch development enviorment
 for ui
 ```
 vue ui
