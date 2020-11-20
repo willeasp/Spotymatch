@@ -1,24 +1,15 @@
 # spotymatch
 
 ## Project setup
+### 1. Install node/npm 
+### 2. Install vue via 
 ```
-npm install
+npm install -g @vue/cli
 ```
-
-### Compiles and hot-reloads for development
+### 3. pull git repo
+### 4. use either vue ui or vue cli to launch development enviorment
+for ui
 ```
-npm run serve
+vue ui
 ```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+dont know how cli works yet but update here
