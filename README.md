@@ -10,7 +10,7 @@ npm install -g @vue/cli
 ### 3. Pull git repo
 ### 4. In git repo locally
 ```
-npm install
+npm ci
 ```
 ### 5. Use either vue ui or vue cli to launch development enviorment
 for ui
