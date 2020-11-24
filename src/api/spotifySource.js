@@ -28,8 +28,9 @@ const APIcontroller = (()=> {
         .then(res=> res.json())
         .catch(err=>console.error(err));
     }
-    const _createQuery = (o) => {
-        let base = "seed_genres=" + o.seed_genres + "&";
+    // TODO logic for seeds, invalid object handling
+    const _createQuery = (queryObject) => {
+        let base = "seed_genres=" + queryObject.seed_genres + "&";
         const properties = ["acousticness",
                             "danceability", 
                             "energy",
@@ -41,8 +42,8 @@ const APIcontroller = (()=> {
                             "tempo",
                             "valence"];
         properties.forEach(p => {
-            if(o[p]){
-                base += p + "=" + o[p] + "&";
+            if(queryObject[p]){
+                base += p + "=" + queryObject[p] + "&";
             } 
         })
         console.log("base string: " + base);
