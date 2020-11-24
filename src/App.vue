@@ -1,16 +1,29 @@
 <template>
+
   <img class ="logo" alt="Pear logo" src="./assets/pe.png">
   <HelloWorld msg="The new spotymatch app"/>
 </template>
 
 <script>
 import HelloWorld from './components/HelloWorld.vue'
+import APIcontroller from './api/spotifySource.js'
 
+
+let token = "BQBxNWwQvtPsNz4X6MYyb3JeXQYrNtpnY_XJUlFuCrw_Xepb3JBuWzOyLAwfV6zlPEGWnNt1ruiKUdvl6z4";
+// APIcontroller.getToken().then(console.log);
+// console.log("token: " + token);
+let test = {
+  "seed_genres": "dancehall",
+  "liveness": "1.0",
+   "energy": "1.0",
+};
+
+APIcontroller.getRecommendations(token, test);
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    HelloWorld,
   }
 }
 </script>

@@ -1,0 +1,16 @@
+{
+    "seed_genres": "dfgsdfgsdfg",
+    "seed_track": "dfgsdfgsdfg",
+    "seed_artists": "dfgsdfgsdfg",
+    
+    "acousticness": "0-1.0",
+    "danceability": "0-1.0",
+    "energy": "0-1.0",
+    "instrumentalness": "0-1.0",
+    "liveness": "0-1.0",
+    "loudness": "0-1.0",
+    "popularity": "0-100",
+    "speechiness": "0-1.0",
+    "tempo": "BPM of tracks",
+    "valence": "happiness of track"
+}
