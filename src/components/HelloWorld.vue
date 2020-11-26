@@ -7,6 +7,9 @@
       <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
     </p>
     <h3>Installed CLI Plugins</h3>
+    <input v-model="email" placeholder="email"/>
+    <input v-model="password" placeholder="passwd"/>
+    <button @click="signIn">click me</button>
     <ul>
       <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
       <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
@@ -33,8 +36,23 @@
 <script>
 export default {
   name: 'HelloWorld',
+  data() {
+    return {
+      email : String,
+      password : String
+    }
+  },
   props: {
     msg: String
+  },
+  methods: {
+    signIn(event) {
+      console.log("nice");
+      console.log(event);
+      console.log(this.email);
+      console.log(this.password);
+      this.$store.dispatch("USER_SIGN_IN", {email:this.email, password:this.password});
+    }
   }
 }
 </script>
