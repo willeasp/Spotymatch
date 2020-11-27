@@ -8,6 +8,7 @@ const APIcontroller = (()=> {
     /**
      * Retrieves the auth token used in all searches
      * saves it to store
+     * @returns authorisation token used in API calls
      */
     const _getToken = async () => {
         return fetch("https://accounts.spotify.com/api/token", {
@@ -23,8 +24,9 @@ const APIcontroller = (()=> {
     }
     /**
      * Base API call function 
-     * @param {*} token auth token 
-     * @param {*} query query to be executed
+     * @param {String} token auth token 
+     * @param {String} query query to be executed
+     * @returns promise from API
      */
     const _apiCall = (token, query) => {
         return fetch("https://api.spotify.com/v1/" + query, {
@@ -38,15 +40,17 @@ const APIcontroller = (()=> {
      * used in the _apiCall()
      * TODO make it more advanced
      * @param {*} queryObject 
+     * @returns a string for API
      */
     const _createQuery = (queryObject) => {
+        
         if (queryObject == {}) throw Error("API: Empty queryObject"); 
-
         let base ="";
-
         const max_seed_count = 5;
+        
         if(queryObject["seed_genres"]){
-            base += "seed_genres="
+            base += "seed_genres=";
+            
             for(let i = 0; i < max_seed_count && i < queryObject["seed_genres"].length; i++){
                 base += queryObject["seed_genres"][i] + ",";
             }
@@ -55,8 +59,7 @@ const APIcontroller = (()=> {
         }else{
             base = "seed_genres=[]&";
         }
-        console.log("base seed_generation " + base);
-
+        
         const properties = ["acousticness","danceability","energy",
                             "instrumentalness","liveness","loudness",
                             "popularity","speechiness","tempo","valence"];
@@ -64,15 +67,15 @@ const APIcontroller = (()=> {
             if(queryObject[p]){
                 base += p + "=" + queryObject[p] + "&";
             } 
-        })
-        console.log("base string: " + base);
+        });
         return base;
     }
     /**
      * Retrieves recommendations from the spotify API based on 
      * given query
-     * @param {*} token 
+     * @param {String} token 
      * @param {*} queryObject 
+     * @returns promise with recommended songs and used seeds
      */
     const _getRecommendations = (token, queryObject) => {
         let param = "recommendations?";
@@ -82,12 +85,52 @@ const APIcontroller = (()=> {
     }
 
     return {
+        /**
+        * Retrieves the auth token used in all searches
+        * saves it to store
+        * @returns authorisation token used in API calls
+        */
         getToken() {
             return _getToken();
         },
+        /**
+        * Retrieves recommendations from the spotify API based on 
+        * given query
+        * @param {String} token 
+        * @param {*} queryObject 
+        * @returns promise with recommended songs and used seeds
+        */
         getRecommendations(token, queryObject) {
             return _getRecommendations(token, queryObject);
         }
     }
 })();
 export default APIcontroller;
+
+/*
+USAGE:
+import APIcontroller from './api/spotifySource.js'
+
+-----------     TOKEN   -----------
+To get and view token (not saving to store):
+For debugging only.
+APIcontroller.getToken().then(console.log);
+
+To retrieve token and save to store use:
+store.dispatch('setToken');     //auto renewal every hour
+
+----------- QueryObject example -----------
+let queryObject = {
+  "seed_genres": ["funky","disco"],
+  "liveness": "1.0",
+   "energy": "1.0",
+};
+
+----------- Retrieve recommendations -----------
+Directly from API (Promise object):
+    APIcontroller.getRecommendation(token, queryObject).then(bla bla bla);
+In store (PROXY object):    
+    store.dispatch('getRecommendation', queryObject);
+
+
+*/

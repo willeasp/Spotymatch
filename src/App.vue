@@ -1,57 +1,20 @@
 <template>
-
-  <img class ="logo" alt="Pear logo" src="./assets/pe.png">
-  <HelloWorld msg="The new spotymatch app"/>
+  <h1>This is Spotymatch APP</h1>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 import APIcontroller from './api/spotifySource.js'
-
-
-let token = "BQBxNWwQvtPsNz4X6MYyb3JeXQYrNtpnY_XJUlFuCrw_Xepb3JBuWzOyLAwfV6zlPEGWnNt1ruiKUdvl6z4";
-// APIcontroller.getToken().then(console.log);
-// console.log("token: " + token);
-let test = {
-  "seed_genres": "dancehall",
-  "liveness": "1.0",
-   "energy": "1.0",
-};
-
-APIcontroller.getRecommendations(token, test);
+import store from './store/index.js';
 
 export default {
   name: 'App',
   components: {
-    HelloWorld,
   }
 }
 </script>
 
 <style>
-@keyframes vibrator {
-    0% {
-      transform: translate(0);
-    }
-    20% {
-      transform: translate(-2px, 2px);
-    }
-    40% {
-      transform: translate(-2px, -2px);
-    }
-    60% {
-      transform: translate(2px, 2px);
-    }
-    80% {
-      transform: translate(2px, -2px);
-    }
-    100% {
-      transform: translate(0);
-    }
-  }
-.logo{
-   animation: vibrator 0.15s linear infinite both;
-}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
