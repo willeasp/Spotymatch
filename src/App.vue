@@ -5,7 +5,7 @@
 
 <script>
 import HelloWorld from './components/HelloWorld.vue'
-
+// använd v-if för conditional rendering!!!!
 export default {
   name: 'App',
   components: {

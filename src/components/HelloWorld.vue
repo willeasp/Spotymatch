@@ -6,10 +6,20 @@
       check out the
       <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
     </p>
-    <h3>Installed CLI Plugins</h3>
-    <input v-model="email" placeholder="email"/>
-    <input v-model="password" placeholder="passwd"/>
-    <button @click="signIn">click me</button>
+    
+
+    <template v-if="user">
+      <h3>{{user}} is logged in.</h3>
+      <button @click="signOut">sign out</button>
+    </template>
+    <template v-else>
+      <h3>Sign In</h3>
+      <input v-model="email" placeholder="email"/>
+      <input v-model="password" placeholder="passwd"/>
+      <button @click="signIn">sign in</button>
+      <button @click="createAccount">create account</button>
+    </template>
+
     <ul>
       <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
       <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
@@ -34,24 +44,39 @@
 </template>
 
 <script>
+//import { watch } from 'vue';
+
 export default {
   name: 'HelloWorld',
   data() {
     return {
-      email : String,
-      password : String
+      email : "",
+      password : "",
     }
   },
+
+  computed: {
+    user() {
+      const user = this.$store.getters.getCurrentUser;
+      return user && user.user.email;
+    }
+  },
+
   props: {
     msg: String
   },
+
   methods: {
-    signIn(event) {
-      console.log("nice");
-      console.log(event);
-      console.log(this.email);
-      console.log(this.password);
+    signIn() {
       this.$store.dispatch("USER_SIGN_IN", {email:this.email, password:this.password});
+    },
+
+    createAccount() {
+      this.$store.dispatch("CREATE_USER", {email:this.email, password:this.password});
+    },
+
+    signOut() {
+      this.$store.dispatch("USER_SIGN_OUT");
     }
   }
 }
