@@ -1,15 +1,29 @@
 <template>
   <img class ="logo" alt="Pear logo" src="./assets/pe.png">
-  <HelloWorld msg="The new spotymatch app"/>
+  <template v-if="user">
+    <Welcome/>
+  </template>
+  <template v-else>
+    <Login/>
+  </template>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Welcome from './components/Welcome.vue'
+import Login from "./components/Login.vue"
 // använd v-if för conditional rendering!!!!
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    Welcome,
+    Login,
+  },
+
+  computed: {
+    user() {
+      const user = this.$store.getters.getCurrentUser;
+      return user && user.user;
+    }
   }
 }
 </script>

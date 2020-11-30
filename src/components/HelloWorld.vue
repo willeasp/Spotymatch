@@ -6,19 +6,8 @@
       check out the
       <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
     </p>
-    
 
-    <template v-if="user">
-      <h3>{{user}} is logged in.</h3>
-      <button @click="signOut">sign out</button>
-    </template>
-    <template v-else>
-      <h3>Sign In</h3>
-      <input v-model="email" placeholder="email"/>
-      <input v-model="password" placeholder="passwd"/>
-      <button @click="signIn">sign in</button>
-      <button @click="createAccount">create account</button>
-    </template>
+    <button @click="signOut">sign out</button>
 
     <ul>
       <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
@@ -44,7 +33,6 @@
 </template>
 
 <script>
-//import { watch } from 'vue';
 
 export default {
   name: 'HelloWorld',
@@ -58,7 +46,7 @@ export default {
   computed: {
     user() {
       const user = this.$store.getters.getCurrentUser;
-      return user && user.user.email;
+      return user && user.user;
     }
   },
 
