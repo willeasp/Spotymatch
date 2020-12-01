@@ -1,5 +1,5 @@
 {
-    "seed_genres": "dfgsdfgsdfg",
+    "seed_genres": ["acoustic","afrobeat","alternative"],
     "seed_track": "dfgsdfgsdfg",
     "seed_artists": "dfgsdfgsdfg",
     

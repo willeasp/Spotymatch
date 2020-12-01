@@ -27,6 +27,7 @@ export default createStore({
       });
 
       setTimeout(() => {
+        state.commit('setToken', "");
         state.dispatch('setToken');
       }, 3600*1000);
     },

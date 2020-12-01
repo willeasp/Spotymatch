@@ -117,7 +117,7 @@ For debugging only.
 APIcontroller.getToken().then(console.log);
 
 To retrieve token and save to store use:
-store.dispatch('setToken');     //auto renewal every hour
+store.dispatch('requestToken');     //auto renewal every hour
 
 ----------- QueryObject example -----------
 let queryObject = {
