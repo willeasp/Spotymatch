@@ -21,7 +21,7 @@ export default {
     computed: {
         user() {
             const user = this.$store.getters.getCurrentUser;
-            return user && user.user;
+            return user;
         },
     },
 };

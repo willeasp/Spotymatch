@@ -27,8 +27,8 @@ export default {
 </script>
 
 <style scoped>
-#welcomeText {
-    size: 48px;
-    color: olivedrab;
-}
+    #welcomeText {
+        size: 48px;
+        color: olivedrab;
+    }
 </style>

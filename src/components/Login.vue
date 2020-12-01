@@ -6,9 +6,9 @@
             <h2>Discover new songs</h2>
         </div>
         <div id="sign-in">
-            <form>
+            <form @submit.prevent>
                 <h3 class="text">Sign In</h3>
-                <input type="text" v-model="email" placeholder="email" />
+                <input type="text" v-model="email" placeholder="email"/>
                 <input
                     type="text"
                     v-model="password"
