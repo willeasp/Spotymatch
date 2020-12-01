@@ -51,6 +51,7 @@ export default {
 .logon{
     animation: vibrator 0.15s linear infinite both;
 }
+
 #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
