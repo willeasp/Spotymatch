@@ -21,4 +21,6 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
-apiConfig.js
+
+src/api/apiConfig.js
+src/api/firebase/config.js

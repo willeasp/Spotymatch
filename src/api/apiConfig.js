@@ -1,3 +1,4 @@
 const CLIENT_ID = "3b3dd265641e45eba8497b09aa6bb1ef";
-
 const CLIENT_SECRET = "798e20787c3b404593029cf44a563718";
+
+export default {CLIENT_ID, CLIENT_SECRET};
