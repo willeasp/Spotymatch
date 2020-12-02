@@ -1,4 +1,8 @@
-import { fireauth } from './config'
+import firebase from 'firebase';
+import  firebaseConfig  from './config.js';
+
+firebase.initializeApp(firebaseConfig);
+const fireauth = firebase.auth;
 
 const fb = {    
     createUser: (email, password)=> 
@@ -12,8 +16,10 @@ const fb = {
     ,
     currentUser: ()=>
         fireauth().currentUser
-
 }
+
+const db = firebase.database();
+
 
 /* fireauth().onAuthStateChanged(user => {
     if (user) {
@@ -23,4 +29,5 @@ const fb = {
     }
   }); */
 
-export default fb;
+
+export default {fb, db};

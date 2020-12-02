@@ -1,13 +1,16 @@
-import { createStore } from 'vuex'
-import APIcontroller from '../api/spotifySource.js'
-import fb from '../api/firebase/firebaseSource'
+import { createStore } from 'vuex';
+import APIcontroller from '../api/spotifySource.js';
+import firebaseSource from '../api/firebase/firebaseSource';
+const fb = firebaseSource.fb;
+const db = firebaseSource.db;
 
 export default createStore({
   state: {
     token: "", // authorisation token for current session
     lastRecommendation: {},  // the last received spotify recommendation
-    
-    user: null
+    user: null,
+    previousRecommendations: [], // all recommendations
+    viewingRecommendation: {} // en recommendation
   },
   mutations: {
     setToken(state, token){
@@ -21,6 +24,12 @@ export default createStore({
     },
     logout(state) {
         state.user = null;
+    },
+    setPreviousRecommendations(state, object){
+      state.previousRecommendations = object;
+    },
+    setViewingRecommendation(state){
+
     }
   },
   actions: {
@@ -29,7 +38,7 @@ export default createStore({
      * Call this in the beginning of a session
      * @param {*} state is handled automatically
      */
-    requestToken(state){
+    REQUEST_TOKEN(state){
       APIcontroller.getToken().then(token => {
         state.commit('setToken', token);
         console.log("store set token: " + token)
@@ -45,12 +54,19 @@ export default createStore({
      * @param {*} state is handled automatically
      * @param {*} queryObject contains the query
      */
-    requestRecomendation(state, queryObject){
+    REQUEST_RECOMMENDATION(state, queryObject){
       //for debugging so we not spam api, replace token with new token every 1h
       //let temptoken = "BQCDxQc1PPXSsfKnTHCj6JPUpUF72TsZaZhDT-M4h1TSo9mblUI3cK-hWD4lixSghzq30NqauUwdX2UU7Vw";
       APIcontroller.getRecommendations(state.getters.getToken, queryObject)
       .then(res => res.json())
-      .then(res => {state.commit('saveRecommendation', res)});
+      .then(res => {
+        state.commit('saveRecommendation', res);
+        db.ref("USERS/" + state.getters.getCurrentUser.user.uid).push({
+          "songs": res.tracks,
+          "seeds": queryObject,
+          "time": Date.now()
+        });
+      });
     },
     USER_SIGN_IN(state, { email, password }) {
             fb.signInUser(email, password)
@@ -58,6 +74,7 @@ export default createStore({
                     state.commit("set_user", user);
                 })
                 .catch(err => console.error(err, "user could not sign in"));
+                
     },
 
     CREATE_USER(state, { email, password }) {
@@ -78,6 +95,26 @@ export default createStore({
 
     SET_USER(state, user) {
             state.commit("set_user", user);
+    },
+    /**
+     * Fetches user history from firbase
+     * @param {*} state 
+     */
+    FETCH_RESULT_HISTORY(state){
+      db.ref('USERS/' + state.getters.getCurrentUser.user.uid).once('value').then((snapshot)=>{
+        let history = [];
+        
+        for (const snapShotID in snapshot.val()){
+          history.push({
+            "songs" : snapshot.val()[snapShotID]["songs"],
+            "time" : snapshot.val()[snapShotID]["time"],
+            "seeds" : snapshot.val()[snapShotID]["seeds"]
+          });
+        }
+        // add histroy to state
+        console.log(history);
+        state.commit("setPreviousRecommendations", history);
+      });
     }
   },
   getters: {
@@ -97,6 +134,9 @@ export default createStore({
     },
     getCurrentUser(state){
       return state.user;
+    },
+    setPreviousRecommendations(state){
+      return state.previousRecommendations;
     }
   },
   modules: {
