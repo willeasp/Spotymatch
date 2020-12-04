@@ -80,7 +80,6 @@ const APIcontroller = (()=> {
     const _getRecommendations = (token, queryObject) => {
         let param = "recommendations?";
         param += _createQuery(queryObject);
-        console.log("param string: " + param);
         return _apiCall(token, param);
     }
 

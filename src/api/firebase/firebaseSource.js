@@ -23,18 +23,7 @@ const fb = {
 const database = firebase.database();
 const db = {
     fetchResultHistory : (userUID)=>{
-        database.ref('USERS/' + userUID).once('value').then((snapshot)=>{
-            let history = [];
-            
-            for (const snapShotID in snapshot.val()){
-              history.push({
-                "songs" : snapshot.val()[snapShotID]["songs"],
-                "time" : snapshot.val()[snapShotID]["time"],
-                "seeds" : snapshot.val()[snapShotID]["seeds"]
-              });
-            }
-            return history;
-        });
+        return database.ref('USERS/' + userUID).once('value');
     },
     pushRecommendation : (spotifyRec, queryObject, userUID) => {
         database.ref("USERS/" + userUID).push({
@@ -44,15 +33,5 @@ const db = {
           });
     }
 }
-
-
-/* fireauth().onAuthStateChanged(user => {
-    if (user) {
-        user;
-    } else {
-        console.log("user is signed out");
-    }
-  }); */
-
 
 export default {fb, db};

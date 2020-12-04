@@ -42,7 +42,6 @@ export default createStore({
     REQUEST_TOKEN(state){
       APIcontroller.getToken().then(token => {
         state.commit('setToken', token);
-        console.log("store set token: " + token)
       });
 
       setTimeout(() => {
@@ -98,7 +97,18 @@ export default createStore({
      * @param {*} state 
      */
     FETCH_RESULT_HISTORY(state){
-        state.commit("setPreviousRecommendations", db.fetchResultHistory(state.getters.getCurrentUser.user.uid));
+        db.fetchResultHistory(state.getters.getCurrentUser.user.uid)
+        .then((snapshot)=>{
+          let history = [];
+          for (const snapShotID in snapshot.val()){
+            history.push({
+              "songs" : snapshot.val()[snapShotID]["songs"],
+              "time" : snapshot.val()[snapShotID]["time"],
+              "seeds" : snapshot.val()[snapShotID]["seeds"]
+            });
+          }
+          state.commit("setPreviousRecommendations", history);
+        });
     }
   },
   getters: {
@@ -119,7 +129,7 @@ export default createStore({
     getCurrentUser(state){
       return state.user;
     },
-    setPreviousRecommendations(state){
+    getPreviousRecommendations(state){
       return state.previousRecommendations;
     }
   },

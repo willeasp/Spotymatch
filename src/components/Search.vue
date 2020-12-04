@@ -13,16 +13,19 @@ export default {
     methods: {
         getToken(){
             this.$store.dispatch("REQUEST_TOKEN");
-        },
+            setTimeout(()=>console.log(this.$store.getters.getToken), 500);
+            },
         getRekt(){
             this.$store.dispatch("REQUEST_RECOMMENDATION", 
             {
                 "seed_genres": ["rock","afrobeat","alternative"],
                 "liveness": 0.4
             });
+            console.log("requested recommendation");
         },
         resultHistory(){
             this.$store.dispatch("FETCH_RESULT_HISTORY");
+            setTimeout(()=> console.log(this.$store.getters.getPreviousRecommendations) ,1000);
         }
     }
 }
