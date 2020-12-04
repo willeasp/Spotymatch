@@ -1,5 +1,14 @@
 import { createApp } from 'vue'
-import App from './App.vue'
 import store from './store'
+import App from './App.vue'
+import firebase from 'firebase'
+let app;
 
-createApp(App).use(store).mount('#app')
+firebase.auth().onAuthStateChanged((user)=>{
+    if(!app) {
+        createApp(App).use(store).mount('#app');
+        app = true;
+    }
+    if(user) store.dispatch('SET_USER', user)
+    else store.dispatch('SET_USER', null)
+})

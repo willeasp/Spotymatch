@@ -18,7 +18,6 @@ export default {
         Welcome,
         Login,
     },
-
     computed: {
         user() {
             const user = this.$store.getters.getCurrentUser;

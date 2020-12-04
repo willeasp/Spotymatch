@@ -10,7 +10,8 @@ export default createStore({
     lastRecommendation: {},  // the last received spotify recommendation
     user: null,
     previousRecommendations: [], // all recommendations
-    viewingRecommendation: {} // en recommendation
+    viewingRecommendation: {}, // en recommendation
+    navHash: ""
   },
   mutations: {
     setToken(state, token){
@@ -27,6 +28,9 @@ export default createStore({
     },
     setPreviousRecommendations(state, object){
       state.previousRecommendations = object;
+    },
+    setNavHash(state, newHash){
+      state.navHash = newHash;
     }
     // ,
     // setViewingRecommendation(state){
@@ -66,9 +70,9 @@ export default createStore({
     },
     USER_SIGN_IN(state, { email, password }) {
             fb.signInUser(email, password)
-                .then(user => {
-                    state.commit("set_user", user);
-                })
+                // .then(user => {
+                //     state.commit("set_user", user);
+                // })
                 .catch(err => console.error(err, "user could not sign in"));
                 
     },
@@ -83,14 +87,14 @@ export default createStore({
 
     USER_SIGN_OUT(state) {
             fb.signOutUser()
-                .then(() => {
-                    state.commit("logout");
-                })
+                // .then(() => {
+                //     state.commit("logout");
+                // })
                 .catch(err => console.error(err, "Could not log out user"));
     },
 
     SET_USER(state, user) {
-            state.commit("set_user", user);
+      state.commit("set_user", user);
     },
     /**
      * Fetches user history from firbase
@@ -109,6 +113,10 @@ export default createStore({
           }
           state.commit("setPreviousRecommendations", history);
         });
+    },
+    SET_NAV_HASH(state, newHash){
+      window.location.hash = newHash;
+      state.commit("setNavHash", newHash);
     }
   },
   getters: {
@@ -127,7 +135,7 @@ export default createStore({
       return state.lastRecommendation;
     },
     getCurrentUser(state){
-      return state.user;
+      return state.user; 
     },
     getPreviousRecommendations(state){
       return state.previousRecommendations;
