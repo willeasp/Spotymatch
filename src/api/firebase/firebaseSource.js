@@ -1,4 +1,10 @@
-import { fireauth } from './config'
+import firebase from 'firebase';
+import  firebaseConfig  from './config.js';
+
+if(!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+const fireauth = firebase.auth;
 
 const fb = {    
     createUser: (email, password)=> 
@@ -12,15 +18,20 @@ const fb = {
     ,
     currentUser: ()=>
         fireauth().currentUser
-
 }
 
-/* fireauth().onAuthStateChanged(user => {
-    if (user) {
-        user;
-    } else {
-        console.log("user is signed out");
+const database = firebase.database();
+const db = {
+    fetchResultHistory : (userUID)=>{
+        return database.ref('USERS/' + userUID).once('value');
+    },
+    pushRecommendation : (spotifyRec, queryObject, userUID) => {
+        database.ref("USERS/" + userUID).push({
+            "songs": spotifyRec.tracks,
+            "seeds": queryObject,
+            "time": Date.now()
+          });
     }
-  }); */
+}
 
-export default fb;
+export default {fb, db};

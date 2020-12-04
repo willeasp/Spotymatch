@@ -10,6 +10,7 @@
 <script>
 import Welcome from "./components/Welcome.vue";
 import Login from "./components/Login.vue";
+
 // använd v-if för conditional rendering!!!!
 export default {
     name: "App",
