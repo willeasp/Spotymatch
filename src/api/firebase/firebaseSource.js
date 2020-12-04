@@ -1,5 +1,6 @@
 import firebase from 'firebase';
-import  firebaseConfig  from './config.js';
+import firebaseConfig from './config.js';
+import store from '../../store/index';
 
 if(!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
@@ -18,6 +19,7 @@ const fb = {
     ,
     currentUser: ()=>
         fireauth().currentUser
+    ,
 }
 
 const database = firebase.database();
@@ -33,5 +35,4 @@ const db = {
           });
     }
 }
-
 export default {fb, db};

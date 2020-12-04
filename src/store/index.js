@@ -13,25 +13,21 @@ export default createStore({
     viewingRecommendation: {} // en recommendation
   },
   mutations: {
-    setToken(state, token){
+    setToken(state, token) {
       state.token = token;
     },
-    saveRecommendation(state, recommendationObject){
+    saveRecommendation(state, recommendationObject) {
       state.lastRecommendation = recommendationObject;
     },
     set_user(state, user) {
-        state.user = user;
+      state.user = user;
     },
     logout(state) {
-        state.user = null;
+      state.user = null;
     },
-    setPreviousRecommendations(state, object){
+    setPreviousRecommendations(state, object) {
       state.previousRecommendations = object;
-    }
-    // ,
-    // setViewingRecommendation(state){
-    //   state;
-    // }
+    },
   },
   actions: {
     /**
@@ -39,7 +35,7 @@ export default createStore({
      * Call this in the beginning of a session
      * @param {*} state is handled automatically
      */
-    REQUEST_TOKEN(state){
+    REQUEST_TOKEN(state) {
       APIcontroller.getToken().then(token => {
         state.commit('setToken', token);
       });
@@ -47,68 +43,66 @@ export default createStore({
       setTimeout(() => {
         state.commit('setToken', "");
         state.dispatch('setToken');
-      }, 3600*1000);
+      }, 3600 * 1000);
     },
     /**
      * Request a list of 20 tracks based on queryObject
      * @param {*} state is handled automatically
      * @param {*} queryObject contains the query
      */
-    REQUEST_RECOMMENDATION(state, queryObject){
+    REQUEST_RECOMMENDATION(state, queryObject) {
       //for debugging so we not spam api, replace token with new token every 1h
       //let temptoken = "BQCDxQc1PPXSsfKnTHCj6JPUpUF72TsZaZhDT-M4h1TSo9mblUI3cK-hWD4lixSghzq30NqauUwdX2UU7Vw";
       APIcontroller.getRecommendations(state.getters.getToken, queryObject)
-      .then(res => res.json())
-      .then(res => {
-        state.commit('saveRecommendation', res);
-        db.pushRecommendation(res, queryObject, state.getters.getCurrentUser.user.uid);
-      });
+        .then(res => res.json())
+        .then(res => {
+          state.commit('saveRecommendation', res);
+          db.pushRecommendation(res, queryObject, state.getters.getCurrentUser.user.uid);
+        });
     },
     USER_SIGN_IN(state, { email, password }) {
-            fb.signInUser(email, password)
-                .then(user => {
-                    state.commit("set_user", user);
-                })
-                .catch(err => console.error(err, "user could not sign in"));
-                
+      fb.signInUser(email, password)
+        .catch(err => console.error(err, "user could not sign in"));
+
     },
 
     CREATE_USER(state, { email, password }) {
-            fb.createUser(email, password)
-                .then(user => {
-                    state.commit("set_user", user);
-                })
-                .catch(err => console.error(err, "could not create user"));
+      fb.createUser(email, password)
+        .then(user => {
+          state.commit("set_user", user);
+        })
+        .catch(err => console.error(err, "could not create user"));
     },
 
     USER_SIGN_OUT(state) {
-            fb.signOutUser()
-                .then(() => {
-                    state.commit("logout");
-                })
-                .catch(err => console.error(err, "Could not log out user"));
+      fb.signOutUser()
+
+        .catch(err => console.error(err, "Could not log out user"));
     },
 
     SET_USER(state, user) {
-            state.commit("set_user", user);
+      state.commit("set_user", user);
     },
     /**
      * Fetches user history from firbase
      * @param {*} state 
      */
-    FETCH_RESULT_HISTORY(state){
-        db.fetchResultHistory(state.getters.getCurrentUser.user.uid)
-        .then((snapshot)=>{
+    FETCH_RESULT_HISTORY(state) {
+      db.fetchResultHistory(state.getters.getCurrentUser.user.uid)
+        .then((snapshot) => {
           let history = [];
-          for (const snapShotID in snapshot.val()){
+          for (const snapShotID in snapshot.val()) {
             history.push({
-              "songs" : snapshot.val()[snapShotID]["songs"],
-              "time" : snapshot.val()[snapShotID]["time"],
-              "seeds" : snapshot.val()[snapShotID]["seeds"]
+              "songs": snapshot.val()[snapShotID]["songs"],
+              "time": snapshot.val()[snapShotID]["time"],
+              "seeds": snapshot.val()[snapShotID]["seeds"]
             });
           }
           state.commit("setPreviousRecommendations", history);
         });
+    },
+    SET_NAV_HASH(newHash) {
+      window.location.hash = newHash;
     }
   },
   getters: {
@@ -116,20 +110,20 @@ export default createStore({
      * Gets the current auth token
      * @param {*} state is handled automatically
      */
-    getToken(state){
+    getToken(state) {
       return state.token;
     },
     /**
      * Gets the list of song from the API request
      * @param {*} state is handled automatically
      */
-    getRecommendations(state){
+    getRecommendations(state) {
       return state.lastRecommendation;
     },
-    getCurrentUser(state){
+    getCurrentUser(state) {
       return state.user;
     },
-    getPreviousRecommendations(state){
+    getPreviousRecommendations(state) {
       return state.previousRecommendations;
     }
   },
