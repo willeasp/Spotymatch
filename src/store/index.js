@@ -27,10 +27,11 @@ export default createStore({
     },
     setPreviousRecommendations(state, object){
       state.previousRecommendations = object;
-    },
-    setViewingRecommendation(state){
-
     }
+    // ,
+    // setViewingRecommendation(state){
+    //   state;
+    // }
   },
   actions: {
     /**
@@ -61,11 +62,7 @@ export default createStore({
       .then(res => res.json())
       .then(res => {
         state.commit('saveRecommendation', res);
-        db.ref("USERS/" + state.getters.getCurrentUser.user.uid).push({
-          "songs": res.tracks,
-          "seeds": queryObject,
-          "time": Date.now()
-        });
+        db.pushRecommendation(res, queryObject, state.getters.getCurrentUser.user.uid);
       });
     },
     USER_SIGN_IN(state, { email, password }) {
@@ -101,20 +98,7 @@ export default createStore({
      * @param {*} state 
      */
     FETCH_RESULT_HISTORY(state){
-      db.ref('USERS/' + state.getters.getCurrentUser.user.uid).once('value').then((snapshot)=>{
-        let history = [];
-        
-        for (const snapShotID in snapshot.val()){
-          history.push({
-            "songs" : snapshot.val()[snapShotID]["songs"],
-            "time" : snapshot.val()[snapShotID]["time"],
-            "seeds" : snapshot.val()[snapShotID]["seeds"]
-          });
-        }
-        // add histroy to state
-        console.log(history);
-        state.commit("setPreviousRecommendations", history);
-      });
+        state.commit("setPreviousRecommendations", db.fetchResultHistory(state.getters.getCurrentUser.user.uid));
     }
   },
   getters: {
