@@ -1,25 +1,21 @@
 <template>
-    <div class="color-bg">
-    <div class="black-bg">
-        <div class="title text">
-            <h1>Welcome to Spotymatcher</h1>
-            <h2>Discover new songs</h2>
-        </div>
-        <div id="sign-in">
-            <form @submit.prevent>
-                <h3 class="text">Sign In</h3>
-                <input type="text" v-model="email" placeholder="email"/>
-                <input
-                    type="text"
-                    v-model="password"
-                    placeholder="password"
-                    @keydown.enter="signIn"
-                />
-                <button id="email" @click="signIn">sign in</button>
-                <button id="password" @click="createAccount">create account</button>
-            </form>
-        </div>
+    <div class="title text">
+        <h1>Welcome to Spotymatcher</h1>
+        <h2>Discover new songs</h2>
     </div>
+    <div id="sign-in">
+        <form @submit.prevent>
+            <h3 class="text">Sign In</h3>
+            <input type="text" v-model="email" placeholder="email"/>
+            <input
+                type="text"
+                v-model="password"
+                placeholder="password"
+                @keydown.enter="signIn"
+            />
+            <button id="email" @click="signIn">sign in</button>
+            <button id="password" @click="createAccount">create account</button>
+        </form>
     </div>
 </template>
 
@@ -60,36 +56,6 @@ export default {
     font-weight: 900;
     width: 100%;
     text-align: center;
-}
-.color-bg {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    background-attachment: fixed;
-    background-size: cover;
-    background-repeat: no-repeat;
-    /* background-image: "../assets/pear-png-28.png"; */
-
-    background: -webkit-gradient(
-        linear,
-        left top,
-        right bottom,
-        from(#6192ce),
-        to(#be31a5)
-    );
-}
-.black-bg {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    background-attachment: fixed;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background: linear-gradient(transparent, rgba(0, 0, 0, 0.849));
 }
 
 #sign-in {

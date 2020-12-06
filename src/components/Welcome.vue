@@ -4,8 +4,8 @@
     <div class="welcome">
         <h1 id="welcomeText">Welcome to Spotymatch</h1>
         <h2>Route through the page on the topbar</h2>
-        <button @click="signOut">sign out</button>
         <Search/>
+        <a>hej</a>
     </div>
 </template>
 
@@ -22,12 +22,6 @@ export default {
             return user && user.user;
         },
     },
-
-    methods: {
-        signOut() {
-            this.$store.dispatch("USER_SIGN_OUT");
-        }
-    }
 }
 </script>
 
