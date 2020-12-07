@@ -11,4 +11,18 @@ firebase.auth().onAuthStateChanged((user)=>{
     }
     if(user) store.dispatch('SET_USER', user)
     else store.dispatch('SET_USER', null)
-})
+});
+
+
+function hashChange() {
+    if(! ["#Welcome", "#Search", "#Result", "#History", "#Login"].find(knownRoute=> window.location.hash === knownRoute)) {
+        console.log(window.location.hash);
+        window.location.hash="Welcome";
+    }
+    
+    store.dispatch("SET_ROUTE", window.location.hash.substring(1));
+}
+
+hashChange();
+
+window.addEventListener("hashchange", hashChange);

@@ -11,7 +11,7 @@ export default createStore({
         user: null,     // user currently logged in
         previousRecommendations: [], // all recommendations
         viewingRecommendation: {}, // en recommendation
-        route: "routeBABY"       // current route on the website
+        route: window.location.hash.substring(1),
     },
 
     mutations: {
@@ -64,7 +64,7 @@ export default createStore({
                 .then(res => res.json())
                 .then(res => {
                     state.commit('saveRecommendation', res);
-                    db.pushRecommendation(res, queryObject, state.getters.getCurrentUser.user.uid);
+                    db.pushRecommendation(res, queryObject, state.getters.getCurrentUser.uid);
                 });
         },
 
@@ -113,17 +113,15 @@ export default createStore({
          * @param {*} state 
          */
         FETCH_RESULT_HISTORY(state) {
-            db.fetchResultHistory(state.getters.getCurrentUser.user.uid)
+            db.fetchResultHistory(state.getters.getCurrentUser.uid)
                 .then((snapshot) => {
                     let history = [];
-                    for (const snapShotID in snapshot.val()) {
-                        history.push({
-                            "songs": snapshot.val()[snapShotID]["songs"],
-                            "time": snapshot.val()[snapShotID]["time"],
-                            "seeds": snapshot.val()[snapShotID]["seeds"]
-                        });
+                    let val = snapshot.val();
+                    for (const snapShotID in val) {
+                        history.push(val[snapShotID]);
                     }
-                    state.commit("setPreviousRecommendations", history);
+                    state.commit("setPreviousRecommendations", val);
+                    console.log(val);
                 });
         },
 
