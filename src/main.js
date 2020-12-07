@@ -9,6 +9,8 @@ firebase.auth().onAuthStateChanged((user)=>{
         createApp(App).use(store).mount('#app');
         app = true;
     }
-    if(user) store.dispatch('SET_USER', user)
-    else store.dispatch('SET_USER', null)
-})
+    console.log("firebase user: ")
+    console.log(user);
+    if(user){ store.dispatch('SET_USER', user); }
+    else {store.dispatch('SET_USER', null);}
+});

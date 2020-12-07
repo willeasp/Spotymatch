@@ -1,6 +1,5 @@
 import firebase from 'firebase';
 import firebaseConfig from './config.js';
-import store from '../../store/index';
 
 if(!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);

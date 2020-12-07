@@ -19,11 +19,8 @@ export default createStore({
         saveRecommendation(state, recommendationObject) {
             state.lastRecommendation = recommendationObject;
         },
-        set_user(state, user) {
+        setUser(state, user) {
             state.user = user;
-        },
-        logout(state) {
-            state.user = null;
         },
         setPreviousRecommendations(state, object) {
             state.previousRecommendations = object;
@@ -57,7 +54,9 @@ export default createStore({
                 .then(res => res.json())
                 .then(res => {
                     state.commit('saveRecommendation', res);
-                    db.pushRecommendation(res, queryObject, state.getters.getCurrentUser.user.uid);
+                    console.log("saveRecommendation");
+                    console.log(queryObject);
+                    db.pushRecommendation(res, queryObject, state.getters.getCurrentUser.uid);
                 });
         },
         USER_SIGN_IN(state, { email, password }) {
@@ -69,36 +68,27 @@ export default createStore({
         CREATE_USER(state, { email, password }) {
             fb.createUser(email, password)
                 .then(user => {
-                    state.commit("set_user", user);
+                    state.commit("setUser", user);
                 })
                 .catch(err => console.error(err, "could not create user"));
         },
 
-        USER_SIGN_OUT(state) {
+        USER_SIGN_OUT() {
             fb.signOutUser()
-
                 .catch(err => console.error(err, "Could not log out user"));
         },
 
         SET_USER(state, user) {
-            state.commit("set_user", user);
+            state.commit("setUser", user);
         },
         /**
          * Fetches user history from firbase
          * @param {*} state 
-         */
+         */     
         FETCH_RESULT_HISTORY(state) {
-            db.fetchResultHistory(state.getters.getCurrentUser.user.uid)
+            db.fetchResultHistory(state.getters.getCurrentUser.uid)
                 .then((snapshot) => {
-                    let history = [];
-                    for (const snapShotID in snapshot.val()) {
-                        history.push({
-                            "songs": snapshot.val()[snapShotID]["songs"],
-                            "time": snapshot.val()[snapShotID]["time"],
-                            "seeds": snapshot.val()[snapShotID]["seeds"]
-                        });
-                    }
-                    state.commit("setPreviousRecommendations", history);
+                    state.commit("setPreviousRecommendations", snapshot.val());
                 });
         },
         SET_NAV_HASH(newHash) {
