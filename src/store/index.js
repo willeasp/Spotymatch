@@ -61,10 +61,10 @@ export default createStore({
             //for debugging so we not spam api, replace token with new token every 1h
             //let temptoken = "BQCDxQc1PPXSsfKnTHCj6JPUpUF72TsZaZhDT-M4h1TSo9mblUI3cK-hWD4lixSghzq30NqauUwdX2UU7Vw";
             APIcontroller.getRecommendations(state.getters.getToken, queryObject)
-                .then(res => res.json())
+                .then(res => res.json()).user
                 .then(res => {
                     state.commit('saveRecommendation', res);
-                    db.pushRecommendation(res, queryObject, state.getters.getCurrentUser.user.uid);
+                    db.pushRecommendation(res, queryObject, state.getters.getCurrentUser.uid);
                 });
         },
 
@@ -113,18 +113,21 @@ export default createStore({
          * @param {*} state 
          */
         FETCH_RESULT_HISTORY(state) {
-            db.fetchResultHistory(state.getters.getCurrentUser.user.uid)
+            db.fetchResultHistory(state.getters.getCurrentUser.uid)
                 .then((snapshot) => {
-                    let history = [];
-                    for (const snapShotID in snapshot.val()) {
-                        history.push({
-                            "songs": snapshot.val()[snapShotID]["songs"],
-                            "time": snapshot.val()[snapShotID]["time"],
-                            "seeds": snapshot.val()[snapShotID]["seeds"]
-                        });
-                    }
-                    state.commit("setPreviousRecommendations", history);
+                    state.commit("setPreviousRecommendations", snapshot.val());
                 });
+        },
+        /**
+         * Subscribes to history changes and adds the new history to the store.
+         * @param {*} state 
+         */
+        SUBSCRIBE_RESULT_HISTORY(state) {
+          db.subscribeResultHistory(
+              state.getters.getCurrentUser.uid,
+              snapshot => state.commit("setPreviousRecommendations", snapshot.val())
+             );
+          return () => db.unsubscribeResultHistory(state.getters.getCurrentUser.uid);
         },
 
         /**
