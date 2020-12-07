@@ -8,10 +8,12 @@ export default createStore({
     state: {
         token: "", // authorisation token for current session
         lastRecommendation: {},  // the last received spotify recommendation
-        user: null,
+        user: null,     // user currently logged in
         previousRecommendations: [], // all recommendations
-        viewingRecommendation: {} // en recommendation
+        viewingRecommendation: {}, // en recommendation
+        route: "routeBABY"       // current route on the website
     },
+
     mutations: {
         setToken(state, token) {
             state.token = token;
@@ -25,7 +27,11 @@ export default createStore({
         setPreviousRecommendations(state, object) {
             state.previousRecommendations = object;
         },
+        setRoute(state, route) {
+            state.route = route;
+        }
     },
+
     actions: {
         /**
          * Retrieves a new token and refreshes it every hour.
@@ -42,6 +48,7 @@ export default createStore({
                 state.dispatch('setToken');
             }, 3600 * 1000);
         },
+
         /**
          * Request a list of 20 tracks based on queryObject
          * @param {*} state is handled automatically
@@ -59,12 +66,22 @@ export default createStore({
                     db.pushRecommendation(res, queryObject, state.getters.getCurrentUser.uid);
                 });
         },
+
+        /**
+         * Sign in to firebase with already registered user
+         * @param {*} state 
+         * @param {*} param1 
+         */
         USER_SIGN_IN(state, { email, password }) {
             fb.signInUser(email, password)
                 .catch(err => console.error(err, "user could not sign in"));
-
         },
 
+        /**
+         * Create a new user in firebase
+         * @param {*} state 
+         * @param {*} param1 
+         */
         CREATE_USER(state, { email, password }) {
             fb.createUser(email, password)
                 .then(user => {
@@ -73,14 +90,23 @@ export default createStore({
                 .catch(err => console.error(err, "could not create user"));
         },
 
+        /**
+         * Sign user out from firebase
+         */
         USER_SIGN_OUT() {
             fb.signOutUser()
                 .catch(err => console.error(err, "Could not log out user"));
         },
 
+        /**
+         * Set the current user as user
+         * @param {*} state 
+         * @param {*} user 
+         */
         SET_USER(state, user) {
             state.commit("setUser", user);
         },
+
         /**
          * Fetches user history from firbase
          * @param {*} state 
@@ -91,10 +117,17 @@ export default createStore({
                     state.commit("setPreviousRecommendations", snapshot.val());
                 });
         },
-        SET_NAV_HASH(newHash) {
-            window.location.hash = newHash;
+
+        /**
+         * Set the current route in the webpage
+         * @param {*} state 
+         * @param {*} route 
+         */
+        SET_ROUTE(state, route) {
+            state.commit("setRoute", route);
         }
     },
+
     getters: {
         /**
          * Gets the current auth token
@@ -103,6 +136,7 @@ export default createStore({
         getToken(state) {
             return state.token;
         },
+
         /**
          * Gets the list of song from the API request
          * @param {*} state is handled automatically
@@ -110,13 +144,24 @@ export default createStore({
         getRecommendations(state) {
             return state.lastRecommendation;
         },
+
+        /**
+         * @returns The user currently logged in to firebase
+         * @param {*} state 
+         */
         getCurrentUser(state) {
             return state.user;
         },
+
         getPreviousRecommendations(state) {
             return state.previousRecommendations;
+        },
+
+        getRoute(state) {
+            return state.route;
         }
     },
+
     modules: {
     }
 })
