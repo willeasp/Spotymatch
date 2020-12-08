@@ -1,14 +1,24 @@
 <template>
     <div>
-        <div id="historySidebar" v-for="recommendation in formatHistory(previousRecommendations)" :key="recommendation">
-            <div>{{ recommendation["visualTime"] }}</div>
+        <div id="historySidebar" v-for="key in formatHistory(previousRecommendations)" 
+            :key="key"
+            >
+            <HistorySidebarButton v-bind:reco = "key" />
         </div>
     </div>
 </template>
 
 <script>
+import HistorySidebarButton from "./HistorySidebarButton"
+
+
 export default {
     name: "HistorySidebar",
+    
+    components:{
+        HistorySidebarButton,
+    },
+
     methods: {
         formatHistory : recommendations => {
             let history = [];
@@ -33,6 +43,10 @@ export default {
             }
             history.sort((a,b)=> a["time"] < b["time"]);
             return history;
+        },
+        setViewingRecommendation(rec) {
+            // console.log(rec.obj["time"]);
+            console.log("rec: " + rec)
         }
     },
     computed: {
@@ -46,5 +60,28 @@ export default {
 </script>
 
 <style>
+    /* Style the links inside the navigation bar */
+    b {
+        color: #f2f2f2;
+        text-align: center;
+        padding: 14px 16px;
+        display: inline-block;
+        text-decoration: none;
+        font-size: 17px;
+        transition-property: background-color,border-color,color,box-shadow,filter;
+        transition-duration: .3s;
+        background-color:rgba(0, 0, 0, 0.2) ;
+    }
 
+    /* Change the color of links on hover */
+    b:hover {
+        background-color: #1db954;
+        color: black;
+    }
+    
+    /* Add a color to the active/current link */
+    b:active {
+        background-color: #4CAF50;
+        color: white;
+    } 
 </style>

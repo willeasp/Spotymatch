@@ -9,8 +9,8 @@ export default createStore({
         token: "", // authorisation token for current session
         lastRecommendation: {},  // the last received spotify recommendation
         user: null,     // user currently logged in
-        previousRecommendations: [], // all recommendations
-        viewingRecommendation: {}, // en recommendation
+        history: [], // all recommendations
+        viewingHistory: {}, // a recommendation
         route: "routeBABY"       // current route on the website
     },
 
@@ -27,11 +27,14 @@ export default createStore({
         logout(state) {
             state.user = null;
         },
-        setPreviousRecommendations(state, object) {
-            state.previousRecommendations = object;
+        setHistory(state, object) {
+            state.history = object;
         },
         setRoute(state, route) {
             state.route = route;
+        },
+        setViewingHistory(state, newViewHistory){
+            state.viewingHistory = newViewHistory;
         }
     },
 
@@ -61,7 +64,7 @@ export default createStore({
             //for debugging so we not spam api, replace token with new token every 1h
             //let temptoken = "BQCDxQc1PPXSsfKnTHCj6JPUpUF72TsZaZhDT-M4h1TSo9mblUI3cK-hWD4lixSghzq30NqauUwdX2UU7Vw";
             APIcontroller.getRecommendations(state.getters.getToken, queryObject)
-                .then(res => res.json()).user
+                .then(res => res.json())
                 .then(res => {
                     state.commit('saveRecommendation', res);
                     db.pushRecommendation(res, queryObject, state.getters.getCurrentUser.uid);
@@ -115,7 +118,7 @@ export default createStore({
         FETCH_RESULT_HISTORY(state) {
             db.fetchResultHistory(state.getters.getCurrentUser.uid)
                 .then((snapshot) => {
-                    state.commit("setPreviousRecommendations", snapshot.val());
+                    state.commit("setHistory", snapshot.val());
                 });
         },
         /**
@@ -125,11 +128,20 @@ export default createStore({
         SUBSCRIBE_RESULT_HISTORY(state) {
           db.subscribeResultHistory(
               state.getters.getCurrentUser.uid,
-              snapshot => state.commit("setPreviousRecommendations", snapshot.val())
+              snapshot => state.commit("setHistory", snapshot.val())
              );
           return () => db.unsubscribeResultHistory(state.getters.getCurrentUser.uid);
         },
-
+        /**
+         * Sets the viewingHistory state.
+         * @param {*} state 
+         * @param {Object comtaining a single reccomendation selected from state.history} newViewHistory 
+         */
+        SET_VIEW_HISTORY(state, newViewHistory){
+            state.commit("setViewingHistory", newViewHistory);
+            console.log("set view history");
+            console.log(newViewHistory);
+        },
         /**
          * Set the current route in the webpage
          * @param {*} state 
@@ -165,10 +177,12 @@ export default createStore({
             return state.user;
         },
 
-        getPreviousRecommendations(state) {
-            return state.previousRecommendations;
+        getPreviousRecommendations(state) { // not changed because of compatability (should be changed)
+            return state.history;
         },
-
+        getViewingHistory(state){
+            return state.viewingHistory;
+        },
         getRoute(state) {
             return state.route;
         }
