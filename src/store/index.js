@@ -139,8 +139,6 @@ export default createStore({
          */
         SET_VIEW_HISTORY(state, newViewHistory){
             state.commit("setViewingHistory", newViewHistory);
-            console.log("set view history");
-            console.log(newViewHistory);
         },
         /**
          * Set the current route in the webpage
