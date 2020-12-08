@@ -54,8 +54,6 @@ export default {
     },
     computed: {
         previousRecommendations(){
-            // console.log("computed: ");
-            // console.log(this.$store.getters.getPreviousRecommendations);
             return this.$store.getters.getPreviousRecommendations;
         }
     },
