@@ -121,7 +121,6 @@ export default createStore({
                         history.push(val[snapShotID]);
                     }
                     state.commit("setPreviousRecommendations", val);
-                    console.log(val);
                 });
         },
 

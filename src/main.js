@@ -16,7 +16,6 @@ firebase.auth().onAuthStateChanged((user)=>{
 
 function hashChange() {
     if(! ["#Welcome", "#Search", "#Result", "#History", "#Login"].find(knownRoute=> window.location.hash === knownRoute)) {
-        console.log(window.location.hash);
         window.location.hash="Welcome";
     }
     
