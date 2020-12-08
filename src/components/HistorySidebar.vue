@@ -13,7 +13,6 @@
 
 <script>
 /* eslint-disable vue/no-unused-components */
-
 import HistorySidebarButton from "./HistorySidebarButton"
 
 
@@ -48,9 +47,6 @@ export default {
             history.sort((a,b)=> a["time"] < b["time"]);
             return history;
         },
-        setViewingRecommendation(rec) {
-            console.log("rec: " + rec)
-        }
     },
     computed: {
         previousRecommendations(){

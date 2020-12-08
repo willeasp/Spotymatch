@@ -57,7 +57,6 @@ export default {
     computed: {
         historyExists(){
             if( !this.$store.getters.getViewingHistory["key"] ) return false;
-            console.log(this.$store.getters.getViewingHistory)
             return true;
         },
         history(){
@@ -70,12 +69,7 @@ export default {
 
         },
         getTracks(){
-            // let tracks = [];
             return this.history['songs'];
-            // for(let i = 0; i< h.length; i++){
-            //     console.log(h[i]['name']);
-            // }
-            // return h;
         },
         getSeeds(){
             let listSeeds = [];
@@ -133,8 +127,6 @@ export default {
 }
 .header{
     display: grid;
-    /* grid-template-columns: repeat(3, 3fr); */
-    /* grid-template-rows: 1fr; */
     grid-column-gap: 8px;
     grid-row-gap: 0px;  
     
@@ -208,7 +200,6 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    
     margin-left: 8px;
     border-radius: 8px;
     font-size: 1.5rem;
