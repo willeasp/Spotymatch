@@ -10,7 +10,10 @@ export default createStore({
     lastRecommendation: {},  // the last received spotify recommendation
     user: null,
     previousRecommendations: [], // all recommendations
-    viewingRecommendation: {} // en recommendation
+    viewingRecommendation: {}, // en recommendation
+    error: null,
+    loading: false,
+    doneLoading: false
   },
   mutations: {
     setToken(state, token) {
@@ -28,6 +31,15 @@ export default createStore({
     setPreviousRecommendations(state, object) {
       state.previousRecommendations = object;
     },
+    setError(state, error){
+      state.error = error;
+    },
+    setLoading(state, status){
+      state.loading = status;
+    },
+    setDoneLoading(state, status){
+      state.doneLoading = status;
+    }
   },
   actions: {
     /**
@@ -52,14 +64,31 @@ export default createStore({
      */
     REQUEST_RECOMMENDATION(state, queryObject) {
       //for debugging so we not spam api, replace token with new token every 1h
-      //let temptoken = "BQCDxQc1PPXSsfKnTHCj6JPUpUF72TsZaZhDT-M4h1TSo9mblUI3cK-hWD4lixSghzq30NqauUwdX2UU7Vw";
-      APIcontroller.getRecommendations(state.getters.getToken, queryObject)
-        .then(res => res.json())
-        .then(res => {
-          state.commit('saveRecommendation', res);
-          db.pushRecommendation(res, queryObject, state.getters.getCurrentUser.user.uid);
-        });
+      let temptoken = "BQDEqA5UbnH6bjD8El9n8X7tC4OxUWkhMUX6BRNO8fdUcxm_V5NM_026Z5qo5l-E9ivmIfG5OJv-aucrnnc";
+      state.commit('setLoading', true);
+      state.commit('setDoneLoading', false);
+      // APIcontroller.getRecommendations(state.getters.getToken, queryObject)
+      APIcontroller.getRecommendations(temptoken, queryObject)
+      .then(response => {
+        if (response.ok) return response;
+        else if(response.status === 401) {
+          state.dispatch('REQUEST_TOKEN');
+        }
+        throw new Error(response.statusText);
+      })
+      .then(res => res.json())
+      .then(res => {
+        state.commit('saveRecommendation', res);
+        // db.pushRecommendation(res, queryObject, state.getters.getCurrentUser.uid);
+      })
+      .catch(err => {
+        state.commit('setError', err.message)
+        console.log(err.message);
+      });
+      state.commit('setLoading', false);
+      state.commit('setDoneLoading', true);
     },
+
     USER_SIGN_IN(state, { email, password }) {
       fb.signInUser(email, password)
         .catch(err => console.error(err, "user could not sign in"));
@@ -76,7 +105,6 @@ export default createStore({
 
     USER_SIGN_OUT(state) {
       fb.signOutUser()
-
         .catch(err => console.error(err, "Could not log out user"));
     },
 
@@ -88,7 +116,7 @@ export default createStore({
      * @param {*} state 
      */
     FETCH_RESULT_HISTORY(state) {
-      db.fetchResultHistory(state.getters.getCurrentUser.user.uid)
+      db.fetchResultHistory(state.getters.getCurrentUser.uid)
         .then((snapshot) => {
           let history = [];
           for (const snapShotID in snapshot.val()) {
@@ -125,6 +153,9 @@ export default createStore({
     },
     getPreviousRecommendations(state) {
       return state.previousRecommendations;
+    },
+    getError(state){
+      return state.error;
     }
   },
   modules: {
