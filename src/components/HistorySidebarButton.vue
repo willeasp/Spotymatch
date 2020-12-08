@@ -36,7 +36,7 @@ export default {
     b {
         color: #f2f2f2;
         text-align: center;
-        padding: 14px 16px;
+        padding: 15px;
         display: inline-block;
         text-decoration: none;
         font-size: 17px;
@@ -56,6 +56,6 @@ export default {
 
     /* Active history is highlighted */
     .historySidebarButtonActive{
-    background-color:rgba(208, 208, 208, 0.4)
-}
+        background-color:rgba(208, 208, 208, 0.4)
+    }
 </style>

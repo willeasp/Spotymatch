@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="historySidebar gridchild">
         <div class="historySidebarTitle">
             Previous History
         </div>
@@ -12,6 +12,8 @@
 </template>
 
 <script>
+/* eslint-disable vue/no-unused-components */
+
 import HistorySidebarButton from "./HistorySidebarButton"
 
 
@@ -41,14 +43,12 @@ export default {
                          second: 'numeric' 
                          }).format(new Date(recommendations[key]["time"]))
                     }
-                
-            )
+                )
             }
             history.sort((a,b)=> a["time"] < b["time"]);
             return history;
         },
         setViewingRecommendation(rec) {
-            // console.log(rec.obj["time"]);
             console.log("rec: " + rec)
         }
     },
@@ -64,16 +64,22 @@ export default {
     .historySidebarTitle{
         color: #f2f2f2;
         text-align: center;
-        padding: 14px 16px;
+        padding: 15px;
         display: inline-block;
         text-decoration: none;
         font-size: 20px;
-        /* transition-property: background-color,border-color,color,box-shadow,filter;
-        transition-duration: .3s; */
         background-color:rgba(0, 0, 0, 0.2);
         width:200px;
+
     }
     .historySidebarTitle:hover{
         cursor:default;
+    }
+    .historySidebar{
+        
+        text-align: center;
+        height:100%;
+        width: 230px;
+        border:1px solid red ;
     }
 </style>

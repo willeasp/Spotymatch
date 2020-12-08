@@ -1,17 +1,14 @@
 <template>
-  <div>
-    <HistorySidebar/>
-    <!-- <div> <button @click="setBananaHash">banana</button> </div>
-    <div> <button @click="setAppleHash">apple</button> </div>
-    <div> <button @click="setMonkeyHash">monkey</button> </div> -->
-
+  <div id="history">
+    <HistorySidebar />
+    <HistoryShow /> 
   </div>
 </template>
 
 <script>
-
+/* eslint-disable vue/no-unused-components */
 import HistorySidebar from './HistorySidebar.vue';
-
+import HistoryShow from './HistoryShow.vue';
 
 export default {
     
@@ -21,12 +18,13 @@ export default {
     },
     components: {
         HistorySidebar,
-
+        HistoryShow,
     },
 
 }
 </script>
 
-<style>
+<style scoped>
+
 
 </style>
