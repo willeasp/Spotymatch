@@ -101,14 +101,14 @@ export default {
 } 
 .song{
     display: grid;
-grid-template-columns: repeat(9, 1fr);
-grid-template-rows: 1fr;
-grid-column-gap: 8px;
-grid-row-gap: 0px;  
+    grid-template-columns: repeat(9, 1fr);
+    grid-template-rows: 1fr;
+    grid-column-gap: 8px;
+    grid-row-gap: 0px;  
     
     height: 11rem;
     border-radius: 6px;
-    background-color: rgb(238, 238, 238);
+    background: linear-gradient(90deg, rgba(247,247,247,1) 0%, rgb(218, 206, 255) 100%);
     margin: 1rem;
     box-shadow: 5px 5px 10px 2px rgba(0,0,0,0.30);
 }
@@ -125,7 +125,7 @@ grid-row-gap: 0px;
     box-shadow: 5px 5px 10px 0px rgba(0,0,0,0.30);
     
 }
-@media screen and (max-width: 600px){
+@media (max-width: 600px){
     .song{
         height: 8rem;
     }
@@ -141,12 +141,12 @@ grid-row-gap: 0px;
     }
 }
 .songInfo{
-   grid-area: 1 / 3 / 2 / 6;
+    grid-area: 1 / 3 / 2 / 9;
     margin: 1rem;
 }
 .songInfo h2{
     padding-bottom: 1rem;
-    align-self: center;
+    
 }
 .songInfo h3{
     padding-bottom: 1rem;
