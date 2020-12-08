@@ -25,3 +25,16 @@ firebase.auth().onAuthStateChanged((user)=>{
         }
     }
 })
+
+function hashChange() {
+    if(! ["#Welcome", "#Search", "#Result", "#History", "#Login"].find(knownRoute=> window.location.hash === knownRoute)) {
+        window.location.hash="Welcome";
+    }
+    
+    store.dispatch("SET_ROUTE", window.location.hash.substring(1));
+}
+
+hashChange();
+
+window.addEventListener("hashchange", hashChange);
+

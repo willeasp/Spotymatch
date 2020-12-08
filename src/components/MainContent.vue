@@ -2,13 +2,24 @@
     <TopBar/>
 
     <template v-if="route === 'Welcome'">
-        <Welcome/>
+        <div class="notTopBar">
+            <Welcome/>
+        </div>
     </template>
     <template v-if="route === 'Search'">
-        <Search/>
+        <div class="notTopBar">
+            <Search/>
+        </div>
     </template>
     <template v-if="route === 'Result'">
-        <Result/>
+        <div class="notTopBar">
+            <Result/>
+        </div>
+    </template>
+    <template v-if="route === 'History'">
+        <div class="notTopBar">
+            <History/>
+        </div>
     </template>
     
 </template>
@@ -18,6 +29,7 @@ import TopBar from './TopBar';
 import Welcome from './Welcome';
 import Search from './Search';
 import Result from './Result';
+import History from './History';
 
 export default {
     name: "MainContent",
@@ -27,6 +39,7 @@ export default {
         Welcome,
         Search,
         Result,
+        History,
     },
 
     computed: {
@@ -38,5 +51,7 @@ export default {
 </script>
 
 <style scoped>
-
+    .notTopBar {
+        margin-top: 48px;
+    }
 </style>

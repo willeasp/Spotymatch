@@ -11,7 +11,7 @@ export default createStore({
         user: null,     // user currently logged in
         history: [], // all recommendations
         viewingHistory: {}, // a recommendation
-        route: "routeBABY"       // current route on the website
+        route: window.location.hash.substring(1),
     },
 
     mutations: {
@@ -118,7 +118,13 @@ export default createStore({
         FETCH_RESULT_HISTORY(state) {
             db.fetchResultHistory(state.getters.getCurrentUser.uid)
                 .then((snapshot) => {
-                    state.commit("setHistory", snapshot.val());
+
+                    let history = [];
+                    let val = snapshot.val();
+                    for (const snapShotID in val) {
+                        history.push(val[snapShotID]);
+                    }
+                    state.commit("setPreviousRecommendations", val);
                 });
         },
         /**
