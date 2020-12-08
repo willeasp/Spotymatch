@@ -161,7 +161,7 @@ export default {
     
     height: 11rem;
     border-radius: 6px;
-    background-color: rgb(238, 238, 238);
+    background-color: rgb(238, 238, 238, 0.85);
     margin: 1rem;
     box-shadow: 5px 5px 10px 2px rgba(0,0,0,0.30);
 }

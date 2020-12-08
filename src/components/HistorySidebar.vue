@@ -62,6 +62,7 @@ export default {
 
 <style>
     .historySidebarTitle{
+        display:grid;
         color: #f2f2f2;
         text-align: center;
         padding: 15px;
@@ -70,15 +71,15 @@ export default {
         font-size: 20px;
         background-color:rgba(0, 0, 0, 0.2);
         width:200px;
+        height:60px;
+        line-height: 60px;
+        border-radius: 6px;
+        box-shadow: 2px 2px 5px 1px rgba(0,0,0,0.30);
+
 
     }
     .historySidebarTitle:hover{
         cursor:default;
     }
-    .historySidebar{
-        
-        text-align: center;
-        height:100%;
-        width: 230px;
-    }
+
 </style>
