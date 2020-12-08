@@ -112,7 +112,6 @@ export default {
 <style scoped>
 .historyShow{
     text-align: center;
-    border:1px solid cornflowerblue ;
 }
 * {
     margin: 0;

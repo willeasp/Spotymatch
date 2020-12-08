@@ -80,6 +80,5 @@ export default {
         text-align: center;
         height:100%;
         width: 230px;
-        border:1px solid red ;
     }
 </style>

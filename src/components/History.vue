@@ -1,7 +1,7 @@
 <template>
-  <div id="history">
-    <HistorySidebar />
-    <HistoryShow /> 
+  <div class="history">
+    <HistorySidebar class="sidebar" />
+    <HistoryShow class="show" /> 
   </div>
 </template>
 
@@ -25,6 +25,18 @@ export default {
 </script>
 
 <style scoped>
-
-
+.history{
+    display: grid;
+    gap: 10px;
+}
+.sidebar{
+    grid-column: 1 / 2;
+    grid-row: 1;
+    /* border: solid 1px orangered; */
+}
+.show{
+    grid-column: 2 / 3;
+    grid-row: 1;
+    /* border: solid 1px burlywood; */
+}
 </style>
