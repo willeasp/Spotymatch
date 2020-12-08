@@ -49,7 +49,6 @@ export default {
     },
     methods: {
         signIn() {
-            console.log(this.email + " " + this.password);
             this.$store.dispatch("USER_SIGN_IN", {
                 email: this.email,
                 password: this.password,
@@ -73,6 +72,7 @@ export default {
 <style scoped>
 .text {
     color: white;
+    cursor: default;
 }
 .title {
     font-size: 28px;
@@ -156,7 +156,7 @@ input {
     width: 100%;
     height: 40px;
     padding: 6px 12px;
-    border: 1px solid #d9dadc;
+    border: 1px solid #15883e;
     border-radius: 0;
     box-shadow: none;
     transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
