@@ -132,11 +132,11 @@ export default createStore({
          * @param {*} state 
          */
         SUBSCRIBE_RESULT_HISTORY(state) {
-          db.subscribeResultHistory(
-              state.getters.getCurrentUser.uid,
-              snapshot => state.commit("setHistory", snapshot.val())
-             );
-          return () => db.unsubscribeResultHistory(state.getters.getCurrentUser.uid);
+            db.subscribeResultHistory(
+                state.getters.getCurrentUser.uid,
+                snapshot => state.commit("setHistory", snapshot.val())
+            );
+            return () => db.unsubscribeResultHistory(state.getters.getCurrentUser.uid);
         },
         /**
          * Sets the viewingHistory state.
