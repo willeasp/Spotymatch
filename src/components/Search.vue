@@ -170,7 +170,7 @@ form{
     margin-top: 30px;
     text-align: center;
     transition: .2s;
-    background-color: rgb(206, 206, 206);
+    background-color:  rgba(255, 255, 255, 0.507);
     border-radius: 15px;
     color:black;
     box-shadow: 5px 5px 10px;
@@ -215,7 +215,7 @@ form{
     margin-top: 30px;
     text-align: center;
     transition: .2s;
-    background-color: rgb(206, 206, 206);
+    background-color: rgba(255, 255, 255, 0.507);
     border-radius: 35px;
     color:black;
     -ms-user-select: none;
@@ -224,7 +224,7 @@ form{
 }
 .slideContainer:hover{
     color: whitesmoke;
-    background-color: rgb(29, 185, 84);
+    background-color: rgba(89, 180, 121, 0.575);
 }
 h2{
     margin-left: 10%;
@@ -239,7 +239,7 @@ h2{
     appearance: none;
     width: 350px;
     height: 35px;
-    background: rgb(58, 70, 61);
+    background: rgba(77, 77, 77, 0.452);
     outline: none;
     opacity: 0.7;
     -webkit-transition: .2s; 
@@ -251,6 +251,7 @@ h2{
 }
 .slider:hover{
     opacity: 1;
+    background-color: rgba(89, 180, 121, 0.575);
 }
 #lowerButtons{
     margin-left: 5%;
