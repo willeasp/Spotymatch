@@ -1,7 +1,7 @@
 <template>
     <a 
-    @click="setRoute"
-    v-bind:class="{'currentRoute':isCurrentRoute}" >
+      @click="setRoute"
+      v-bind:class="{'currentRoute':isCurrentRoute}" >
     {{routeName}}
     </a>
 </template>

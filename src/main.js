@@ -11,6 +11,10 @@ firebase.auth().onAuthStateChanged((user)=>{
     }
     console.log("firebase user: ")
     console.log(user);
-    if(user){ store.dispatch('SET_USER', user); }
-    else {store.dispatch('SET_USER', null);}
+    if(user){
+         store.dispatch('SET_USER', user); 
+    }
+    else {
+        store.dispatch('SET_USER', null);
+    }
 });

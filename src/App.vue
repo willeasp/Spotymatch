@@ -67,6 +67,7 @@ export default {
     background-size: cover;
     background-repeat: no-repeat;
     background: linear-gradient(transparent, rgba(0, 0, 0, 0.849));
+    overflow-y: scroll;
 }
 /* @keyframes vibrator {
         0% {

@@ -63,5 +63,7 @@ export default {
     /* For buttons to the right */
     .btn-right {
         float: right;
+        -ms-user-select: none;
+        user-select: none;
     }
 </style>
