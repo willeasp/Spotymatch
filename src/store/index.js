@@ -23,7 +23,7 @@ export default createStore({
         saveRecommendation(state, recommendationObject) {
             state.lastRecommendation = recommendationObject;
         },
-        set_user(state, user) {
+        setUser(state, user) {
             state.user = user;
         },
         logout(state) {
@@ -118,7 +118,7 @@ export default createStore({
         },
 
         SET_USER(state, user) {
-            state.commit("set_user", user);
+            state.commit("setUser", user);
         },
         /**
         * Create a new user in firebase
@@ -135,7 +135,7 @@ export default createStore({
         /**
          * Fetches user history from firbase
          * @param {*} state 
-         */
+         */     
         FETCH_RESULT_HISTORY(state) {
             db.fetchResultHistory(state.getters.getCurrentUser.uid)
                 .then((snapshot) => {
