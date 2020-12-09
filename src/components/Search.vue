@@ -127,7 +127,6 @@ export default {
             else{
                 this.seedGenres = this.seedGenres.length < 5 ? [...this.seedGenres, genre] : this.seedGenres;
             }
-            // this.seedGenres = this.seedGenres.includes(genre) ? this.seedGenres.filter(genre) : this.seedGenres.push(genre);
         },
         isSelected(genre){
             return this.seedGenres.includes(genre);
