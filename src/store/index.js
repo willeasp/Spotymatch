@@ -20,6 +20,9 @@ export default createStore({
         setToken(state, token) {
             state.token = token;
         },
+        setTokenTimeout(state, time){
+            state.tokenTimeout = time;
+        },
         saveRecommendation(state, recommendationObject) {
             state.lastRecommendation = recommendationObject;
         },
@@ -54,14 +57,16 @@ export default createStore({
          * Call this in the beginning of a session
          * @param {*} state is handled automatically
          */
-        REQUEST_TOKEN(state) {
-            APIcontroller.getToken().then(token => {
-                state.commit('setToken', token);
+        async REQUEST_TOKEN(state) {
+            await APIcontroller.getToken().then(tokenObject => {
+                state.commit('setToken', tokenObject["access_token"]);
+                const timeInSeconds = new Date() / 1000;
+                state.commit('setTokenTimeout', tokenObject["expires_in"] + timeInSeconds);
             });
 
             setTimeout(() => {
                 state.commit('setToken', "");
-                state.dispatch('setToken');
+                state.dispatch('REQUEST_TOKEN');
             }, 3600 * 1000);
         },
         /**
@@ -69,11 +74,17 @@ export default createStore({
          * @param {*} state is handled automatically
          * @param {*} queryObject contains the query
          */
-        REQUEST_RECOMMENDATION(state, queryObject) {
+        async REQUEST_RECOMMENDATION(state, queryObject) {
             //for debugging so we not spam api, replace token with new token every 1h
             //let temptoken = "BQDEqA5UbnH6bjD8El9n8X7tC4OxUWkhMUX6BRNO8fdUcxm_V5NM_026Z5qo5l-E9ivmIfG5OJv-aucrnnc";
             state.commit('setLoading', true);
             state.commit('setDoneLoading', false);
+
+            // ugly fix for tokens disapearing on page reload
+            if(!state.getters.getToken) {
+                await state.dispatch('REQUEST_TOKEN');
+            }
+
             APIcontroller.getRecommendations(state.getters.getToken, queryObject)
                 // APIcontroller.getRecommendations(temptoken, queryObject)
                 .then(response => {
