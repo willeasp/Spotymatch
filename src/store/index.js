@@ -86,7 +86,7 @@ export default createStore({
                 .then(res => res.json())
                 .then(res => {
                     state.commit('saveRecommendation', res);
-                    // db.pushRecommendation(res, queryObject, state.getters.getCurrentUser.uid);
+                    db.pushRecommendation(res, queryObject, state.getters.getCurrentUser.uid);
                 })
                 .catch(err => {
                     state.commit('setError', err.message)
@@ -103,11 +103,7 @@ export default createStore({
         USER_SIGN_IN(state, { email, password }) {
             fb.signInUser(email, password)
                 .catch(err => console.error(err, "user could not sign in"));
-            state.dispatch('setToken');
-            setTimeout(() => {
-                state.commit('setToken', "");
-                state.dispatch('setToken');
-            }, 3600 * 1000);
+            state.dispatch('REQUEST_TOKEN');
         },
         /**
         * Sign user out from firebase
