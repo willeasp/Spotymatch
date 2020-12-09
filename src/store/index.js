@@ -12,8 +12,10 @@ export default createStore({
         history: [], // all recommendations
         viewingHistory: {}, // a recommendation
         route: window.location.hash.substring(1),
+        error: null, //if request recommendation throws error
+        loading: false, //request recommendation loading
+        doneLoading: false  // request recommendation done loading
     },
-
     mutations: {
         setToken(state, token) {
             state.token = token;
@@ -30,6 +32,15 @@ export default createStore({
         setHistory(state, object) {
             state.history = object;
         },
+        setError(state, error) {
+            state.error = error;
+        },
+        setLoading(state, status) {
+            state.loading = status;
+        },
+        setDoneLoading(state, status) {
+            state.doneLoading = status;
+        },
         setRoute(state, route) {
             state.route = route;
         },
@@ -37,7 +48,6 @@ export default createStore({
             state.viewingHistory = newViewHistory;
         }
     },
-
     actions: {
         /**
          * Retrieves a new token and refreshes it every hour.
@@ -54,7 +64,6 @@ export default createStore({
                 state.dispatch('setToken');
             }, 3600 * 1000);
         },
-
         /**
          * Request a list of 20 tracks based on queryObject
          * @param {*} state is handled automatically
@@ -62,55 +71,63 @@ export default createStore({
          */
         REQUEST_RECOMMENDATION(state, queryObject) {
             //for debugging so we not spam api, replace token with new token every 1h
-            //let temptoken = "BQCDxQc1PPXSsfKnTHCj6JPUpUF72TsZaZhDT-M4h1TSo9mblUI3cK-hWD4lixSghzq30NqauUwdX2UU7Vw";
+            //let temptoken = "BQDEqA5UbnH6bjD8El9n8X7tC4OxUWkhMUX6BRNO8fdUcxm_V5NM_026Z5qo5l-E9ivmIfG5OJv-aucrnnc";
+            state.commit('setLoading', true);
+            state.commit('setDoneLoading', false);
             APIcontroller.getRecommendations(state.getters.getToken, queryObject)
+                // APIcontroller.getRecommendations(temptoken, queryObject)
+                .then(response => {
+                    if (response.ok) return response;
+                    else if (response.status === 401) {
+                        state.dispatch('REQUEST_TOKEN');
+                    }
+                    throw new Error(response.statusText);
+                })
                 .then(res => res.json())
                 .then(res => {
                     state.commit('saveRecommendation', res);
                     db.pushRecommendation(res, queryObject, state.getters.getCurrentUser.uid);
+                })
+                .catch(err => {
+                    state.commit('setError', err.message)
+                    console.log(err.message);
                 });
+            state.commit('setLoading', false);
+            state.commit('setDoneLoading', true);
         },
-
         /**
-         * Sign in to firebase with already registered user
-         * @param {*} state 
-         * @param {*} param1 
-         */
+        * Sign in to firebase with already registered user
+        * @param {*} state 
+        * @param {*} param1 
+        */
         USER_SIGN_IN(state, { email, password }) {
             fb.signInUser(email, password)
                 .catch(err => console.error(err, "user could not sign in"));
+            state.dispatch('REQUEST_TOKEN');
         },
-
         /**
-         * Create a new user in firebase
-         * @param {*} state 
-         * @param {*} param1 
-         */
-        CREATE_USER(state, { email, password }) {
-            fb.createUser(email, password)
-                .then(user => {
-                    state.commit("setUser", user);
-                })
-                .catch(err => console.error(err, "could not create user"));
-        },
-
-        /**
-         * Sign user out from firebase
-         */
+        * Sign user out from firebase
+        */
         USER_SIGN_OUT() {
             fb.signOutUser()
                 .catch(err => console.error(err, "Could not log out user"));
         },
 
-        /**
-         * Set the current user as user
-         * @param {*} state 
-         * @param {*} user 
-         */
         SET_USER(state, user) {
             state.commit("setUser", user);
         },
-
+        /**
+        * Create a new user in firebase
+        * @param {*} state 
+        * @param {*} param1 
+        */
+        CREATE_USER(state, { email, password }) {
+            fb.createUser(email, password)
+                .then(user => {
+                    state.commit("set_user", user);
+                })
+                .catch(err => console.error(err, "could not create user"));
+        },
         /**
          * Fetches user history from firbase
          * @param {*} state 
@@ -120,11 +137,14 @@ export default createStore({
                 .then((snapshot) => {
 
                     let history = [];
-                    let val = snapshot.val();
-                    for (const snapShotID in val) {
-                        history.push(val[snapShotID]);
+                    for (const snapShotID in snapshot.val()) {
+                        history.push({
+                            "songs": snapshot.val()[snapShotID]["songs"],
+                            "time": snapshot.val()[snapShotID]["time"],
+                            "seeds": snapshot.val()[snapShotID]["seeds"]
+                        });
                     }
-                    state.commit("setPreviousRecommendations", val);
+                    state.commit("setPreviousRecommendations", history);
                 });
         },
         /**
@@ -147,10 +167,10 @@ export default createStore({
             state.commit("setViewingHistory", newViewHistory);
         },
         /**
-         * Set the current route in the webpage
-         * @param {*} state 
-         * @param {*} route 
-         */
+             * Set the current route in the webpage
+             * @param {*} state 
+             * @param {*} route 
+             */
         SET_ROUTE(state, route) {
             state.commit("setRoute", route);
         }
@@ -189,9 +209,14 @@ export default createStore({
         },
         getRoute(state) {
             return state.route;
+        },
+
+        getError(state) {
+            return state.error;
+
         }
     },
-
     modules: {
+
     }
 })
