@@ -65,6 +65,8 @@ export default {
     /* For buttons to the right */
     .btn-right {
         float: right;
+        -ms-user-select: none;
+        user-select: none;
     }
 
     /* Change styling of the current link */

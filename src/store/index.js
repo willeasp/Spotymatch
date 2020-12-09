@@ -21,7 +21,7 @@ export default createStore({
         saveRecommendation(state, recommendationObject) {
             state.lastRecommendation = recommendationObject;
         },
-        set_user(state, user) {
+        setUser(state, user) {
             state.user = user;
         },
         logout(state) {
@@ -89,7 +89,7 @@ export default createStore({
         CREATE_USER(state, { email, password }) {
             fb.createUser(email, password)
                 .then(user => {
-                    state.commit("set_user", user);
+                    state.commit("setUser", user);
                 })
                 .catch(err => console.error(err, "could not create user"));
         },
@@ -108,13 +108,13 @@ export default createStore({
          * @param {*} user 
          */
         SET_USER(state, user) {
-            state.commit("set_user", user);
+            state.commit("setUser", user);
         },
 
         /**
          * Fetches user history from firbase
          * @param {*} state 
-         */
+         */     
         FETCH_RESULT_HISTORY(state) {
             db.fetchResultHistory(state.getters.getCurrentUser.uid)
                 .then((snapshot) => {
