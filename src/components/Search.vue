@@ -3,7 +3,6 @@
         <button @click="getToken"> tokenaye</button>
         <button @click="getRekt"> get rec</button>
         <button @click="resultHistory"> history</button>
-        
     </div>
 </template>
 
@@ -21,7 +20,6 @@ export default {
                 "seed_genres": ["rock","afrobeat","alternative"],
                 "liveness": 0.4
             });
-            console.log("requested recommendation");
         },
         resultHistory(){
             this.$store.dispatch("FETCH_RESULT_HISTORY");

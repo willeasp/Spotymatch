@@ -12,9 +12,9 @@ export default createStore({
         previousRecommendations: [], // all recommendations
         viewingRecommendation: {}, // en recommendation
         route: window.location.hash.substring(1),
-        error: null,
-        loading: false,
-        doneLoading: false
+        error: null, //if request recommendation throws error
+        loading: false, //request recommendation loading
+        doneLoading: false  // request recommendation done loading
     },
     mutations: {
         setToken(state, token) {
@@ -68,11 +68,11 @@ export default createStore({
          */
         REQUEST_RECOMMENDATION(state, queryObject) {
             //for debugging so we not spam api, replace token with new token every 1h
-            let temptoken = "BQDEqA5UbnH6bjD8El9n8X7tC4OxUWkhMUX6BRNO8fdUcxm_V5NM_026Z5qo5l-E9ivmIfG5OJv-aucrnnc";
+            //let temptoken = "BQDEqA5UbnH6bjD8El9n8X7tC4OxUWkhMUX6BRNO8fdUcxm_V5NM_026Z5qo5l-E9ivmIfG5OJv-aucrnnc";
             state.commit('setLoading', true);
             state.commit('setDoneLoading', false);
             APIcontroller.getRecommendations(state.getters.getToken, queryObject)
-            // APIcontroller.getRecommendations(temptoken, queryObject)
+                // APIcontroller.getRecommendations(temptoken, queryObject)
                 .then(response => {
                     if (response.ok) return response;
                     else if (response.status === 401) {
@@ -93,10 +93,10 @@ export default createStore({
             state.commit('setDoneLoading', true);
         },
         /**
-             * Sign in to firebase with already registered user
-             * @param {*} state 
-             * @param {*} param1 
-             */
+        * Sign in to firebase with already registered user
+        * @param {*} state 
+        * @param {*} param1 
+        */
         USER_SIGN_IN(state, { email, password }) {
             fb.signInUser(email, password)
                 .catch(err => console.error(err, "user could not sign in"));
@@ -107,8 +107,8 @@ export default createStore({
             }, 3600 * 1000);
         },
         /**
-                 * Sign user out from firebase
-                 */
+        * Sign user out from firebase
+        */
         USER_SIGN_OUT() {
             fb.signOutUser()
                 .catch(err => console.error(err, "Could not log out user"));
@@ -118,10 +118,10 @@ export default createStore({
             state.commit("set_user", user);
         },
         /**
-             * Create a new user in firebase
-             * @param {*} state 
-             * @param {*} param1 
-             */
+        * Create a new user in firebase
+        * @param {*} state 
+        * @param {*} param1 
+        */
         CREATE_USER(state, { email, password }) {
             fb.createUser(email, password)
                 .then(user => {
@@ -133,7 +133,6 @@ export default createStore({
          * Fetches user history from firbase
          * @param {*} state 
          */
-
         FETCH_RESULT_HISTORY(state) {
             db.fetchResultHistory(state.getters.getCurrentUser.uid)
                 .then((snapshot) => {
@@ -148,18 +147,6 @@ export default createStore({
                     state.commit("setPreviousRecommendations", history);
                 });
         },
-        // FETCH_RESULT_HISTORY(state) {
-        //   db.fetchResultHistory(state.getters.getCurrentUser.uid)
-        //       .then((snapshot) => {
-        //           let history = [];
-        //           let val = snapshot.val();
-        //           for (const snapShotID in val) {
-        //               history.push(val[snapShotID]);
-        //           }
-        //           state.commit("setPreviousRecommendations", val);
-        //       });
-        // },
-
         /**
              * Set the current route in the webpage
              * @param {*} state 
