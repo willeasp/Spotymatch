@@ -65,9 +65,6 @@ export default {
 
     },
     methods :{
-        loadHistory(){
-
-        },
         getTracks(){
             return this.history['songs'];
         },
