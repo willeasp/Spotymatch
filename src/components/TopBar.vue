@@ -1,9 +1,9 @@
 <template>
     <div class="topnav">
-        <RouteButton routeName="Welcome"/>
-        <RouteButton routeName="Search"/>
-        <RouteButton routeName="Result"/>
-        <RouteButton routeName="History"/>
+        <RouteButton routeName="Welcome" text="Welcome"/>
+        <RouteButton routeName="Search" text="Search"/>
+        <RouteButton routeName="Result" text="Result"/>
+        <RouteButton routeName="History" text="History"/>
         <a 
         class="btn-right"
         @click="signOut">
@@ -32,8 +32,9 @@ export default {
 <style scoped>
     /* Add a black background color to the top navigation */
     .topnav {
+        position: fixed;
+        width: 100%;
         background-color: #121212;
-        overflow: hidden;
     }
 
     /* Style the links inside the navigation bar */
@@ -46,6 +47,7 @@ export default {
         font-size: 17px;
         transition-property: background-color,border-color,color,box-shadow,filter;
         transition-duration: .3s;
+        cursor: pointer;
     }
 
     /* Change the color of links on hover */
@@ -65,5 +67,11 @@ export default {
         float: right;
         -ms-user-select: none;
         user-select: none;
+    }
+
+    /* Change styling of the current link */
+    .currentRoute {
+        background-color: #15883e;
+        color: black;
     }
 </style>

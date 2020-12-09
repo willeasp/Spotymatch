@@ -1,4 +1,3 @@
-
 <template>
     <img class="logo" alt="Pear logo" src="../assets/pe.png" />
     <div class="welcome">

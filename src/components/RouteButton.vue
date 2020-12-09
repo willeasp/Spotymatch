@@ -1,8 +1,8 @@
 <template>
     <a 
-      @click="setRoute"
-      v-bind:class="{'currentRoute':isCurrentRoute}" >
-    {{routeName}}
+    @click="setRoute"
+    v-bind:class="{'currentRoute':isCurrentRoute}" >
+    {{text}}
     </a>
 </template>
 
@@ -11,6 +11,7 @@ export default {
     name: "TopBarButton",
     props: {
         routeName: String,
+        text: String,
     },
 
     computed: {
@@ -21,7 +22,7 @@ export default {
 
     methods: {
         setRoute: function() {
-            this.$store.dispatch("SET_ROUTE", this.routeName);
+            window.location.hash = this.routeName;
         }
     }
     
@@ -30,9 +31,4 @@ export default {
 
 <style scoped> 
     
-    /* Change styling of the current link */
-    .currentRoute {
-        background-color: #15883e;
-        color: black;
-    }
 </style>
