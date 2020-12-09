@@ -7,12 +7,8 @@
 </template>
 
 <script>
-import Search from "./Search.vue";
 export default {
-    name: "Welcome",
-    components: {
-        Search,
-    },
+    name: "Welcome",    
     computed: {
         user() {
             const user = this.$store.getters.getCurrentUser;
