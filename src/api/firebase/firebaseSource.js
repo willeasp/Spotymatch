@@ -26,6 +26,12 @@ const db = {
     fetchResultHistory : (userUID)=>{
         return database.ref('USERS/' + userUID).once('value');
     },
+    subscribeResultHistory : (userUID, callback) => {
+        return database.ref('USERS/' + userUID).on('value', callback)
+    },
+    unsubscribeResultHistory : (userUID) => {
+        database.ref('USERS/' + userUID).off('value', undefined);
+    },
     pushRecommendation : (spotifyRec, queryObject, userUID) => {
         database.ref("USERS/" + userUID).push({
             "songs": spotifyRec.tracks,
