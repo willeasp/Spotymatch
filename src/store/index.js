@@ -76,11 +76,13 @@ export default createStore({
          * @param {*} state 
          * @param {*} param1 
          */
-        USER_SIGN_IN(state, { email, password }) {
-            fb.signInUser(email, password)
+        async USER_SIGN_IN(state, { email, password }) {
+            let error;
+            await fb.signInUser(email, password)
             .catch(err => {
-                throw err;
+                error = err;
             });
+            if(error) throw error; 
         },
 
         /**

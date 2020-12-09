@@ -10,26 +10,27 @@
                 <label for="login-username">
                     E-mail
                 </label>
-                <input type="text" v-model="email" id="login-username" placeholder="E-postadress eller användarnamn">
-                <Error v-if="error" v-model:message="error"/>
+                <input :class="{'error':emailError}" type="text" v-model="email" id="login-username" placeholder="E-postadress eller användarnamn"/>
+                <Error v-if="emailError" v-model:message="error"/>
             </div>
             <div class="login-input">
                 <label for="login-password">
                     Password
                 </label>
                 <input type="password" v-model="password" id="login-password" placeholder="Password">
+                <Error v-if="errorCode === 'auth/wrong-password'" v-model:message="error"/>
             </div>
             
             <template v-if="isUser">
                 <button class="btn" @click="signIn">sign in</button>
-                <div class="submit">
+                <div class="registered">
                     Not registered?
                     <a @click="setIsUser(false)">Sign up</a>
                 </div>
             </template>
             <template v-else>
                 <button class="btn" @click="createAccount">create account</button>
-                <div class="submit">
+                <div class="registered">
                     Already registered?
                     <a @click="setIsUser(true)">Sign in</a>
                 </div>
@@ -54,19 +55,24 @@ export default {
             errorCode: ""
         };
     },
+
+    computed: {
+        emailError() {
+            return this.errorCode === 'auth/invalid-email' ||
+            this.errorCode === 'auth/user-not-found';
+        }
+    },
     methods: {
         signIn() {   
             this.$store.dispatch("USER_SIGN_IN", {
                 email: this.email,
                 password: this.password,
             })
-            .then(err => {  // does not catch error from dispatch, weird but this works
-                if(err) {
-                    this.error = err.message;
-                    this.errorCode = err.code;
-                }
-            })
-            .catch(console.log("wtf"));
+            .catch(err => {
+                this.error = err.message;
+                this.errorCode = err.code;
+                console.log(err);
+            });
         },
 
         createAccount() {
@@ -123,6 +129,11 @@ form {
     padding: 16px 50px 18px;
     text-transform: uppercase;
     font-family: inherit;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    line-height: 60px;
 }
 .btn:hover {
     background-color: #1db954;
@@ -175,8 +186,12 @@ input {
     box-shadow: none;
     transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
+.error {
+    -webkit-tap-highlight-color: rgb(255, 0, 0);
+    border: 1px solid #ff0000;
+}
 
-.submit {
+.registered { 
     color: rgb(105, 153, 76);
     margin: 3px;
 }
