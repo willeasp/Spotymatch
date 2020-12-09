@@ -44,6 +44,8 @@ export default {
     background-color: rgba(0, 0, 0, 0.2);
     margin: 1rem;
     box-shadow: 2px 2px 5px 1px rgba(0,0,0,0.30);
+    transition-property: background-color,border-color,color,box-shadow,filter;
+    transition-duration: .3s;
 }
     /* Change the color of links on hover */
     .sidebarButton:hover {
