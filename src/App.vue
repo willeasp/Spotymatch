@@ -55,19 +55,32 @@ body {
         right bottom,
         from(#6192ce),
         to(#be31a5)
-    );
-}
-.black-bg {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    background-attachment: fixed;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background: linear-gradient(transparent, rgba(0, 0, 0, 0.849));
-}
+        );
+    }
+
+    .black-bg {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        background-attachment: fixed;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.849));
+        overflow-y: scroll;
+
+        /* Hide scrollbar for IE, Edge and Firefox */    
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+    }
+
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .black-bg::-webkit-scrollbar {
+        display: none;
+    }
+
+
 /* @keyframes vibrator {
         0% {
             transform: translate(0);
