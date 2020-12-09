@@ -9,7 +9,7 @@ export default createStore({
         token: "", // authorisation token for current session
         lastRecommendation: {},  // the last received spotify recommendation
         user: null,     // user currently logged in
-        history: [], // all recommendations
+        history: {}, // all recommendations
         viewingHistory: {}, // a recommendation
         route: window.location.hash.substring(1),
         error: null, //if request recommendation throws error
@@ -108,7 +108,13 @@ export default createStore({
         /**
         * Sign user out from firebase
         */
-        USER_SIGN_OUT() {
+        USER_SIGN_OUT(state) {
+            // clear state
+            state.commit("saveRecommendation", {});
+            state.commit("setHistory", {});
+            state.commit("setViewingHistory", {});
+            window.location.hash = "";
+
             fb.signOutUser()
                 .catch(err => console.error(err, "Could not log out user"));
         },
