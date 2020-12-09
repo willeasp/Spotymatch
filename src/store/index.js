@@ -75,7 +75,9 @@ export default createStore({
          */
         USER_SIGN_IN(state, { email, password }) {
             fb.signInUser(email, password)
-                .catch(err => console.error(err, "user could not sign in"));
+            .catch(err => {
+                throw err;
+            });
         },
 
         /**

@@ -11,6 +11,7 @@
                     E-mail
                 </label>
                 <input type="text" v-model="email" id="login-username" placeholder="E-postadress eller användarnamn">
+                <Error v-if="error" v-model:message="error"/>
             </div>
             <div class="login-input">
                 <label for="login-password">
@@ -38,21 +39,34 @@
 </template>
 
 <script>
+import Error from './Error';
 export default {
     name: "Login",
+    components: {
+        Error,
+    },
     data() {
         return {
             email: "",
             password: "",
-            isUser: true
+            isUser: true,
+            error: "",
+            errorCode: ""
         };
     },
     methods: {
-        signIn() {
+        signIn() {   
             this.$store.dispatch("USER_SIGN_IN", {
                 email: this.email,
                 password: this.password,
-            });
+            })
+            .then(err => {  // does not catch error from dispatch, weird but this works
+                if(err) {
+                    this.error = err.message;
+                    this.errorCode = err.code;
+                }
+            })
+            .catch(console.log("wtf"));
         },
 
         createAccount() {
@@ -180,7 +194,3 @@ a:visited {
     border: none;
 }
 </style>
-
-
-
-        
