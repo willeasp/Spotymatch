@@ -1,5 +1,6 @@
 <template>
     <div id="search">
+        <h1 id="title">Search Form</h1>
         <form>
             <div id="genreContainer">
                 <a
@@ -52,19 +53,19 @@
                 <h2>{{"Speechiness: " + speechiness/1000}}</h2>
             </div>
             
+            <div id="lowerButtons">
+                <div id="recButton" @click="getRec">
+                    <span>Get recommendations</span>
+                </div>
+            </div>
 
             <li v-for="track in recommendations" :key="track.name">
                 {{track.name}}
             </li>
+
         </form>
     </div>
-    <div class="welcome">
-        
-        <button @click="getToken"> tokenaye</button>
-        <button @click="getRekt"> get rec</button>
-        <button @click="resultHistory"> history</button>
-        
-    </div>
+    
 </template>
 
 <script >
@@ -113,10 +114,11 @@ export default {
             this.$store.dispatch("REQUEST_TOKEN");
             setTimeout(()=>console.log(this.$store.getters.getToken), 500);
             },
-        getRekt(){
+        getRec(){
+            this.getToken();
             this.$store.dispatch("REQUEST_RECOMMENDATION", 
             {
-                "seed_genres": ["rock","afrobeat","alternative"],
+                "seed_genres": this.seedGenres,
                 "acousticness": this.acousticness/100,
                 "danceability": this.danceability/100,
                 "energy": this.energy/100,
@@ -149,51 +151,57 @@ export default {
 
 <style scoped>
 
+#title{
+    margin: 10% 10% 0 10%;
+    text-align: center;
+}
 form{
-    background-color: rgb(54, 54, 54);
     margin: 10%;
-    border-radius: 10px;
-    box-shadow: 5px 5px 10px;
-    padding: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
 #genreContainer{
     display: flex;
+    flex-wrap: wrap;
+    padding: 5px;
     width: 80%;
-    height: 120px;
     margin-left:10%;
     margin-top: 30px;
     text-align: center;
     transition: .2s;
     background-color: rgb(206, 206, 206);
     border-radius: 15px;
-    border: solid rgb(0, 0, 0);
     color:black;
+    box-shadow: 5px 5px 10px;
 
 }
 
 .genreButton{
     flex:1;
-    width: 10%;
-    height: 25px;
-    margin: 5px;
+    height: 20px;
+    width: auto;
+    margin: 3px;
     padding: 5px;
     text-align: center;
-    transition: .08s;
-    background-color: rgb(47, 88, 75);
+    transition: .12s;
+    background-color: rgb(24, 27, 26);
     border-radius: 15px;
-    border: solid rgb(0, 0, 0);
     color: whitesmoke;
+    white-space: nowrap;
     -ms-user-select: none;
     user-select: none;
+    text-transform: uppercase;
+    font-weight: bold;
 }
 .genreButton:active{
-    background-color: rgb(121, 173, 157);
-    border: solid rgb(83, 83, 83);
-
+    background-color: rgb(150, 173, 166);
 }
 .genreButton:hover{
     cursor: pointer;
+    box-shadow: 5px 5px 5px;
+    color:rgb(27, 133, 50);
+
 }
 .selected{
     background-color:  rgb(29, 185, 84);
@@ -209,10 +217,10 @@ form{
     transition: .2s;
     background-color: rgb(206, 206, 206);
     border-radius: 35px;
-    border: solid rgb(0, 0, 0);
     color:black;
     -ms-user-select: none;
     user-select: none;
+    box-shadow: 5px 5px 10px;
 }
 .slideContainer:hover{
     color: whitesmoke;
@@ -235,17 +243,42 @@ h2{
     outline: none;
     opacity: 0.7;
     -webkit-transition: .2s; 
-    transition: opacity .4s;
     border-radius: 20px;
     padding-right: 10px;
     padding-left: 10px;
     overflow-x: auto ;
+    transition: all 0.3s ease;
 }
 .slider:hover{
     opacity: 1;
 }
-
-
-
+#lowerButtons{
+    margin-left: 5%;
+    margin-top: 70px; 
+}
+#recButton{
+    height: 50px;
+    width: 250px;
+    padding: 15px;
+    text-align: center;
+    background-color: rgb(253, 253, 253);
+    border-radius: 50px;
+    color: rgb(0, 0, 0);
+    -ms-user-select: none;
+    user-select: none;
+    text-transform: uppercase;
+    font-weight: bold;
+    white-space: nowrap;
+    vertical-align:middle;
+    font-size: 20px;
+    line-height:50px;
+}
+#recButton:hover{
+    cursor: pointer;
+    background-color: rgb(59, 153, 72);
+    color: white;
+    box-shadow: 5px 5px 15px;
+    
+}
 
 </style>
