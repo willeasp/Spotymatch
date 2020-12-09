@@ -4,30 +4,32 @@
     <h1 v-if="!loading" class ="searchResult"> Search result</h1> 
     <span class="genres"> 
         <h2> Based on genres: </h2>
-        <div class="genre" v-for="seed in seeds"> 
+        <div class="genre" v-for="seed in seeds" v-bind:key="seed"> 
             <h2>{{(seed.id).charAt(0).toUpperCase() + (seed.id).slice(1)}} </h2>
             </div>
     </span>
+    <div v-if="enableList"> 
+        <span class="songCard"  v-for="(track,index) in tracks" v-bind:key="track">
+            <div class="songNumber"> 
+                {{index+1}}
+                <div class="explicit" v-if="track.explicit">E</div>
+            </div>
+            
+            <div class="image"> 
+                <img v-bind:src="track.album.images[0].url" @mouseover="playPreview(track.preview_url)" @mouseleave="stopPreview()">
+            </div>
+            
+            <div class="songInfo"> 
+                <h2>{{track.name}} </h2>
+                <h3> {{track.album.name}} </h3>
+                <h3> {{track.artists[0].name}} </h3>
+                <a :href="track.external_urls.spotify" target="_blank">Open in Spotify</a>
+            </div>
+            <div class="preview" v-if="track.preview_url">Hover album cover for preview</div>
+            <h3 class="songDuration"> Duration {{formatMilliseconds(track.duration_ms)}}</h3>
+        </span>
+    </div>
 
-    <span class="songCard" v-if="enableList" v-for="(track,index) in tracks">
-        <div class="songNumber"> 
-            {{index+1}}
-            <div class="explicit" v-if="track.explicit">E</div>
-        </div>
-        
-        <div class="image"> 
-            <img v-bind:src="track.album.images[0].url" @mouseover="playPreview(track.preview_url)" @mouseleave="stopPreview()">
-        </div>
-        
-        <div class="songInfo"> 
-            <h2>{{track.name}} </h2>
-            <h3> {{track.album.name}} </h3>
-            <h3> {{track.artists[0].name}} </h3>
-            <a :href="track.external_urls.spotify" target="_blank">Open in Spotify</a>
-        </div>
-        <div class="preview" v-if="track.preview_url">Hover album cover for preview</div>
-        <h3 class="songDuration"> Duration {{formatMilliseconds(track.duration_ms)}}</h3>
-    </span>
     </div>
 </template>
 
@@ -68,8 +70,17 @@ export default {
             }
         },
         stopPreview(){
-            this.preview.pause();
+            if(this.preview){
+                this.preview.pause();
+                this.preview = null;
+            }
         },
+        load(){
+            let load = this.$store.state.loading;
+            if(!load) this.populateData();
+            else this.enableList = false;
+            return load; 
+        }
         
     },
     computed:{
@@ -78,10 +89,7 @@ export default {
          * change occur i.e, loading status set to false
          */
         loading(){
-            let load = this.$store.state.loading;
-            if(!load) this.populateData();
-            else this.enableList = false;
-            return load; 
+           return this.load();
         }
     }
 }
