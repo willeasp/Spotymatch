@@ -106,12 +106,7 @@ export default {
         },
     },
     methods: {
-        getToken(){
-            this.$store.dispatch("REQUEST_TOKEN");
-            setTimeout(()=>console.log(this.$store.getters.getToken), 500);
-            },
         getRec(){
-            this.getToken();
             this.$store.dispatch("REQUEST_RECOMMENDATION", 
             {
                 "seed_genres": this.seedGenres,
@@ -124,10 +119,6 @@ export default {
                 "popularity": this.popularity/10,
                 "speechiness": this.speechiness/100
             });
-        },
-        resultHistory(){
-            this.$store.dispatch("FETCH_RESULT_HISTORY");
-            setTimeout(()=> console.log(this.$store.getters.getPreviousRecommendations) ,1000);
         },
         changeSelected(genre){
             if(this.isSelected(genre)){
