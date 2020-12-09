@@ -14,7 +14,6 @@ export default {
     
     name: "History",
     methods: {
-
     },
     components: {
         HistorySidebar,
