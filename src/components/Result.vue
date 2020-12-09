@@ -9,23 +9,24 @@
             </div>
     </span>
 
-    <span class="song" v-if="enableList" v-for="(track,index) in tracks">
+    <span class="songCard" v-if="enableList" v-for="(track,index) in tracks">
         <div class="songNumber"> 
             {{index+1}}
             <div class="explicit" v-if="track.explicit">E</div>
         </div>
         
         <div class="image"> 
-            <img v-bind:src="track.album.images[0].url">
+            <img v-bind:src="track.album.images[0].url" @mouseover="playPreview(track.preview_url)" @mouseleave="stopPreview()">
         </div>
         
         <div class="songInfo"> 
             <h2>{{track.name}} </h2>
             <h3> {{track.album.name}} </h3>
             <h3> {{track.artists[0].name}} </h3>
-            <a :href="track.external_urls.spotify" target="_blank">Open in Spotify</a> 
+            <a :href="track.external_urls.spotify" target="_blank">Open in Spotify</a>
         </div>
-        <h3 class="songDuration"> Duration {{getDuration(track.duration_ms)}}</h3>
+        <div class="preview" v-if="track.preview_url">Hover album cover for preview</div>
+        <h3 class="songDuration"> Duration {{formatMilliseconds(track.duration_ms)}}</h3>
     </span>
     </div>
 </template>
@@ -37,15 +38,16 @@ export default {
             tracks: [],
             seeds: [],
             enableList: false,
+            preview: null,
         };
     },
     methods: {
-        generate(){
+        populateData(){
             this.tracks = this.$store.getters.getRecommendations.tracks;
             this.seeds = this.$store.getters.getRecommendations.seeds;
             this.enableList = true;
         },
-        getDuration(milliseconds){
+        formatMilliseconds(milliseconds){
             let hours = Math.floor(milliseconds/1000/60/60);
             let minutes = Math.floor((milliseconds/1000/60) % 60);
             let seconds = Math.floor(milliseconds/1000) % 60;
@@ -58,12 +60,27 @@ export default {
                 return hours + ":" + minutes + ":" + seconds;
             }
             else return minutes + ":" + seconds;
-        } 
+        },
+        playPreview(link){
+            if(link){
+                this.preview = new Audio(link);      
+                this.preview.play();
+            }
+        },
+        stopPreview(){
+            this.preview.pause();
+        },
+        
     },
     computed:{
+        /**
+         * Watches if the load status changes. Poplulates data if
+         * change occur i.e, loading status set to false
+         */
         loading(){
-            let load = this.$store.state.loading
-            if(!load) this.generate()
+            let load = this.$store.state.loading;
+            if(!load) this.populateData();
+            else this.enableList = false;
             return load; 
         }
     }
@@ -99,7 +116,7 @@ export default {
     align-items: center;
     font-size: 32px; 
 } 
-.song{
+.songCard{
     display: grid;
     grid-template-columns: repeat(9, 1fr);
     grid-template-rows: 1fr;
@@ -113,7 +130,7 @@ export default {
     box-shadow: 5px 5px 10px 2px rgba(0,0,0,0.30);
 }
 .image{
-     grid-area: 1 / 2 / 2 / 3;
+    grid-area: 1 / 2 / 2 / 3;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -126,7 +143,7 @@ export default {
     
 }
 @media (max-width: 600px){
-    .song{
+    .songCard{
         height: 8rem;
     }
     .image img{
@@ -141,15 +158,14 @@ export default {
     }
 }
 .songInfo{
-    grid-area: 1 / 3 / 2 / 9;
+    grid-area: 1 / 3 / 2 / 7;
     margin: 1rem;
 }
 .songInfo h2{
-    padding-bottom: 1rem;
-    
+    padding-bottom: 0.5rem; 
 }
 .songInfo h3{
-    padding-bottom: 1rem;
+    padding-bottom: 0.5rem;
 }
 .explicit{
     display: flex;
@@ -163,6 +179,12 @@ export default {
     text-align: center;
     box-shadow: 5px 5px 5px -2px rgba(0,0,0,0.36);
     background-color: darkgray;
+}
+.preview{
+    grid-area: 1 / 7 / 2 / 9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .songDuration{
    grid-area: 1 / 9 / 2 / 10;
