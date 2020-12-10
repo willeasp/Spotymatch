@@ -17,7 +17,7 @@ export default createStore({
         error: null, //if request recommendation throws error
         loading: false, //request recommendation loading
         doneLoading: false,  // request recommendation done loading
-        popupMessages: [{msg: "bonk", type: "error", id:5}, {msg: "monk", type: "happy accident", id:17}] // poppup messages are stored here
+        popupMessages: [] // poppup messages are stored here example {msg: "bonk", category: "error", id:5}
     },
     mutations: {
         setToken(state, token) {
@@ -52,7 +52,7 @@ export default createStore({
         },
         pushMessage(state, msgObject){
             state.popupMessages.push({
-                title : msgObject["title"],
+                category : msgObject["category"],
                 msg : msgObject["msg"],
                 id: popupMessageId++
             })

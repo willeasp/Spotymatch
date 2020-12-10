@@ -1,10 +1,18 @@
 <template>
-  <div class="border" v-for="message in getMessages()" :key="message['id']">
-      <Message :msg="message" />
-  </div>
+  <transition name="notifications" mode="out-in">
+      <div>
+        <div 
+        class="notifications">
+            <transition-group name="message" mode="out-in">
+                <Message class="singleMessage" v-for="message in getMessages()" :key="message['id']" :msg="message"/>
+            </transition-group>
+        </div>
+        </div>
+  </transition>
 </template>
 
 <script>
+/* eslint-disable */
 import Message from "./Message"
 
 export default {
@@ -22,9 +30,53 @@ export default {
         }
     },
 }
+/* eslint-disable */
 </script>
 
-<style>
+<style lang="postcss" scoped>
+.notifications {
+  position: fixed;
+  width: calc(100% - 2rem);
+  /* z-index: var(--notifications-zindex); */
+  top: calc(1rem + 40px);
+  right: 1rem;
+  left: 1rem;
+
+
+}
+@screen md {
+  .notifications {
+    max-width: 400px;
+    width: 40vw;
+    left: auto;
+  }
+}
+/* purgecss start ignore */
+.notifications-enter-active,
+.notifications-leave-active {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.notifications-enter,
+.notifications-leave-to {
+  opacity: 0;
+  transform: translateX(2rem);
+}
+.message-enter-active,
+.message-leave-active {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.message-enter,
+.message-leave-to {
+  opacity: 0;
+  transform: translateY(-3rem);
+}
+/* purgecss end ignore */
+.singleMessage{
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 6px;
+  margin: 1rem;
+  box-shadow: 5px 5px 10px 2px rgba(0, 0, 0, 0.3);
+}
 .border{
     border: solid 2px orange;
 }
