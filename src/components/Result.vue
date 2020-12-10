@@ -8,11 +8,25 @@
             <h2>{{(seed.id).charAt(0).toUpperCase() + (seed.id).slice(1)}} </h2>
             </div>
     </span>
+    <div class="attributes">
+            <div>
+                <h2>Song attributes:</h2>
+            </div>
+            <div
+                class="attribute"
+                v-for="property in attributes"
+                :key="property"
+            >
+                <h2>
+                    {{ property}}
+                </h2>
+            </div>
+        </div>
     <div v-if="enableList"> 
         <span class="songCard"  v-for="(track,index) in tracks" v-bind:key="track">
             <div class="songNumber"> 
                 {{index+1}}
-                <div class="explicit" v-if="track.explicit">E</div>
+                <div class="explicit" v-if="track.explicit">Explicit</div>
             </div>
             
             <div class="image"> 
@@ -39,15 +53,39 @@ export default {
         return{
             tracks: [],
             seeds: [],
+            attributes: [],
             enableList: false,
             preview: null,
         };
     },
+    props: {
+        mode: {
+            type: String,
+            validator: function (val) {
+                return ['search', 'history'].indexOf(val) !== -1;
+            }
+        }
+    },
     methods: {
         populateData(){
-            this.tracks = this.$store.getters.getRecommendations.tracks;
-            this.seeds = this.$store.getters.getRecommendations.seeds;
-            this.enableList = true;
+            let data;
+            if(this.mode === 'search'){
+                console.log("search data")
+                data = this.$store.getters.getRecommendations;
+            }
+            else if(this.mode === 'history'){
+                data = this.$store.getters.getViewingHistory;
+            }
+            
+            if(data){
+                this.tracks = data.res.tracks;
+                this.seeds = data.res.seeds;
+                let h = data.queryObject;
+                for (let key in h) {
+                    if (key !== "seed_genres") this.attributes.push(key + " " + h[key]);
+                }
+                this.enableList = true;
+            }
         },
         formatMilliseconds(milliseconds){
             let hours = Math.floor(milliseconds/1000/60/60);
@@ -76,6 +114,7 @@ export default {
             }
         },
         load(){
+            console.log(this.loading);
             let load = this.$store.state.loading;
             if(!load) this.populateData();
             else this.enableList = false;
@@ -112,10 +151,17 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    
 }
 .genre{
     margin: 5px;
+}
+.attribute{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.attributes{
+    text-align: center;
 }
 .songNumber{
     grid-area: 1 / 1 / 2 / 2;
@@ -129,9 +175,9 @@ export default {
     grid-template-columns: repeat(9, 1fr);
     grid-template-rows: 1fr;
     grid-column-gap: 8px;
-    grid-row-gap: 0px;  
-    
-    height: 11rem;
+    grid-row-gap: 0px; 
+
+    overflow: hidden;
     border-radius: 6px;
     background: linear-gradient(90deg, rgba(247,247,247,1) 0%, rgb(218, 206, 255) 100%);
     margin: 1rem;
@@ -150,10 +196,20 @@ export default {
     box-shadow: 5px 5px 10px 0px rgba(0,0,0,0.30);
     
 }
+.imgOverlay {
+  
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  transition: .5s ease;
+  background-color: #008CBA;
+}
 @media (max-width: 600px){
-    .songCard{
-        height: 8rem;
-    }
+    
     .image img{
         width: 64px;
         height: 64px;
@@ -163,6 +219,10 @@ export default {
     }
     h3{
         font-size: 0.8rem;
+    }
+    .explicit{
+        font-size: 0.8rem;
+        
     }
 }
 .songInfo{
@@ -182,7 +242,8 @@ export default {
     
     margin-left: 8px;
     border-radius: 8px;
-    font-size: 1.5rem;
+    font-size: 1rem;
+    font-style: italic;
     padding: 0.5rem;
     text-align: center;
     box-shadow: 5px 5px 5px -2px rgba(0,0,0,0.36);
