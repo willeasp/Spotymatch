@@ -9,7 +9,7 @@ export default createStore({
         token: "", // authorisation token for current session
         lastRecommendation: {},  // the last received spotify recommendation
         user: null,     // user currently logged in
-        history: [], // all recommendations
+        history: {}, // all recommendations
         viewingHistory: {}, // a recommendation
         route: window.location.hash.substring(1),
         error: null, //if request recommendation throws error
@@ -55,14 +55,19 @@ export default createStore({
          * @param {*} state is handled automatically
          */
         REQUEST_TOKEN(state) {
-            APIcontroller.getToken().then(token => {
-                state.commit('setToken', token);
+            APIcontroller.getToken().then(tokenObject => {
+                state.commit('setToken', tokenObject["access_token"]);
+                const timeInMilliSeconds = Number(new Date());
+                localStorage.setItem("tokenObject", JSON.stringify(
+                    {
+                        token: tokenObject["access_token"],
+                        time: (tokenObject["expires_in"] * 1000) + timeInMilliSeconds
+                    }
+                ));
             });
-
-            setTimeout(() => {
-                state.commit('setToken', "");
-                state.dispatch('setToken');
-            }, 3600 * 1000);
+        },
+        SET_TOKEN(state, token){
+            state.commit('setToken', token);
         },
         /**
          * Request a list of 20 tracks based on queryObject
@@ -70,10 +75,9 @@ export default createStore({
          * @param {*} queryObject contains the query
          */
         REQUEST_RECOMMENDATION(state, queryObject) {
-            //for debugging so we not spam api, replace token with new token every 1h
-            //let temptoken = "BQDEqA5UbnH6bjD8El9n8X7tC4OxUWkhMUX6BRNO8fdUcxm_V5NM_026Z5qo5l-E9ivmIfG5OJv-aucrnnc";
             state.commit('setLoading', true);
             state.commit('setDoneLoading', false);
+
             APIcontroller.getRecommendations(state.getters.getToken, queryObject)
                 // APIcontroller.getRecommendations(temptoken, queryObject)
                 .then(response => {
@@ -109,9 +113,16 @@ export default createStore({
         /**
         * Sign user out from firebase
         */
-        USER_SIGN_OUT() {
+        USER_SIGN_OUT(state) {
+            // clear state
+            state.commit("saveRecommendation", {});
+            state.commit("setHistory", {});
+            state.commit("setViewingHistory", {});
+            window.location.hash = "";
+
             fb.signOutUser()
-                .catch(err => console.error(err, "Could not log out user"));
+            .catch(err => console.error(err, "Could not log out user"));
+            localStorage.clear();
         },
 
         SET_USER(state, user) {
