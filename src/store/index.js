@@ -89,8 +89,8 @@ export default createStore({
                 })
                 .then(res => res.json())
                 .then(res => {
-                    state.commit('saveRecommendation', res);
-                    db.pushRecommendation(res, queryObject, state.getters.getCurrentUser.uid);
+                    state.commit('saveRecommendation', {res, queryObject});
+                    // db.pushRecommendation(res, queryObject, state.getters.getCurrentUser.uid);
                 })
                 .catch(err => {
                     state.commit('setError', err.message)
@@ -176,7 +176,9 @@ export default createStore({
          * @param {Object comtaining a single reccomendation selected from state.history} newViewHistory 
          */
         SET_VIEW_HISTORY(state, newViewHistory){
+            state.commit('setLoading', true);
             state.commit("setViewingHistory", newViewHistory);
+            state.commit('setLoading', false);
         },
         /**
              * Set the current route in the webpage

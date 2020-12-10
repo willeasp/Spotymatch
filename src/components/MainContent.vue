@@ -13,7 +13,7 @@
     </template>
     <template v-if="route === 'Result'">
         <div class="notTopBar">
-            <Result/>
+            <Result mode="search"/>
         </div>
     </template>
     <template v-if="route === 'History'">
