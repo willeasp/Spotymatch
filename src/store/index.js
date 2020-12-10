@@ -135,7 +135,7 @@ export default createStore({
         CREATE_USER(state, { email, password }) {
             fb.createUser(email, password)
                 .then(user => {
-                    state.commit("set_user", user);
+                    state.commit("setUser", user);
                 })
                 .catch(err => console.error(err, "could not create user"));
         },
