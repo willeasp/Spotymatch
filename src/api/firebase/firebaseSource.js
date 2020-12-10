@@ -40,7 +40,7 @@ const db = {
      * @param {*} callback callback that will be triggered
      */
     subscribeResultHistory : (userUID, callback) => {
-        const callbackOnFailure = Error => {
+        const callbackOnFailure = () => {
             db.unsubscribeResultHistory(userUID);
             alert("You don't have permission to read from the database of this user." 
                 + "\nAccess to history has been terminated.");
