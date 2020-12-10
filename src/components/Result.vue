@@ -67,12 +67,8 @@ export default {
     methods: {
         populateData() {
             let data;
-            console.log("current mode: " + this.mode);
-
             if (this.mode === "search") {
-                console.log("search data");
                 data = this.$store.getters.getRecommendations;
-                console.log(data);
                 if (data.res) {
                     this.tracks = data.res.tracks;
                     this.seeds = data.queryObject.seed_genres;
