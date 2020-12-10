@@ -1,21 +1,21 @@
 <template>
     <div class="history">
         <HistorySidebar class="sidebar" />
-        <HistoryShow class="show" />
+        <Result mode="history" class="show"/>
     </div>
 </template>
 
 <script>
 /* eslint-disable vue/no-unused-components */
 import HistorySidebar from "./HistorySidebar.vue";
-import HistoryShow from "./HistoryShow.vue";
+import Result from './Result.vue';
 
 export default {
     name: "History",
     methods: {},
     components: {
         HistorySidebar,
-        HistoryShow,
+        Result,
     },
 };
 </script>
