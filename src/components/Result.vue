@@ -26,10 +26,13 @@
                 <div class="songNumber"> 
                     {{index+1}}
                     <div class="explicit" v-if="track.explicit">Explicit</div>
+                    <img v-show="this.preview" src="https://open.scdn.co/cdn/images/equaliser-animated-green.73b73928.gif">
                 </div>
                 
                 <div class="image"> 
-                    <img v-bind:src="track.album.images[0].url" @mouseover="playPreview(track.preview_url)" @mouseleave="stopPreview()">
+                    <img v-bind:src="track.album.images[0].url" 
+                    @mouseover="playPreview(track.preview_url)" 
+                    @mouseleave="stopPreview()">
                 </div>
                 
                 <div class="songInfo"> 
@@ -119,7 +122,6 @@ export default {
                 this.preview.play()
                 .then(() => {
                     this.interval = setInterval(() => {
-                    console.log(this.preview.volume)
                     this.preview.volume += 0.01;
                     if(this.preview.volume >= 0.9) clearInterval(this.interval);
                 }, 30);
@@ -213,6 +215,8 @@ export default {
     );
     margin: 1rem;
     box-shadow: 5px 5px 10px 2px rgba(0, 0, 0, 0.3);
+    -webkit-animation: slide-in-fwd-center 0.8s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+	        animation: slide-in-fwd-center 0.8s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
 }
 .image {
     grid-area: 1 / 2 / 2 / 3;
@@ -226,17 +230,7 @@ export default {
     height: 128px;
     box-shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.3);
 }
-.imgOverlay {
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 100%;
-    width: 100%;
-    opacity: 0;
-    transition: 0.5s ease;
-    background-color: #008cba;
-}
+
 @media (max-width: 600px) {
     .image img {
         width: 64px;
@@ -288,4 +282,30 @@ export default {
     justify-content: center;
     align-items: center;
 }
+
+@-webkit-keyframes slide-in-fwd-center {
+  0% {
+    -webkit-transform: translateZ(-1400px);
+            transform: translateZ(-1400px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+    opacity: 1;
+  }
+}
+@keyframes slide-in-fwd-center {
+  0% {
+    -webkit-transform: translateZ(-1400px);
+            transform: translateZ(-1400px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+    opacity: 1;
+  }
+}
+
 </style>
