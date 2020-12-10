@@ -90,7 +90,7 @@ export default createStore({
                 .then(res => res.json())
                 .then(res => {
                     state.commit('saveRecommendation', {res, queryObject});
-                    // db.pushRecommendation(res, queryObject, state.getters.getCurrentUser.uid);
+                    db.pushRecommendation(res, queryObject, state.getters.getCurrentUser.uid);
                 })
                 .catch(err => {
                     state.commit('setError', err.message)
