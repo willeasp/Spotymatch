@@ -4,42 +4,57 @@
         <form>
             <div id="genreContainer">
                 <input id="genreSearch" type="text" 
-                    v-model="searchInput"/>
-                <a class="genreButton" 
-                    v-for="genre in filterdGenres" :key="genre"
-                    @click="changeSelected(genre)"
-                    v-bind:class="{'selected':isSelected(genre)}">
-                    {{genre}}
-                </a>
+                    v-model="searchInput" placeholder="Filter genres"/>
+                <div id="genreButtons">
+                    <a class="genreButton" 
+                        v-for="genre in filterdGenres" :key="genre"
+                        @click="changeSelected(genre)"
+                        v-bind:class="{'selected':isSelected(genre)}">
+                        {{genre}}
+                    </a>
+                </div>
             </div>
 
             <div class="slideContainer"
                 v-for="slider in querySliders" :key="slider.name"
                 v-bind:class="{'disabled':isDisabled(slider.name)}"
                 >
-                <h2 class="sliderTitle">{{slider.name + ": " + slider.value/slider.max*100+ "%"}}</h2>
+                <h2 class="sliderTitle">{{slider.name + ": " + Math.round(slider.value/slider.max*100)+ "%"}}</h2>
                 <div class="disableButton" @click="changeDisabled(slider.name)">
                     <span class="disableText" v-if="isDisabled(slider.name)">Enable</span>
                     <span class="disableText" v-else>Disable</span>
                 </div>
-                <input v-bind:disabled="isDisabled(slider.name)" type="range" :min="slider.min" :max="slider.max" :step="slider.max/100" v-model="slider.value" class="slider"/>
+                <input type="range"
+                    class="slider"
+                    v-bind:disabled="isDisabled(slider.name)" 
+                    :min="slider.min" 
+                    :max="slider.max" 
+                    :step="slider.max/100" 
+                    v-model="slider.value" />                       
             </div>
-            
-            <div id="lowerButtons">
-                <div id="recButton" @click="getRec">
-                    <span>Get recommendations</span>
-                </div>
-            </div>
+
         </form>
+        <div id="sideBar">
+            <div class="bigButton" id="recButton" @click="getRec">
+                <RouteButton routeName="Result" text="Get Recommendation"/>
+            </div>
+            <div class="bigButton" id="resetButton" >
+                <span>Reset</span>
+            </div>
+        </div>
     </div> 
     
 </template>
 
 <script >
-
+import RouteButton from './RouteButton'
 
 export default {
     name: "Search",
+    components: {
+        RouteButton,
+    },
+
     data(){
         return {
             genres:["acoustic", "afrobeat", "alt-rock", "alternative", "ambient", 
@@ -59,62 +74,79 @@ export default {
                 "samba", "sertanejo", "show-tunes", "singer-songwriter", "ska", "sleep", "songwriter", "soul", 
                 "soundtracks", "spanish", "study", "summer", "swedish", "synth-pop", "tango", "techno", "trance", 
                 "trip-hop", "turkish", "work-out", "world-music"],
-                searchInput: "",
+            searchInput: "",
             querySliders: {
                 acousticness: {
                     value: 0.5,
-                    name: "Acousticness",
+                    name: "acousticness",
                     min: 0,
-                    max: 1
+                    max: 1,
+                    enabled: true
                 },
                 danceability:{
                     value: 0.5,
-                    name: "Danceability",
+                    name: "danceability",
                     min: 0,
-                    max: 1
+                    max: 1,
+                    enabled: true
                 },
                 energy: {
                     value: 0.5,
-                    name: "Energy",
+                    name: "energy",
                     min: 0,
-                    max: 1
+                    max: 1,
+                    enabled: true
                 },
                 instrumentalness: {
                     value: 0.5,
-                    name: "Instrumentalness",
+                    name: "instrumentalness",
                     min: 0,
-                    max: 1
+                    max: 1,
+                    enabled: true
                 },
                 liveness: {
                     value: 0.5,
-                    name: "Liveness",
+                    name: "liveness",
                     min: 0,
-                    max: 1
+                    max: 1,
+                    enabled: true
                 },
                 loudness: {
                     value: 0.5,
-                    name: "Loudness",
+                    name: "loudness",
                     min: 0,
-                    max: 1
+                    max: 1,
+                    enabled: true
                 },
                 popularity: {
-                    value: 0.5,
-                    name: "Popularity",
+                    value: 50,
+                    name: "popularity",
                     min: 0,
-                    max: 100
+                    max: 100,
+                    enabled: true
                 },
                 speechiness: {
                     value: 0.5,
-                    name: "Speechiness",
+                    name: "speechiness",
                     min: 0,
-                    max: 1
+                    max: 1,
+                    enabled: true
                 }
             },
             seedGenres: [],
-            enabledSliders: ["Acousticness", "Danceability", "Energy", "Instrumentalness", "Liveness", "Loudness", "Popularity", "Speechiness"]
         }
-    }
-    ,
+    },
+
+    mounted() {
+        const querySlidersString = localStorage.getItem("querySliders");
+        if (querySlidersString)
+            this.querySliders = JSON.parse(querySlidersString);
+
+        const seedGenresString = localStorage.getItem("seedGenres");
+        if (seedGenresString)
+            this.seedGenres = JSON.parse(seedGenresString);
+    },
+
     computed: {
         recommendations() {
             return this.$store.getters.getRecommendations.tracks;
@@ -127,19 +159,13 @@ export default {
     },
     methods: {
         getRec(){
-            var searchQuery = {
+            let searchQuery = {
                 "seed_genres": this.seedGenres
             };
-
-            this.enabledSliders.forEach(enabledSlider => {
-                const sliderName = enabledSlider.toLowerCase();
-                searchQuery[sliderName] = this.querySliders[sliderName].value;
-                });
-
-            console.log("enabled sliders: ");
-            console.log(this.enabledSliders);
-
-            console.log("search query: ");
+            Object.keys(this.querySliders).forEach(key=> {
+                if(this.querySliders[key].enabled)
+                    searchQuery[key] = this.querySliders[key].value;
+            });
             console.log(searchQuery);
             this.$store.dispatch("REQUEST_RECOMMENDATION", searchQuery);
         },
@@ -155,15 +181,26 @@ export default {
             return this.seedGenres.includes(genre);
         },
         changeDisabled(slider){
-            if(this.isDisabled(slider)){
-                this.enabledSliders =  [...this.enabledSliders, slider];
-            }
-            else{
-                this.enabledSliders = this.enabledSliders.filter(enabledSlider => enabledSlider !== slider);
-            }
+            let s = this.querySliders[slider];
+            this.querySliders[slider].enabled = s.enabled ? false : true;
         },
         isDisabled(slider){
-            return !this.enabledSliders.includes(slider);
+            return !this.querySliders[slider].enabled;
+        }
+    },
+
+    watch: {
+        querySliders: {
+            handler(val) {
+                localStorage.setItem("querySliders", JSON.stringify(val));
+            },
+            deep: true
+        },
+        seedGenres: {
+            handler(val) {
+                localStorage.setItem("seedGenres", JSON.stringify(val));
+            },
+            deep: true
         }
     }
 }
@@ -175,7 +212,11 @@ export default {
     margin: 0 auto;
     margin-top: 5%;
     text-align: center;
-    background-color: rgba(255, 255, 255, 0.692);
+    background: linear-gradient(
+        90deg,
+        rgba(247, 247, 247, 1) 0%,
+        rgb(218, 206, 255) 100%
+    );
     width: 300px;
     height: 50px;
     line-height: 50px;
@@ -190,22 +231,36 @@ form{
     margin-right: 30%;
     display: flex;
     flex-direction: column;
+    margin-bottom: 30px;
 }
 
 #genreContainer{
-    display: flex;
-    flex-wrap: wrap;
-    padding: 5px;
+    padding: 10px;
     width: 80%;
     margin-left:10%;
     margin-top: 30px;
+    background: linear-gradient(
+            90deg,
+            rgba(247, 247, 247, 1) 0%,
+            rgb(218, 206, 255) 100%
+        );    
+    border-radius: 15px;
+    box-shadow: 5px 5px 10px;
+}
+
+#genreButtons{
+    display: flex;
+    flex-wrap: wrap;
+    max-height: 250px;
+    overflow-y: scroll;
     text-align: center;
     transition: .2s;
-    background-color:  rgba(255, 255, 255, 0.692);
-    border-radius: 15px;
     color:black;
-    box-shadow: 5px 5px 10px;
-
+    -ms-overflow-style: none;  
+    scrollbar-width: none; 
+}
+#genreButtons::-webkit-scrollbar {
+    display: none;
 }
 
 #genreSearch{
@@ -214,9 +269,12 @@ form{
     margin-right: 40%;
     height: 35px;
     border-radius: 20px;
-    font-size: 28px;
+    font-size: 22px;
     padding-left: 20px;
     border:none;
+}
+#genreSearch:focus{
+    outline: none;
 }
 
 .genreButton{
@@ -258,14 +316,15 @@ form{
 .slideContainer{
     display: flex;
     flex-direction: column;
-    padding-top: 10px;
+    flex-flow: wrap; 
+    align-items: center;
+    padding: 10px;
     width: 80%;
     margin-left:10%;
     margin-top: 30px;
     text-align: left;
     transition: .2s;
-    background-color:  rgb(238, 238, 238, 0.85);
-    border-radius: 35px;
+    border-radius: 15px;
     color:black;
     -ms-user-select: none;
     user-select: none;
@@ -273,17 +332,34 @@ form{
     border:none;
 
 }
+.slideContainer:not(.disabled){
+    background: linear-gradient(
+            90deg,
+            rgba(247, 247, 247, 1) 0%,
+            rgb(218, 206, 255) 100%
+        );   
+}
 
 .disableButton{
-    flex:1;
-    display: flex;
-    width: 60px;
-    height: 30px;
+    width: 70px;
     padding:5px;
     margin-left: 20px;
+    margin-right: 20px;
     border-radius: 40px;
-    background-color: rgba(129, 129, 129, 0.76);
-    box-shadow: 3px 3px 5px;
+    box-shadow: 1px 1px 3px;
+    text-align: center;
+    background: -webkit-gradient(
+        linear,
+        left top,
+        right bottom,
+        from(#6192ce79),
+        to(#be31a46e)
+        );
+    color: black;
+}
+.disableButton:active{
+    background-color: rgb(142, 177, 206);
+    color: rgb(192, 192, 192);
 }
 .disableButton:hover{
     cursor: pointer;
@@ -291,7 +367,10 @@ form{
 .disabled{
     background-color: rgba(0, 0, 0, 0.226);
 }
-
+.disabled > .disableButton{
+    opacity: 0.5;
+    color: black;
+}
 .disabled > input:hover{
     cursor: not-allowed;
     background-color: rgb(112, 21, 21);
@@ -303,17 +382,17 @@ form{
     font-weight: bold  ;
 }
 .sliderTitle{
-    margin-top: 5px;
-    margin-left: 5%;
-    flex:1;
+    margin-left: 20px;
+    margin-top: 5%;
+    width: 100%;
+    text-transform: capitalize;
 }
 
 .slider {
     flex:1;
-    margin-right: 10%;
+    margin-right:10px;
     -webkit-appearance: none;
-    appearance: none;
-    width: 350px;
+    /* appearance: none; */
     height: 35px;
     background: rgba(77, 77, 77, 0.452);
     outline: none;
@@ -343,22 +422,41 @@ background: -webkit-gradient(
     background-color: rgba(77, 15, 15, 0.719);
     
 }
-.disabled:hover > .disableButton{
-    opacity: 1;
-}
 .disabled:hover{
     opacity: 0.5;
     background-color: rgba(131, 26, 12, 0.575);
 }
-
-#lowerButtons{
-    margin-left: 5%;
-    margin-top: 70px; 
+.disabled > .disableButton:hover{
+    opacity: 1;
 }
-#recButton{
-    margin-bottom: 5%;
+
+
+#sideBar{
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    width: 25%;
+    height: 80%;
+    z-index:1;
+    top: 48px;
+    right: 0;
+    margin-top: 5%;
+    margin-right:5%;
+    background: linear-gradient(
+            90deg,
+            rgba(247, 247, 247, 1) 0%,
+            rgb(218, 206, 255) 100%
+        );       border-radius: 15px;
+    box-shadow: 5px 5px 10px;
+    position: fixed;
+}
+
+.bigButton{
+    margin: 0 auto;
+    margin-top: 20px;
     height: 50px;
-    width: 250px;
+    width: 80%;
+    max-width: 300px;
     padding: 15px;
     text-align: center;
     background-color: rgb(253, 253, 253);
@@ -371,8 +469,10 @@ background: -webkit-gradient(
     white-space: nowrap;
     vertical-align:middle;
     font-size: 20px;
-    line-height:50px;
     transition: 0.2s;
+}
+#recButton{
+    flex:0;
 }
 #recButton:hover{
     cursor: pointer;
@@ -381,5 +481,7 @@ background: -webkit-gradient(
     box-shadow: 5px 5px 15px;
     
 }
-
+#resetButton{
+    flex:0;
+}
 </style>
