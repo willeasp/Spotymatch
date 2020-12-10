@@ -67,6 +67,10 @@ export default {
     methods: {
         populateData() {
             let data;
+            this.tracks = [];
+            this.seeds = [];
+            this.attributes = [];
+            
             if (this.mode === "search") {
                 data = this.$store.getters.getRecommendations;
                 if (data.res) {
@@ -81,9 +85,7 @@ export default {
                 }
             } else if (this.mode === "history") {
                 data = this.$store.getters.getViewingHistory;
-                this.tracks = [];
-                this.seeds = [];
-                this.attributes = [];
+                
                 if (data.songs) {
                     this.tracks = data.songs;
                     this.seeds = data.seeds.seed_genres;
