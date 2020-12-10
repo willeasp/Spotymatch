@@ -54,6 +54,7 @@ export default {
             attributes: [],
             enableList: false,
             preview: null,
+            interval: null,
         };
     },
     props: {
@@ -114,11 +115,30 @@ export default {
         playPreview(link) {
             if (link) {
                 this.preview = new Audio(link);
-                this.preview.play();
+                this.preview.volume = 0.3;
+                this.preview.play()
+                .then(() => {
+                    this.interval = setInterval(() => {
+                    console.log(this.preview.volume)
+                    this.preview.volume += 0.01;
+                    if(this.preview.volume >= 0.9) clearInterval(this.interval);
+                }, 30);
+                })
+                .catch(err => {
+                    if(err.name === 'NotAllowedError'){
+                        // this.$store.dispatch('ADD_MSG', {category: 'Permission Error', msg: 'Seems like autoplay in browser is disabled'})
+                        console.log("browser doesnt support");
+                    }
+                    else if (err.name === 'AbortError'){
+                        console.log("to quick remove from media");
+                    }
+                });
+                
             }
         },
         stopPreview() {
             if (this.preview) {
+                clearInterval(this.interval);
                 this.preview.pause();
                 this.preview = null;
             }
