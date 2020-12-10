@@ -79,9 +79,9 @@ export default createStore({
         async USER_SIGN_IN(state, { email, password }) {
             let error;
             await fb.signInUser(email, password)
-            .catch(err => {
-                error = err;
-            });
+                .catch(err => {
+                    error = err;
+                });
             if(error) throw error; 
         },
 
@@ -90,12 +90,13 @@ export default createStore({
          * @param {*} state 
          * @param {*} param1 
          */
-        CREATE_USER(state, { email, password }) {
-            fb.createUser(email, password)
-                .then(user => {
-                    state.commit("setUser", user);
-                })
-                .catch(err => console.error(err, "could not create user"));
+        async CREATE_USER(state, { email, password }) {
+            let error;
+            await fb.createUser(email, password)
+                .catch(err => {
+                    error = err
+                });
+            if(error) throw error; 
         },
 
         /**
