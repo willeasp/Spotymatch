@@ -85,13 +85,14 @@ export default createStore({
                 })
                 .then(res => res.json())
                 .then(res => {
-                    state.commit('saveRecommendation', res);
-                    db.pushRecommendation(res, queryObject, state.getters.getCurrentUser.uid);
+                    state.commit('saveRecommendation', {res, queryObject});
+                    // db.pushRecommendation(res, queryObject, state.getters.getCurrentUser.uid);
                 })
                 .catch(err => {
                     state.commit('setError', err.message)
                     console.log(err.message);
                 });
+                console.log("searhed")
             state.commit('setLoading', false);
             state.commit('setDoneLoading', true);
         },
@@ -165,7 +166,9 @@ export default createStore({
          * @param {Object comtaining a single reccomendation selected from state.history} newViewHistory 
          */
         SET_VIEW_HISTORY(state, newViewHistory){
+            state.commit('setLoading', true);
             state.commit("setViewingHistory", newViewHistory);
+            state.commit('setLoading', false);
         },
         /**
              * Set the current route in the webpage
@@ -191,6 +194,7 @@ export default createStore({
          * @param {*} state is handled automatically
          */
         getRecommendations(state) {
+            console.log("retrieven rec")
             return state.lastRecommendation;
         },
 
