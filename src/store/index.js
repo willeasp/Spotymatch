@@ -96,7 +96,6 @@ export default createStore({
                     state.commit('setError', err.message)
                     console.log(err.message);
                 });
-                console.log("searhed")
             state.commit('setLoading', false);
             state.commit('setDoneLoading', true);
         },
@@ -205,7 +204,6 @@ export default createStore({
          * @param {*} state is handled automatically
          */
         getRecommendations(state) {
-            console.log("retrieven rec")
             return state.lastRecommendation;
         },
 
