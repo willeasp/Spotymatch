@@ -26,9 +26,32 @@ const db = {
     fetchResultHistory : (userUID)=>{
         return database.ref('USERS/' + userUID).once('value');
     },
+    /**
+     * Subscribes to changes to a user's history in the firebase database.
+     * 
+     * The callback will receive a DataSnapshot which can be accessed with the
+     * .val(), if there is no data .val() will return null.
+     * 
+     * The callback will only get triggered when the data changes but it won't
+     * trigger until the contents have been synchronized. 
+     * 
+     * @param {*}  userUID userUID that identifies the user data that should
+     *                     be subscribed to
+     * @param {*} callback callback that will be triggered
+     */
     subscribeResultHistory : (userUID, callback) => {
-        return database.ref('USERS/' + userUID).on('value', callback)
+        const callbackOnFailure = Error => {
+            db.unsubscribeResultHistory(userUID);
+            alert(Error.message + "\nAccess to history has been terminated.");
+        }
+        return database.ref('USERS/' + userUID).on('value', callback, callbackOnFailure);
     },
+    /**
+     * Unsubscribes from any subscribers attached to a user's history.
+     * 
+     * @param {*}  userUID userUID that identifies the user data that should
+     *                     be unsubscribed from
+     */
     unsubscribeResultHistory : (userUID) => {
         database.ref('USERS/' + userUID).off('value', undefined);
     },
