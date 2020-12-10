@@ -1,7 +1,13 @@
 <template>
     <div class="title text">
-        <h1>Welcome to Spotymatcher</h1>
-        <h2>Discover new songs</h2>
+        <div class="header">
+            <h1>Welcome to Sp<img
+                src="https://open.scdn.co/cdn/images/icons/Spotify_256.c8416b60.png"
+                alt="spotify-logo"
+            />tymatcher</h1>
+            
+        </div>
+        <h2>Discover new songs based on preferences</h2>
     </div>
     <div class="sign-in slide-top">
         <form @submit.prevent>
@@ -9,13 +15,11 @@
             <div class="login-input">
                 <label for="login-username"> E-mail </label>
                 <input
-                    :class="{ error: emailError }"
                     type="text"
                     v-model="email"
                     id="login-username"
                     placeholder="E-mail"
                 />
-                <Error v-if="emailError" v-model:message="error" />
             </div>
             <div class="login-input">
                 <label for="login-password"> Password </label>
@@ -47,8 +51,8 @@
             </template>
             <div class="info">
                 <p>
-                    The Spotymatch app does not have access to your password.
-                    We only collect your email to be able to store your favourite 
+                    The Spotymatch app does not have access to your password. We
+                    only collect your email to be able to store your favourite
                     searches for future reference.
                 </p>
             </div>
@@ -100,7 +104,6 @@ export default {
                 .catch((err) => {
                     this.error = err.message;
                     this.errorCode = err.code;
-                    console.log(err);
                 });
         },
 
@@ -113,7 +116,6 @@ export default {
                 .catch((err) => {
                     this.error = err.message;
                     this.errorCode = err.code;
-                    console.log(err);
                 });
         },
 
@@ -126,7 +128,7 @@ export default {
 
 <style scoped>
 h1 {
-    margin-top: 70px;
+    margin-top: 100px;
 }
 h2 {
     margin-bottom: 20px;
@@ -136,7 +138,7 @@ h2 {
     cursor: default;
 }
 .title {
-    font-size: 28px;
+    font-size: 2vw;
     font-weight: 700;
     width: 100%;
     text-align: center;
@@ -145,6 +147,7 @@ h2 {
 .sign-in {
     text-align: center;
     color: #2c3e50;
+    margin-bottom: 100px;
 }
 
 form {
@@ -154,10 +157,11 @@ form {
     border: 5px solid rgb(0, 0, 0);
     background: #141414;
     text-align: center;
+    border-radius: 5px;
 }
 
 .btn {
-    margin-top: 10px;
+    margin-top: 30px;
     margin-bottom: 5px;
     color: #fff;
     background-color: #15883e;
@@ -262,7 +266,7 @@ a:visited {
 }
 
 :root {
-    --y: 500
+    --y: 500;
 }
 .slide-top {
     -webkit-animation: slide-top 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
@@ -294,12 +298,23 @@ a:visited {
     margin: 0 auto;
     width: 60%;
     text-align: justify;
-    /* text-justify: kashida; */
+    margin-top: 35px;
 }
 
 .info p {
     direction: left;
     unicode-bidi: bidi-override;
 }
-
+/* 
+.header h1 {
+    overflow: auto;
+    width: 50%;
+    position: relative;
+}
+ */
+.header img {
+    margin: 0px;
+    vertical-align: middle;
+    height: 4vw;
+}
 </style>
