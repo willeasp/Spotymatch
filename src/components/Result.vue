@@ -1,19 +1,18 @@
 <template lang="">
     <div v-if="!loading" class="list"> 
         <div v-if="enableList"> 
-            <h1 class ="searchResult"> Search result</h1> 
-            <span class="genres"> 
+            <h1 class ="searchResult noselect"> Search result</h1> 
+            <span class="genres noselect"> 
                 <h2> Based on genres: </h2>
                 <div class="genre" v-for="seed in seeds" v-bind:key="seed"> 
                     <h2>{{(seed).charAt(0).toUpperCase() + (seed).slice(1)}} </h2>
                     </div>
             </span>
-        <div class="attributes">
+            <div class="attributes noselect">
                 <div >
-                    <h2>Song attributes:</h2>
+                    <h2>Song attributes &#x25BC</h2>
                 </div>
-                <ul
-                    class="attribute"
+                <ul class="attribute"
                     v-for="atribute in attributes"
                     :key="atribute"
                 >
@@ -200,14 +199,15 @@ export default {
     margin: 5px;
 }
 .attribute {
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
 }
 .attributes {
     text-align: center;
+    cursor: pointer;
 }
-.attributes:hover .attribute ul{
+.attributes:hover .attribute{
     display: flex;
 }
 .songNumber {
@@ -278,6 +278,9 @@ export default {
     }
     .explicit {
         font-size: 0.8rem;
+    }
+    a{
+        font-size: 0.6rem;
     }
 }
 .songInfo {
