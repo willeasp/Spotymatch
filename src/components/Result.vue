@@ -8,8 +8,8 @@
                     <h2>{{(seed).charAt(0).toUpperCase() + (seed).slice(1)}} </h2>
                     </div>
             </span>
-        <div >
-                <div class="attributes">
+        <div class="attributes">
+                <div >
                     <h2>Song attributes:</h2>
                 </div>
                 <ul
@@ -200,7 +200,7 @@ export default {
     margin: 5px;
 }
 .attribute {
-    display: none;
+    display: flex;
     justify-content: center;
     align-items: center;
 }
@@ -307,13 +307,12 @@ export default {
     background-color: darkgray;
 }
 .noselect {
-  -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-     -khtml-user-select: none; /* Konqueror HTML */
-       -moz-user-select: none; /* Old versions of Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none; /* Non-prefixed version, currently
-                                  supported by Chrome, Edge, Opera and Firefox */
+  -webkit-touch-callout: none; 
+    -webkit-user-select: none; 
+     -khtml-user-select: none; 
+       -moz-user-select: none; 
+        -ms-user-select: none; 
+            user-select: none; 
 }
 .preview {
     grid-area: 1 / 8 / 2 / 9;
@@ -333,10 +332,11 @@ a {
   padding: 6px;
   text-decoration: none;
   text-transform: uppercase;
+  transition: filter 300ms;
 }
 
 a:hover {
-  background-color: #009e37;
+  filter: brightness(1.3);
 }
 
 a:active {
