@@ -36,12 +36,12 @@ export default {
 
 <style>
 
-    body {
-        font-family: circular-spotify-ui,Helvetica Neue,Helvetica,Arial,sans-serif;
-        font-weight: 400;
-    }
+body {
+    font-family: circular-spotify-ui,Helvetica Neue,Helvetica,Arial,sans-serif;
+    font-weight: 400;
+}
 
-    .color-bg {
+.color-bg {
     width: 100%;
     height: 100%;
     position: absolute;
