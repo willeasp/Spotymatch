@@ -24,7 +24,7 @@
                 v-for="slider in querySliders" :key="slider.name"
                 v-bind:class="{'disabled':isDisabled(slider.name)}"
                 >
-                <h2 class="sliderTitle">{{slider.name + ": " + Math.round(slider.value/slider.max*100)+ "%"}}</h2>
+                <h2 class="sliderTitle">{{slider.name + ": " + Math.round(((slider.value-slider.min)/slider.max)*100)+ "%"}}</h2>
                 <div class="disableButton" @click="changeDisabled(slider.name)">
                     <span class="disableText" v-if="isDisabled(slider.name)">Enable</span>
                     <span class="disableText" v-else>Disable</span>
@@ -37,16 +37,33 @@
                     :step="slider.max/100" 
                     v-model="slider.value" />                       
             </div>
+
             <div class="slideContainer" 
-                v-bind:class="{'disabled':isDisabled(tempo.name)}">
-                <h2 class="sliderTitle">{{tempo.name + ": " + tempo.value + " BPM"}}</h2>
-                <div class="disableButton" @click="changeDisabled(tempo.name)">
-                    <span class="disableText" v-if="isDisabled(tempo.name)">Enable</span>
+                v-bind:class="{'disabled':isDisabledSpec(loudness.name)}">
+                <h2 class="sliderTitle">{{loudness.name + ": " + loudness.value + " db"}}</h2>
+                <div class="disableButton" @click="changeDisabledSpec(loudness.name)">
+                    <span class="disableText" v-if="isDisabledSpec(loudness.name)">Enable</span>
                     <span class="disableText" v-else>Disable</span>
                 </div>
                 <input type="range"
                     class="slider"
-                    v-bind:disabled="isDisabled(tempo.name)" 
+                    v-bind:disabled="isDisabledSpec(loudness.name)" 
+                    :min="loudness.min" 
+                    :max="loudness.max" 
+                    :step="1" 
+                    v-model="loudness.value" /> 
+            </div>
+
+            <div class="slideContainer" 
+                v-bind:class="{'disabled':isDisabledSpec(tempo.name)}">
+                <h2 class="sliderTitle">{{tempo.name + ": " + tempo.value + " BPM"}}</h2>
+                <div class="disableButton" @click="changeDisabledSpec(tempo.name)">
+                    <span class="disableText" v-if="isDisabledSpec(tempo.name)">Enable</span>
+                    <span class="disableText" v-else>Disable</span>
+                </div>
+                <input type="range"
+                    class="slider"
+                    v-bind:disabled="isDisabledSpec(tempo.name)" 
                     :min="tempo.min" 
                     :max="tempo.max" 
                     :step="1" 
@@ -57,8 +74,6 @@
         <div id="sideBar">
             <span>
                 Here you can find recommendations of songs to your liking.
-            
-
             </span>
             <div class="bigButton" id="recButton" @click="getRec">
                 Get Recommendation
@@ -73,42 +88,59 @@
 
 <script >
 
-const descriptions = {
-    acousticness: {
-        name: "Acousticness",
-        desc: "A confidence measure from 0 to 100% of whether the" 
-            + "track is acoustic."
-    },
-    danceability:{
-        name: "Danceability",
-        desc: "Danceability describes how suitable a track is for "
-            + "dancing based on a combination of musical elements "
-            + "including tempo, rhythm stability, beat strength, and" 
-            + " overall regularity."
-    },
-    energy: {
-        name: "Energy",
-        desc: ""
-    },
-    instrumentalness: {
-        name: "Instrumentalness",
-    },
-    liveness: {
-        name: "Liveness",
-    },
-    loudness: {
-        name: "Loudness",
-    },
-    popularity: {
-        name: "Popularity",
-    },
-    speechiness: {
-        name: "Speechiness",
-    },
-    tempo:{
-        name: "Tempo"
-    }
-}
+// const descriptions = {
+//     acousticness: {
+//         name: "Acousticness",
+//         desc: "A confidence measure from 0 to 100% of whether the" 
+//             + "track is acoustic."
+//     },
+//     danceability:{
+//         name: "Danceability",
+//         desc: "Danceability describes how suitable a track is for "
+//             + "dancing based on a combination of musical elements "
+//             + "including tempo, rhythm stability, beat strength, and" 
+//             + " overall regularity."
+//     },
+//     energy: {
+//         name: "Energy",
+//         desc: "Energy represents a perceptual measure of intensity"
+//             + " and activity. Typically, energetic tracks feel fast,"
+//             + " loud, and noisy. For example, death metal has high"
+//             + " energy, while a Bach prelude scores low on the scale. "
+//     },
+//     instrumentalness: {
+//         name: "Instrumentalness",
+//         desc: "Predicts whether a track contains no vocals. “Ooh” and"
+//             + " “aah” sounds are treated as instrumental in this"
+//             + " context. Rap or spoken word tracks are clearly"
+//             + " “vocal”. The closer the instrumentalness value is to"
+//             + " 100%, the greater likelihood the track contains no vocal"
+//             + " content. Values above 50% are intended to represent"
+//             + " instrumental tracks, but confidence is higher as the"
+//             + " value approaches 100%."
+//     },
+//     liveness: {
+//         name: "Liveness",
+//         desc: "Detects the presence of an audience in the recording."
+//             + " Higher liveness values represent an increased"
+//             + " probability that the track was performed live. A value"
+//             + " above 0.8 provides strong likelihood that the track is"
+//             + " live."
+//     },
+//     loudness: {
+//         name: "Loudness",
+//         desc: ""
+//     },
+//     popularity: {
+//         name: "Popularity",
+//     },
+//     speechiness: {
+//         name: "Speechiness",
+//     },
+//     tempo:{
+//         name: "Tempo"
+//     }
+// }
 
 export default {
     name: "Search",
@@ -169,13 +201,6 @@ export default {
                     max: 1,
                     enabled: true
                 },
-                loudness: {
-                    value: 0.5,
-                    name: "loudness",
-                    min: 0,
-                    max: 1,
-                    enabled: true
-                },
                 popularity: {
                     value: 50,
                     name: "popularity",
@@ -192,12 +217,19 @@ export default {
                 },
             },
             tempo: {
-                    value: 130,
-                    name: "BPM",
-                    min: 10,
-                    max: 250,
-                    enabled: true
-                },
+                value: 130,
+                name: "BPM",
+                min: 10,
+                max: 250,
+                enabled: true
+            },
+            loudness: {
+                value: -30,
+                name: "loudness",
+                min: -60,
+                max: 0,
+                enabled: true
+            },
             seedGenres: [],
         }
     },
@@ -253,6 +285,7 @@ export default {
                 this.querySliders[key].enabled = true;
             });
             this.tempo.value = (this.tempo.max-this.tempo.min)/2 + this.tempo.min;
+            this.loudness.value = this.loudness.min/2;
             this.genreReset();
         },
         genreReset(){
@@ -278,19 +311,27 @@ export default {
             return this.seedGenres.includes(genre);
         },
         changeDisabled(slider){
-            if (slider === this.tempo.name){
-                this.tempo.enabled = !this.tempo.enabled;
-            }else{
-                this.querySliders[slider].enabled = !this.querySliders[slider].enabled;
-            }
+            this.querySliders[slider].enabled = !this.querySliders[slider].enabled;
         },
         isDisabled(slider){
-            if(slider === this.tempo.name){
+            return !this.querySliders[slider].enabled;
+        },
+        changeDisabledSpec(slider){
+            if (slider === this.tempo.name){
+                this.tempo.enabled = !this.tempo.enabled;
+            }
+            else if (slider === this.loudness.name){
+                this.loudness.enabled = !this.loudness.enabled;
+            }
+        },
+        isDisabledSpec(slider){
+            if (slider === this.tempo.name){
                 return !this.tempo.enabled;
             }
-            return !this.querySliders[slider].enabled;
+            else if (slider === this.loudness.name){
+                return !this.loudness.enabled;
+            }
         }
-    
     },
 
     watch: {
