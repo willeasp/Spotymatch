@@ -1,6 +1,8 @@
 <template lang="">
-<div>
-    <h1 v-if="!searchExists" class="noResult" >There is no result registered, please perform a search.</h1>
+<div>  
+    <div v-if="this.mode==='search'">
+        <h1 v-if="!searchExists" class="noResult" >There is no result registered, please perform a search.</h1>
+    </div>
     <div v-if="!loading" class="list"> 
         <div v-if="enableList"> 
             <h1 class ="searchResult noselect"> Search result</h1> 
@@ -179,6 +181,7 @@ export default {
         },
         searchExists(){
             let search = this.$store.getters.getRecommendations;
+            
             if (! search) return false;
             return Object.keys(search).length > 0;
         }
