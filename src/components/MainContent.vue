@@ -1,5 +1,6 @@
 <template>
     <TopBar/>
+    <Popup/>
 
     <template v-if="route === 'Welcome'">
         <div class="notTopBar">
@@ -30,6 +31,7 @@ import Welcome from './Welcome';
 import Search from './Search';
 import Result from './Result';
 import History from './History';
+import Popup from './Popup';
 
 export default {
     name: "MainContent",
@@ -40,6 +42,7 @@ export default {
         Search,
         Result,
         History,
+        Popup,
     },
 
     computed: {
