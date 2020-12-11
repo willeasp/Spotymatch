@@ -61,7 +61,6 @@ export default {
             let recExist = this.$store.getters.getPreviousRecommendations;
             if (! recExist) return "empty";
             else return (Object.keys(recExist).length > 0) ? "loaded" : "loading" ;
-            // return Object.keys(this.$store.getters.getPreviousRecommendations).length > 0;
         }
     },
 };
