@@ -22,17 +22,20 @@
             </div>
         <div> 
         </div>
-            <span class="songCard"  v-for="(track,index) in tracks" v-bind:key="track">
+            <span class="songCard"  v-for="track in tracks" v-bind:key="track">
                 <div class="songNumber"> 
-                    {{index+1}}
-                    <div class="explicit" v-if="track.explicit">Explicit</div>
-                    <img ref="playin" v-show="isHovered(track.name)" src="https://open.scdn.co/cdn/images/equaliser-animated-green.73b73928.gif">
+                    
+                    <div v-show="!isHovered(track.name)"> 
+                        <div class="play noselect" v-if="track.preview_url" @click="playPreview(track.preview_url, track.name)"> &#9658 </div> 
+                    </div>
+                    <div class="pause noselect" @click="playPreview(track.preview_url, track.name)" v-show="isHovered(track.name)"> &#9612 &#9612</div>
+                    
                 </div>
                 
                 <div class="image"> 
                     <img v-bind:src="track.album.images[0].url" 
-                    @mouseover="playPreview(track.preview_url, track.name)" 
-                    @mouseleave="stopPreview()">
+                    
+                    >
                 </div>
                 
                 <div class="songInfo"> 
@@ -41,8 +44,14 @@
                     <h3> {{track.artists[0].name}} </h3>
                     <a :href="track.external_urls.spotify" target="_blank">Open in Spotify</a>
                 </div>
-                <div class="preview" v-if="track.preview_url">Hover album cover for preview</div>
-                <h3 class="songDuration"> Duration {{formatMilliseconds(track.duration_ms)}}</h3>
+                <div class="explicitContainer noselect"> 
+                    <div class="explicit" v-if="track.explicit">Explicit</div>    
+                </div>
+                <div class="playin noselect"> 
+                    <img v-show="isHovered(track.name)" src="https://open.scdn.co/cdn/images/equaliser-animated-green.73b73928.gif">
+                </div>
+                <!-- <div class="preview" v-if="track.preview_url">Click on album cover for preview</div> -->
+                <h3 class="songDuration noselect"> Duration {{formatMilliseconds(track.duration_ms)}}</h3>
             </span>
         </div>
     </div>
@@ -117,7 +126,10 @@ export default {
             } else return minutes + ":" + seconds;
         },
         playPreview(link, trackid) {
-            if (link) {
+            if(this.preview){
+                this.stopPreview();
+            }
+            else if (link) {
                 this.preview = new Audio(link);
                 this.preview.volume = 0.3;
                 this.hover.push(trackid);
@@ -209,7 +221,7 @@ export default {
     grid-template-columns: repeat(9, 1fr);
     grid-template-rows: 1fr;
     grid-column-gap: 8px;
-    grid-row-gap: 0px;
+    grid-row-gap: 0px; 
 
     overflow: hidden;
     border-radius: 6px;
@@ -232,6 +244,23 @@ export default {
     width: 128px;
     height: 128px;
     box-shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.3);
+}
+.play{
+    cursor: pointer;
+}
+.pause{
+    font-size: 1rem;
+    cursor: pointer;
+}
+.playin{
+    grid-area: 1 / 7 / 2 / 9;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    margin: 10px;
+}
+.playin img{
+    size: 150%;
 }
 
 @media (max-width: 600px) {
@@ -260,12 +289,14 @@ export default {
 .songInfo h3 {
     padding-bottom: 0.5rem;
 }
-.explicit {
+.explicitContainer{
+    grid-area: 1 / 7 / 2 / 8;
     display: flex;
     justify-content: center;
-    align-items: center;
-
-    margin-left: 8px;
+    align-items: center; 
+}
+.explicit {
+    /* height: 15px; */
     border-radius: 8px;
     font-size: 1rem;
     font-style: italic;
@@ -274,8 +305,17 @@ export default {
     box-shadow: 5px 5px 5px -2px rgba(0, 0, 0, 0.36);
     background-color: darkgray;
 }
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
 .preview {
-    grid-area: 1 / 7 / 2 / 9;
+    grid-area: 1 / 8 / 2 / 9;
     display: flex;
     justify-content: center;
     align-items: center;
