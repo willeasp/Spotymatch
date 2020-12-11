@@ -10,7 +10,7 @@
             </span>
             <div class="attributes noselect">
                 <div >
-                    <h2> Song attributes &#x25BC</h2>
+                    <h2> Song attributes &#x25BC;</h2>
                 </div>
                 <ul class="attribute"
                     v-for="atribute in attributes"
@@ -25,9 +25,9 @@
                 <div class="songNumber"> 
                     
                     <div v-show="!isHovered(track.name)"> 
-                        <div class="play noselect" v-if="track.preview_url" @click="playPreview(track.preview_url, track.name)"> &#9658 </div> 
+                        <div class="play noselect" v-if="track.preview_url" @click="playPreview(track.preview_url, track.name)"> &#9658; </div> 
                     </div>
-                    <div class="pause noselect" @click="playPreview(track.preview_url, track.name)" v-show="isHovered(track.name)"> &#9612 &#9612</div>
+                    <div class="pause noselect" @click="playPreview(track.preview_url, track.name)" v-show="isHovered(track.name)"> &#9612; &#9612;</div>
                     
                 </div>
                 
