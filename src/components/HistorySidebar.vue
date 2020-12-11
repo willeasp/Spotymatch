@@ -1,6 +1,12 @@
 <template>
     <div class="historySidebar gridchild">
         <div class="historySidebarTitle">Previous History</div>
+        <div class="loading" v-if="getPreviousRecommendationStatus === 'loading'">
+            <Loading />
+        </div>
+        <div class="noHistory" v-if="getPreviousRecommendationStatus === 'empty'">
+            <div>There is no existing history.</div>
+        </div>
         <div
             id="historySidebar"
             v-for="key in formatHistory(previousRecommendations)"
@@ -14,12 +20,14 @@
 <script>
 /* eslint-disable vue/no-unused-components */
 import HistorySidebarButton from "./HistorySidebarButton";
+import Loading from "./Loading.vue";
 
 export default {
     name: "HistorySidebar",
 
     components: {
         HistorySidebarButton,
+        Loading
     },
 
     methods: {
@@ -49,6 +57,12 @@ export default {
         previousRecommendations() {
             return this.$store.getters.getPreviousRecommendations;
         },
+        getPreviousRecommendationStatus(){
+            let recExist = this.$store.getters.getPreviousRecommendations;
+            if (! recExist) return "empty";
+            else return (Object.keys(recExist).length > 0) ? "loaded" : "loading" ;
+            // return Object.keys(this.$store.getters.getPreviousRecommendations).length > 0;
+        }
     },
 };
 </script>
@@ -71,5 +85,16 @@ export default {
 }
 .historySidebarTitle:hover {
     cursor: default;
+}
+
+.noHistory{
+    color:white;
+    height: auto;
+    padding-top: 25px;
+    font-size: small;
+
+}
+.loading{
+    padding: 10px;
 }
 </style>
