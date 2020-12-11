@@ -81,7 +81,7 @@ export default {
             this.tracks = [];
             this.seeds = [];
             this.attributes = [];
-            // console.log(this.$refs.playin.focus())
+            
             if (this.mode === "search") {
                 data = this.$store.getters.getRecommendations;
                 if (data.res) {
