@@ -2,8 +2,6 @@ import { createApp } from 'vue'
 import store from './store'
 import App from './App.vue'
 import firebase from 'firebase'
-
-
 let app;
 let promise_database_unsubscriber;
 
