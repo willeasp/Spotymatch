@@ -1,10 +1,10 @@
 <template>
-  <div @click="removeMsg" class="format">
-    <div >
-      <p class="messageType">{{ msg["category"] }}</p>
-      <p class="messageText"> {{ msg["msg"] }}</p>
+    <div @click="removeMsg" class="format">
+        <div>
+            <p class="messageType">{{ msg["category"] }}</p>
+            <p class="messageText">{{ msg["msg"] }}</p>
+        </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -13,50 +13,49 @@
 // https://github.com/markusantonwolf/best-practice-vue-js-tailwind-post-css
 
 export default {
-    props : {
-            msg : {
-                type: Object
-            }
+    props: {
+        msg: {
+            type: Object,
+        },
     },
     data() {
         return {
             timeout: null,
-        }
+        };
     },
-    methods:{
-        removeMsg(){
+    methods: {
+        removeMsg() {
             this.$store.dispatch("REMOVE_MSG", this.msg["id"]);
-        }
+        },
     },
-    mounted (){
-            this.timeout = setTimeout(() => {
-                this.$store.dispatch("REMOVE_MSG", this.msg["id"])
-            }
-            , 10000);
+    mounted() {
+        this.timeout = setTimeout(() => {
+            this.$store.dispatch("REMOVE_MSG", this.msg["id"]);
+        }, 10000);
     },
-}
+};
 </script>
 
 <style scoped>
-.format{
+.format {
     text-align: center;
 }
-.messageType{
-    font-size:x-large;
-    color:rgb(67, 67, 67);
+.messageType {
+    font-size: x-large;
+    color: rgb(67, 67, 67);
 }
-.messageText{
+.messageText {
     font-size: medium;
 }
-.removeBtn{
+.removeBtn {
     background: rgb(67, 67, 67, 0.5);
-    height:30px;
+    height: 30px;
     width: 30px;
     line-height: 30px;
     border-radius: 6px;
 }
 
-.format:hover{
+.format:hover {
     cursor: pointer;
 }
 </style>
