@@ -41,6 +41,7 @@ export default {
 
 <style lang="postcss" scoped>
 .notifications {
+    z-index: 5;
     position: fixed;
     width: calc(100% - 2rem);
     top: calc(1rem + 40px);

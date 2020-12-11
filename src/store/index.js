@@ -87,15 +87,16 @@ export default createStore({
          * @param {*} state is handled automatically
          * @param {*} queryObject contains the query
          */
-        REQUEST_RECOMMENDATION(state, queryObject) {
+        async REQUEST_RECOMMENDATION(state, queryObject) {
             state.commit('setLoading', true);
-            state.commit('setDoneLoading', false);
 
-            APIcontroller.getRecommendations(state.getters.getToken, queryObject)
+            let error;
+            await APIcontroller.getRecommendations(state.getters.getToken, queryObject)
                 // APIcontroller.getRecommendations(temptoken, queryObject)
                 .then(response => {
                     if (response.ok) return response;
                     else if (response.status === 401) {
+
                         state.dispatch('REQUEST_TOKEN');
                     }
                     throw new Error(response.statusText);
@@ -106,11 +107,13 @@ export default createStore({
                     db.pushRecommendation(res, queryObject, state.getters.getCurrentUser.uid);
                 })
                 .catch(err => {
+                    error = err;
                     state.commit('setError', err.message)
                     console.log(err.message);
                 });
             state.commit('setLoading', false);
-            state.commit('setDoneLoading', true);
+            if(error) throw error;
+            
         },
         /**
          * Sign in to firebase with already registered user

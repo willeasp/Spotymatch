@@ -6,9 +6,9 @@
                 <div>
                     <input id="genreSearch" type="text" 
                         v-model="searchInput" placeholder="Filter genres"/>
-                    <div id="genreReset" @click="genreReset">
+                    <a id="genreReset" @click="genreReset">
                         Reset Genres
-                    </div>
+                    </a>
                 </div>
                 <div id="genreButtons">
                     <a class="genreButton" 
@@ -37,11 +37,31 @@
                     :step="slider.max/100" 
                     v-model="slider.value" />                       
             </div>
+            <div class="slideContainer" 
+                v-bind:class="{'disabled':isDisabled(tempo.name)}">
+                <h2 class="sliderTitle">{{tempo.name + ": " + tempo.value + " BPM"}}</h2>
+                <div class="disableButton" @click="changeDisabled(tempo.name)">
+                    <span class="disableText" v-if="isDisabled(tempo.name)">Enable</span>
+                    <span class="disableText" v-else>Disable</span>
+                </div>
+                <input type="range"
+                    class="slider"
+                    v-bind:disabled="isDisabled(tempo.name)" 
+                    :min="tempo.min" 
+                    :max="tempo.max" 
+                    :step="1" 
+                    v-model="tempo.value" /> 
+            </div>
 
         </form>
         <div id="sideBar">
+            <span>
+                Here you can find recommendations of songs to your liking.
+            
+
+            </span>
             <div class="bigButton" id="recButton" @click="getRec">
-                <RouteButton routeName="Result" text="Get Recommendation"/>
+                Get Recommendation
             </div>
             <div class="bigButton" id="resetButton" @click="reset">
                 <span>Reset</span>
@@ -52,13 +72,46 @@
 </template>
 
 <script >
-import RouteButton from './RouteButton'
+
+const descriptions = {
+    acousticness: {
+        name: "Acousticness",
+        desc: "A confidence measure from 0 to 100% of whether the" 
+            + "track is acoustic."
+    },
+    danceability:{
+        name: "Danceability",
+        desc: "Danceability describes how suitable a track is for "
+            + "dancing based on a combination of musical elements "
+            + "including tempo, rhythm stability, beat strength, and" 
+            + " overall regularity."
+    },
+    energy: {
+        name: "Energy",
+        desc: ""
+    },
+    instrumentalness: {
+        name: "Instrumentalness",
+    },
+    liveness: {
+        name: "Liveness",
+    },
+    loudness: {
+        name: "Loudness",
+    },
+    popularity: {
+        name: "Popularity",
+    },
+    speechiness: {
+        name: "Speechiness",
+    },
+    tempo:{
+        name: "Tempo"
+    }
+}
 
 export default {
     name: "Search",
-    components: {
-        RouteButton,
-    },
 
     data(){
         return {
@@ -136,8 +189,15 @@ export default {
                     min: 0,
                     max: 1,
                     enabled: true
-                }
+                },
             },
+            tempo: {
+                    value: 130,
+                    name: "BPM",
+                    min: 10,
+                    max: 250,
+                    enabled: true
+                },
             seedGenres: [],
         }
     },
@@ -171,34 +231,63 @@ export default {
                 if(this.querySliders[key].enabled)
                     searchQuery[key] = this.querySliders[key].value;
             });
-            this.$store.dispatch("REQUEST_RECOMMENDATION", searchQuery);
+
+            this.$store.dispatch("REQUEST_RECOMMENDATION", searchQuery)
+            .then(()=>{
+                this.reroute("Result");
+            })
+            .catch(err=>{
+                console.log(err);
+                this.$store.dispatch("ADD_MSG", {
+                    category: "Recomendation",
+                    msg: "Something went wrong, check if your search is correctly filled"
+                    })
+            });
+        },
+        reroute(location){
+            window.location.hash = location;
         },
         reset(){
             Object.keys(this.querySliders).forEach(key=>{
                 this.querySliders[key].value = this.querySliders[key].max/2;
                 this.querySliders[key].enabled = true;
             });
+            this.tempo.value = (this.tempo.max-this.tempo.min)/2 + this.tempo.min;
             this.genreReset();
         },
         genreReset(){
             this.seedGenres = [];
         },
         changeSelected(genre){
-            if(this.isSelected(genre)){
-                this.seedGenres = this.seedGenres.filter(word => word !== genre);
+            if (this.seedGenres.length < 5) {
+                if (this.isSelected(genre)){
+                    this.seedGenres = this.seedGenres.filter(word => word !== genre);
+                }
+                else {
+                    this.seedGenres = this.seedGenres.length < 5 ? [...this.seedGenres, genre] : this.seedGenres;
+                }
             }
-            else{
-                this.seedGenres = this.seedGenres.length < 5 ? [...this.seedGenres, genre] : this.seedGenres;
+            else {
+                this.$store.dispatch("ADD_MSG", {
+                    category: "Genres",
+                    msg: "You can only pick 5 genres"
+                })
             }
         },
         isSelected(genre){
             return this.seedGenres.includes(genre);
         },
         changeDisabled(slider){
-            let s = this.querySliders[slider];
-            this.querySliders[slider].enabled = s.enabled ? false : true;
+            if (slider === this.tempo.name){
+                this.tempo.enabled = !this.tempo.enabled;
+            }else{
+                this.querySliders[slider].enabled = !this.querySliders[slider].enabled;
+            }
         },
         isDisabled(slider){
+            if(slider === this.tempo.name){
+                return !this.tempo.enabled;
+            }
             return !this.querySliders[slider].enabled;
         }
     
@@ -280,11 +369,13 @@ form{
 
 #genreSearch{
     width:60%;
+    z-index: 0;
     margin: 15px;
     height: 35px;
     border-radius: 20px;
     font-size: 22px;
     padding-left: 20px;
+    padding-bottom: 8px;
     border:none;
 }
 #genreSearch:focus{
@@ -296,12 +387,23 @@ form{
     margin-right: 5%;
     margin-bottom: 5%;
     border-radius: 30px;
-    background-color: blueviolet;
+    background: -webkit-gradient(
+        linear,
+        left top,
+        right bottom,
+        from(#6192ce79),
+        to(#be31a46e)
+        );    
     color: black;
+    font-weight: bold;
     box-shadow: 2px 2px 5px;
     -ms-user-select: none;
     user-select: none;
     cursor: pointer;
+}
+#genreReset:active{
+    background-color: rgb(142, 177, 206);
+    color: rgb(192, 192, 192);
 }
 
 .genreButton{
@@ -410,7 +512,7 @@ form{
 }
 .sliderTitle{
     margin-left: 20px;
-    margin-top: 5%;
+    margin-top: 5px;
     width: 100%;
     text-transform: capitalize;
 }
@@ -464,7 +566,7 @@ background: -webkit-gradient(
     padding: 10px;
     width: 25%;
     height: 80%;
-    z-index:1;
+    z-index: 1;
     top: 48px;
     right: 0;
     margin-top: 5%;
@@ -497,6 +599,7 @@ background: -webkit-gradient(
     vertical-align:middle;
     font-size: 20px;
     transition: 0.2s;
+    box-shadow: 2px 2px 5px;
 }
 
 .bigButton:hover{
