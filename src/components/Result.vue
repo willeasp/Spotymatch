@@ -1,4 +1,6 @@
 <template lang="">
+<div>
+    <h1 v-if="!searchExists" class="noResult" >There is no result registered, please perform a search.</h1>
     <div v-if="!loading" class="list"> 
         <div v-if="enableList"> 
             <h1 class ="searchResult noselect"> Search result</h1> 
@@ -52,6 +54,7 @@
             </span>
         </div>
     </div>
+</div>
 </template>
 
 <script>
@@ -174,6 +177,11 @@ export default {
         loading() {
             return this.load();
         },
+        searchExists(){
+            let search = this.$store.getters.getRecommendations;
+            if (! search) return false;
+            return Object.keys(search).length > 0;
+        }
     },
 };
 </script>
@@ -350,4 +358,9 @@ a:visited {
   background-color: #ccc;
 }
 
+.noResult{
+    color: white;
+    padding-top: 15px;
+    text-align: center;
+}
 </style>
