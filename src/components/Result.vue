@@ -26,12 +26,12 @@
                 <div class="songNumber"> 
                     {{index+1}}
                     <div class="explicit" v-if="track.explicit">Explicit</div>
-                    <img v-show="this.preview" src="https://open.scdn.co/cdn/images/equaliser-animated-green.73b73928.gif">
+                    <img ref="playin" v-show="isHovered(track.name)" src="https://open.scdn.co/cdn/images/equaliser-animated-green.73b73928.gif">
                 </div>
                 
                 <div class="image"> 
                     <img v-bind:src="track.album.images[0].url" 
-                    @mouseover="playPreview(track.preview_url)" 
+                    @mouseover="playPreview(track.preview_url, track.name)" 
                     @mouseleave="stopPreview()">
                 </div>
                 
@@ -58,6 +58,7 @@ export default {
             enableList: false,
             preview: null,
             interval: null,
+            hover: [],
         };
     },
     props: {
@@ -74,7 +75,7 @@ export default {
             this.tracks = [];
             this.seeds = [];
             this.attributes = [];
-            
+            // console.log(this.$refs.playin.focus())
             if (this.mode === "search") {
                 data = this.$store.getters.getRecommendations;
                 if (data.res) {
@@ -115,10 +116,12 @@ export default {
                 return hours + ":" + minutes + ":" + seconds;
             } else return minutes + ":" + seconds;
         },
-        playPreview(link) {
+        playPreview(link, trackid) {
             if (link) {
                 this.preview = new Audio(link);
                 this.preview.volume = 0.3;
+                this.hover.push(trackid);
+                console.log(this.hover);
                 this.preview.play()
                 .then(() => {
                     this.interval = setInterval(() => {
@@ -135,7 +138,6 @@ export default {
                         console.log("to quick remove from media");
                     }
                 });
-                
             }
         },
         stopPreview() {
@@ -143,6 +145,7 @@ export default {
                 clearInterval(this.interval);
                 this.preview.pause();
                 this.preview = null;
+                this.hover = [];
             }
         },
         load() {
@@ -151,6 +154,10 @@ export default {
             else this.enableList = false;
             return load;
         },
+        isHovered(trackid){
+            if(this.hover.includes(trackid)) return true;
+            else return false;
+        }
     },
     computed: {
         /**
@@ -235,6 +242,7 @@ export default {
     .image img {
         width: 64px;
         height: 64px;
+        
     }
     h2 {
         font-size: 1rem;
@@ -281,6 +289,25 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+a {
+  background-color: #4CAF50;
+  color: white;
+  padding: 6px;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+a:hover {
+  background-color: #46d377;
+}
+
+a:active {
+  background-color: #3ad43f;
+}
+
+a:visited {
+  background-color: #ccc;
 }
 
 @-webkit-keyframes slide-in-fwd-center {
