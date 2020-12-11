@@ -9,7 +9,7 @@ firebase.auth().onAuthStateChanged((user)=>{
     if(!app) {
         app = createApp(App);
         app.use(store);
-        // Error handler, to use this, do *throw new Error(message);*
+        // Error handler, to use this, do *throw 'message';*
         app.config.errorHandler = function(err) {
             console.log(err);
             store.dispatch("ADD_MSG", {
