@@ -121,9 +121,8 @@ export default {
                 this.preview = new Audio(link);
                 this.preview.volume = 0.3;
                 this.hover.push(trackid);
-                console.log(this.hover);
-                this.preview.play()
-                .then(() => {
+
+                this.preview.play().then(() => {
                     this.interval = setInterval(() => {
                     this.preview.volume += 0.01;
                     if(this.preview.volume >= 0.9) clearInterval(this.interval);
@@ -131,11 +130,10 @@ export default {
                 })
                 .catch(err => {
                     if(err.name === 'NotAllowedError'){
-                        // this.$store.dispatch('ADD_MSG', {category: 'Permission Error', msg: 'Seems like autoplay in browser is disabled'})
-                        console.log("browser doesnt support");
+                        this.$store.dispatch('ADD_MSG', {category: 'Permission Error', msg: 'Autoplay is disabled in browser is, please disable to play on mouse hover'})
                     }
                     else if (err.name === 'AbortError'){
-                        console.log("to quick remove from media");
+                        this.$store.dispatch('ADD_MSG', {category: 'Error', msg: 'Preview did not have enough time to load before stopping'})
                     }
                 });
             }
@@ -222,8 +220,6 @@ export default {
     );
     margin: 1rem;
     box-shadow: 5px 5px 10px 2px rgba(0, 0, 0, 0.3);
-    -webkit-animation: slide-in-fwd-center 0.8s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-	        animation: slide-in-fwd-center 0.8s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
 }
 .image {
     grid-area: 1 / 2 / 2 / 3;
@@ -299,7 +295,7 @@ a {
 }
 
 a:hover {
-  background-color: #46d377;
+  background-color: #009e37;
 }
 
 a:active {
@@ -308,31 +304,6 @@ a:active {
 
 a:visited {
   background-color: #ccc;
-}
-
-@-webkit-keyframes slide-in-fwd-center {
-  0% {
-    -webkit-transform: translateZ(-1400px);
-            transform: translateZ(-1400px);
-    opacity: 0;
-  }
-  100% {
-    -webkit-transform: translateZ(0);
-            transform: translateZ(0);
-    opacity: 1;
-  }
-}
-@keyframes slide-in-fwd-center {
-  0% {
-    -webkit-transform: translateZ(-1400px);
-            transform: translateZ(-1400px);
-    opacity: 0;
-  }
-  100% {
-    -webkit-transform: translateZ(0);
-            transform: translateZ(0);
-    opacity: 1;
-  }
 }
 
 </style>
