@@ -10,7 +10,7 @@
             </span>
             <div class="attributes noselect">
                 <div >
-                    <h2>Song attributes &#x25BC</h2>
+                    <h2> Song attributes &#x25BC</h2>
                 </div>
                 <ul class="attribute"
                     v-for="atribute in attributes"
@@ -103,7 +103,7 @@ export default {
                     let h = data.seeds;
                     for (let key in h) {
                         if (key !== "seed_genres")
-                            this.attributes.push(key + " " + h[key]);
+                            this.attributes.push(key.toUpperCase() + ": " + h[key]);
                     }
                     this.enableList = true;
                 }
