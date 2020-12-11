@@ -4,6 +4,8 @@ import firebaseSource from '../api/firebase/firebaseSource';
 const fb = firebaseSource.fb;
 const db = firebaseSource.db;
 
+let popupMessageId = 0;
+
 export default createStore({
     state: {
         token: "", // authorisation token for current session
@@ -14,7 +16,8 @@ export default createStore({
         route: window.location.hash.substring(1),
         error: null, //if request recommendation throws error
         loading: false, //request recommendation loading
-        doneLoading: false  // request recommendation done loading
+        doneLoading: false,  // request recommendation done loading
+        popupMessages: [] // poppup messages are stored here example {msg: "bonk", category: "error", id:5}
     },
     mutations: {
         setToken(state, token) {
@@ -46,6 +49,16 @@ export default createStore({
         },
         setViewingHistory(state, newViewHistory){
             state.viewingHistory = newViewHistory;
+        },
+        pushMessage(state, msgObject){
+            state.popupMessages.push({
+                category : msgObject["category"],
+                msg : msgObject["msg"],
+                id: popupMessageId++
+            })
+        },
+        deleteMessage(state, msgId){
+            state.popupMessages = state.popupMessages.filter(msg=> msg["id"] !== msgId);
         }
     },
     actions: {
@@ -187,6 +200,12 @@ export default createStore({
              */
         SET_ROUTE(state, route) {
             state.commit("setRoute", route);
+        },
+        ADD_MSG(state, msgObject){
+            state.commit("pushMessage", msgObject);
+        },
+        REMOVE_MSG(state, msgId){
+            state.commit("deleteMessage", msgId);
         }
     },
 
@@ -228,6 +247,9 @@ export default createStore({
         getError(state) {
             return state.error;
 
+        },
+        getPopupMessages(state){
+            return state.popupMessages;
         }
     },
     modules: {
