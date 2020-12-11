@@ -245,6 +245,13 @@ export default {
                     max: 1,
                     enabled: true
                 },
+                valence: {
+                    value: 0.5,
+                    name: "valence",
+                    min: 0,
+                    max: 1,
+                    enabled: true
+                }
             },
             tempo: {
                 value: 130,
