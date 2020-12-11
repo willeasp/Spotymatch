@@ -113,14 +113,17 @@ export default createStore({
             state.commit('setDoneLoading', true);
         },
         /**
-        * Sign in to firebase with already registered user
-        * @param {*} state 
-        * @param {*} param1 
-        */
-        USER_SIGN_IN(state, { email, password }) {
-            fb.signInUser(email, password)
-                .catch(err => console.error(err, "user could not sign in"));
-            state.dispatch('REQUEST_TOKEN');
+         * Sign in to firebase with already registered user
+         * @param {*} state 
+         * @param {*} param1 
+         */
+        async USER_SIGN_IN(state, { email, password }) {
+            let error;
+            await fb.signInUser(email, password)
+                .catch(err => {
+                    error = err;
+                });
+            if(error) throw error; 
         },
         /**
         * Sign user out from firebase
@@ -141,16 +144,17 @@ export default createStore({
             state.commit("setUser", user);
         },
         /**
-        * Create a new user in firebase
-        * @param {*} state 
-        * @param {*} param1 
-        */
-        CREATE_USER(state, { email, password }) {
-            fb.createUser(email, password)
-                .then(user => {
-                    state.commit("setUser", user);
-                })
-                .catch(err => console.error(err, "could not create user"));
+         * Create a new user in firebase
+         * @param {*} state 
+         * @param {*} param1 
+         */
+        async CREATE_USER(state, { email, password }) {
+            let error;
+            await fb.createUser(email, password)
+                .catch(err => {
+                    error = err
+                });
+            if(error) throw error; 
         },
         /**
          * Fetches user history from firbase
