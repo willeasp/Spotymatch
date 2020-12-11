@@ -12,7 +12,10 @@
 </template>
 
 <script>
-/* eslint-disable */
+// acknowledgment:
+// Pattern and styling for Popup.vue and Message.vue heavily inspired by git repo
+// https://github.com/markusantonwolf/best-practice-vue-js-tailwind-post-css
+
 import Message from "./Message"
 
 export default {
@@ -30,14 +33,12 @@ export default {
         }
     },
 }
-/* eslint-disable */
 </script>
 
 <style lang="postcss" scoped>
 .notifications {
   position: fixed;
   width: calc(100% - 2rem);
-  /* z-index: var(--notifications-zindex); */
   top: calc(1rem + 40px);
   right: 1rem;
   left: 1rem;

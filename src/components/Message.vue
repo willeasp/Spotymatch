@@ -8,6 +8,10 @@
 </template>
 
 <script>
+// Acknowledgment:
+// Pattern and styling for Popup.vue and Message.vue heavily inspired by git repo
+// https://github.com/markusantonwolf/best-practice-vue-js-tailwind-post-css
+
 export default {
     props : {
             msg : {
