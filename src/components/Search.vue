@@ -3,8 +3,13 @@
         <h1 id="title">Search Form</h1>
         <form>
             <div id="genreContainer">
-                <input id="genreSearch" type="text" 
-                    v-model="searchInput" placeholder="Filter genres"/>
+                <div>
+                    <input id="genreSearch" type="text" 
+                        v-model="searchInput" placeholder="Filter genres"/>
+                    <div id="genreReset" @click="genreReset">
+                        Reset Genres
+                    </div>
+                </div>
                 <div id="genreButtons">
                     <a class="genreButton" 
                         v-for="genre in filterdGenres" :key="genre"
@@ -38,7 +43,7 @@
             <div class="bigButton" id="recButton" @click="getRec">
                 <RouteButton routeName="Result" text="Get Recommendation"/>
             </div>
-            <div class="bigButton" id="resetButton" >
+            <div class="bigButton" id="resetButton" @click="reset">
                 <span>Reset</span>
             </div>
         </div>
@@ -166,8 +171,17 @@ export default {
                 if(this.querySliders[key].enabled)
                     searchQuery[key] = this.querySliders[key].value;
             });
-            console.log(searchQuery);
             this.$store.dispatch("REQUEST_RECOMMENDATION", searchQuery);
+        },
+        reset(){
+            Object.keys(this.querySliders).forEach(key=>{
+                this.querySliders[key].value = this.querySliders[key].max/2;
+                this.querySliders[key].enabled = true;
+            });
+            this.genreReset();
+        },
+        genreReset(){
+            this.seedGenres = [];
         },
         changeSelected(genre){
             if(this.isSelected(genre)){
@@ -187,6 +201,7 @@ export default {
         isDisabled(slider){
             return !this.querySliders[slider].enabled;
         }
+    
     },
 
     watch: {
@@ -265,8 +280,7 @@ form{
 
 #genreSearch{
     width:60%;
-    margin: 10px;
-    margin-right: 40%;
+    margin: 15px;
     height: 35px;
     border-radius: 20px;
     font-size: 22px;
@@ -275,6 +289,19 @@ form{
 }
 #genreSearch:focus{
     outline: none;
+}
+#genreReset{
+    width:100px;
+    padding: 10px;
+    margin-right: 5%;
+    margin-bottom: 5%;
+    border-radius: 30px;
+    background-color: blueviolet;
+    color: black;
+    box-shadow: 2px 2px 5px;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: pointer;
 }
 
 .genreButton{
@@ -471,15 +498,19 @@ background: -webkit-gradient(
     font-size: 20px;
     transition: 0.2s;
 }
-#recButton{
-    flex:0;
-}
-#recButton:hover{
+
+.bigButton:hover{
     cursor: pointer;
-    background-color: rgba(89, 180, 121, 0.575);
+    background-color:  rgba(133, 46, 150, 0.699);
     color: white;
     box-shadow: 5px 5px 15px;
     
+}
+.bigButton:active{
+    background-color: rgb(197, 151, 206);
+}
+#recButton{
+    flex:0;
 }
 #resetButton{
     flex:0;
