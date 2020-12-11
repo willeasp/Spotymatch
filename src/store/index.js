@@ -4,6 +4,8 @@ import firebaseSource from '../api/firebase/firebaseSource';
 const fb = firebaseSource.fb;
 const db = firebaseSource.db;
 
+let popupMessageId = 0;
+
 export default createStore({
     state: {
         token: "", // authorisation token for current session
@@ -14,7 +16,8 @@ export default createStore({
         route: window.location.hash.substring(1),
         error: null, //if request recommendation throws error
         loading: false, //request recommendation loading
-        doneLoading: false  // request recommendation done loading
+        doneLoading: false,  // request recommendation done loading
+        popupMessages: [] // poppup messages are stored here example {msg: "bonk", category: "error", id:5}
     },
     mutations: {
         setToken(state, token) {
@@ -46,6 +49,16 @@ export default createStore({
         },
         setViewingHistory(state, newViewHistory){
             state.viewingHistory = newViewHistory;
+        },
+        pushMessage(state, msgObject){
+            state.popupMessages.push({
+                category : msgObject["category"],
+                msg : msgObject["msg"],
+                id: popupMessageId++
+            })
+        },
+        deleteMessage(state, msgId){
+            state.popupMessages = state.popupMessages.filter(msg=> msg["id"] !== msgId);
         }
     },
     actions: {
@@ -100,14 +113,17 @@ export default createStore({
             state.commit('setDoneLoading', true);
         },
         /**
-        * Sign in to firebase with already registered user
-        * @param {*} state 
-        * @param {*} param1 
-        */
-        USER_SIGN_IN(state, { email, password }) {
-            fb.signInUser(email, password)
-                .catch(err => console.error(err, "user could not sign in"));
-            state.dispatch('REQUEST_TOKEN');
+         * Sign in to firebase with already registered user
+         * @param {*} state 
+         * @param {*} param1 
+         */
+        async USER_SIGN_IN(state, { email, password }) {
+            let error;
+            await fb.signInUser(email, password)
+                .catch(err => {
+                    error = err;
+                });
+            if(error) throw error; 
         },
         /**
         * Sign user out from firebase
@@ -128,16 +144,17 @@ export default createStore({
             state.commit("setUser", user);
         },
         /**
-        * Create a new user in firebase
-        * @param {*} state 
-        * @param {*} param1 
-        */
-        CREATE_USER(state, { email, password }) {
-            fb.createUser(email, password)
-                .then(user => {
-                    state.commit("setUser", user);
-                })
-                .catch(err => console.error(err, "could not create user"));
+         * Create a new user in firebase
+         * @param {*} state 
+         * @param {*} param1 
+         */
+        async CREATE_USER(state, { email, password }) {
+            let error;
+            await fb.createUser(email, password)
+                .catch(err => {
+                    error = err
+                });
+            if(error) throw error; 
         },
         /**
          * Fetches user history from firbase
@@ -187,6 +204,12 @@ export default createStore({
              */
         SET_ROUTE(state, route) {
             state.commit("setRoute", route);
+        },
+        ADD_MSG(state, msgObject){
+            state.commit("pushMessage", msgObject);
+        },
+        REMOVE_MSG(state, msgId){
+            state.commit("deleteMessage", msgId);
         }
     },
 
@@ -228,6 +251,9 @@ export default createStore({
         getError(state) {
             return state.error;
 
+        },
+        getPopupMessages(state){
+            return state.popupMessages;
         }
     },
     modules: {
