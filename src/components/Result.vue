@@ -8,17 +8,17 @@
                     <h2>{{(seed).charAt(0).toUpperCase() + (seed).slice(1)}} </h2>
                     </div>
             </span>
-        <div class="attributes">
-                <div>
+        <div >
+                <div class="attributes">
                     <h2>Song attributes:</h2>
                 </div>
-                <div
+                <ul
                     class="attribute"
                     v-for="atribute in attributes"
                     :key="atribute"
                 >
-                    <h2> {{ atribute}} </h2>
-                </div>
+                    <h2> {{atribute}} </h2>
+                </ul>
             </div>
         <div> 
         </div>
@@ -33,9 +33,7 @@
                 </div>
                 
                 <div class="image"> 
-                    <img v-bind:src="track.album.images[0].url" 
-                    
-                    >
+                    <img v-bind:src="track.album.images[0].url">
                 </div>
                 
                 <div class="songInfo"> 
@@ -202,12 +200,15 @@ export default {
     margin: 5px;
 }
 .attribute {
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
 }
 .attributes {
     text-align: center;
+}
+.attributes:hover .attribute ul{
+    display: flex;
 }
 .songNumber {
     grid-area: 1 / 1 / 2 / 2;
