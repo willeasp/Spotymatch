@@ -2,12 +2,21 @@ import { createApp } from 'vue'
 import store from './store'
 import App from './App.vue'
 import firebase from 'firebase'
+
+
 let app;
 let promise_database_unsubscriber;
 
 firebase.auth().onAuthStateChanged((user)=>{
     if(!app) {
-        createApp(App).use(store).mount('#app');
+        app = createApp(App).use(store).mount('#app');
+        console.log(app);
+        app.config.errorHandler = (err, vm, info) => {
+            console.log(err);
+            console.log(vm);
+            console.log(info);
+            console.log("nu jävlar händer det grejer");
+        }
         app = true;
     }
     if(user) {
@@ -25,6 +34,8 @@ firebase.auth().onAuthStateChanged((user)=>{
         }
     }
 })
+
+app = createApp(App).use(store).mount('#app');
 
 function hashChange() {
     if(! ["#Welcome", "#Search", "#Result", "#History", "#Login"].find(knownRoute=> window.location.hash === knownRoute)) {
