@@ -20,7 +20,13 @@ const APIcontroller = (()=> {
             body: "grant_type=client_credentials"
         })
         .then(res=>res.json())
-        .then(JSON => JSON.access_token); 
+        // .then(JSON => JSON.access_token); 
+        .then(JSON => {
+            return {
+                access_token:JSON.access_token, 
+                expires_in:JSON.expires_in
+            }
+        }); 
     }
     /**
      * Base API call function 

@@ -12,7 +12,7 @@
     "popularity": "0-100",
     "speechiness": "0-1.0",
     "tempo": "BPM of tracks",
-    "valence": "happiness of track",
+    "valence": "happiness of track 0-1.0",
 
     "availible_genres": [ "acoustic", "afrobeat", "alt-rock", "alternative", "ambient", 
         "anime", "black-metal", "bluegrass", "blues", "bossanova", "brazil", "breakbeat", 
