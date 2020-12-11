@@ -9,14 +9,19 @@ let promise_database_unsubscriber;
 
 firebase.auth().onAuthStateChanged((user)=>{
     if(!app) {
-        app = createApp(App).use(store).mount('#app');
-        console.log(app);
-        app.config.errorHandler = (err, vm, info) => {
+        app = createApp(App);
+        app.use(store);
+        // Error handler, to use this, do *throw new Error(message);*
+        app.config.errorHandler = function(err) {
             console.log(err);
-            console.log(vm);
-            console.log(info);
-            console.log("nu jävlar händer det grejer");
+            store.dispatch("ADD_MSG", {
+                category: "Error",
+                msg: err
+            });
         }
+        app.mount('#app');
+        console.log(app);
+        
         app = true;
     }
     if(user) {
@@ -35,8 +40,6 @@ firebase.auth().onAuthStateChanged((user)=>{
     }
 })
 
-app = createApp(App).use(store).mount('#app');
-
 function hashChange() {
     if(! ["#Welcome", "#Search", "#Result", "#History", "#Login"].find(knownRoute=> window.location.hash === knownRoute)) {
         window.location.hash="Welcome";
@@ -49,3 +52,6 @@ hashChange();
 
 window.addEventListener("hashchange", hashChange);
 
+window.onerror = function (errorMsg, url, lineNumber) {
+    alert('Error: ' + errorMsg + ' Script: ' + url + ' Line: ' + lineNumber);
+}

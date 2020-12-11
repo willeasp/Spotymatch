@@ -1,4 +1,5 @@
 <template>
+    <button @click="error">error</button>
     <img class="logo" alt="Pear logo" src="../assets/pe.png" />
     <div class="welcome">
         <h1 id="welcomeText">Welcome to Spotymatch</h1>
@@ -15,6 +16,11 @@ export default {
             return user && user.user;
         },
     },
+    methods: {
+        error() {
+            throw new Error("This is an error");
+        }
+    }
 }
 </script>
 
