@@ -200,8 +200,10 @@ export default {
 }
 .searchResult {
     text-align: center;
+    color:white;
 }
 .genres {
+    color:white;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -215,6 +217,7 @@ export default {
     align-items: center;
 }
 .attributes {
+    color:white;
     text-align: center;
     cursor: pointer;
 }
