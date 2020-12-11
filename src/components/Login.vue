@@ -15,11 +15,13 @@
             <div class="login-input">
                 <label for="login-username"> E-mail </label>
                 <input
+                    :class="{ error: emailError }"
                     type="text"
                     v-model="email"
                     id="login-username"
                     placeholder="E-mail"
                 />
+                <Error v-if="emailError" v-model:message="error" />
             </div>
             <div class="login-input">
                 <label for="login-password"> Password </label>
@@ -104,6 +106,7 @@ export default {
                 .catch((err) => {
                     this.error = err.message;
                     this.errorCode = err.code;
+                    console.log(err);
                 });
         },
 
@@ -116,6 +119,7 @@ export default {
                 .catch((err) => {
                     this.error = err.message;
                     this.errorCode = err.code;
+                    console.log(err);
                 });
         },
 
