@@ -1,7 +1,6 @@
 <template>
     <div id="search">
         <h1 id="title">Search Form</h1>
-        {{querySliders}}
         <form>
             <div id="genreContainer">
                 <div>
@@ -47,50 +46,18 @@
                     v-model="slider.value" />                       
             </div>
 
-            <!-- <div class="slideContainer" 
-                v-bind:class="{'disabled':isDisabledSpec(loudness.name)}">
-                <h2 class="sliderTitle">{{loudness.name + ": " + loudness.value + " db"}}</h2>
-                <div class="disableButton" @click="changeDisabledSpec(loudness.name)">
-                    <span class="disableText" v-if="isDisabledSpec(loudness.name)">Enable</span>
-                    <span class="disableText" v-else>Disable</span>
-                </div>
-                <input type="range"
-                    class="slider"
-                    v-bind:disabled="isDisabledSpec(loudness.name)" 
-                    :min="loudness.min" 
-                    :max="loudness.max" 
-                    :step="1" 
-                    v-model="loudness.value" /> 
-            </div>
-
-            <div class="slideContainer" 
-                v-bind:class="{'disabled':isDisabledSpec(tempo.name)}">
-                <h2 class="sliderTitle">{{tempo.name + ": " + tempo.value + " BPM"}}</h2>
-                <div class="disableButton" @click="changeDisabledSpec(tempo.name)">
-                    <span class="disableText" v-if="isDisabledSpec(tempo.name)">Enable</span>
-                    <span class="disableText" v-else>Disable</span>
-                </div>
-                <input type="range"
-                    class="slider"
-                    v-bind:disabled="isDisabledSpec(tempo.name)" 
-                    :min="tempo.min" 
-                    :max="tempo.max" 
-                    :step="1" 
-                    v-model="tempo.value" /> 
-            </div> -->
-
         </form>
         <div id="sideBar">
             <span>
-                Here you can find recommendations of songs to your liking.
+                Here you can find recommendations of songs to your liking. <br>
+                Select at least one genre to perform a search.
             </span>
-            <p>Select at least one genre to perform a search</p>
 
             <div class="bigButton" id="recButton" @click="getRec">
                 Get Recommendation
             </div>
             <div class="bigButton" id="resetButton" @click="reset">
-                <span>Reset</span>
+                Reset
             </div>
         </div>
     </div> 
@@ -272,7 +239,7 @@ export default {
                     enabled: true,
                     step: 1,
                     scale: 1,
-                    unit: "%",
+                    unit: "dB",
                     description: false,
                     desc: "The overall loudness of a track in decibels (dB). Loudness"
                             + " values are averaged across the entire track and are"
@@ -655,6 +622,23 @@ form{
     overflow-x: auto ;
     transition: all 0.3s ease;
 }
+/*slider handleknob css*/
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  width: 20px; /* Set a specific slider handle width */
+  height: 20px; /* Slider handle height */
+  background: rgba(104, 32, 109, 0.788);
+  border-radius: 50%;
+  cursor: pointer; /* Cursor on hover */
+}
+/*slider handleknob css*/
+.slider::-moz-range-thumb {
+  width: 20px; /* Set a specific slider handle width */
+  height: 20px; /* Slider handle height */
+  background: rgba(104, 32, 109, 0.788);
+  cursor: pointer; /* Cursor on hover */
+}
 .slideContainer:hover:not(.disabled) > .slider{
 background: -webkit-gradient(
         linear,
@@ -700,6 +684,11 @@ background: -webkit-gradient(
         );       border-radius: 15px;
     box-shadow: 5px 5px 10px;
     position: fixed;
+}
+#sideBar span{
+    margin: 15px auto;
+    color: rgb(39, 39, 39);
+    text-shadow: 1px 1px 5px rgba(104, 32, 109, 0.788)
 }
 
 .bigButton{
