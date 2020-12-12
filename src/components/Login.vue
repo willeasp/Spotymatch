@@ -307,13 +307,7 @@ a:visited {
     direction: left;
     unicode-bidi: bidi-override;
 }
-/* 
-.header h1 {
-    overflow: auto;
-    width: 50%;
-    position: relative;
-}
- */
+
 .header img {
     margin: 0px;
     vertical-align: middle;

@@ -49,7 +49,7 @@ export default {
     height: 100%;
     text-emphasis: before;
 }
-.header {
+.category {
     margin-top: 5px;
     margin-bottom: 3px;
     font-size: x-large;
