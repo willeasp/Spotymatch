@@ -103,7 +103,24 @@ export default createStore({
                 .then(res => res.json())
                 .then(res => {
                     state.commit('saveRecommendation', {res, queryObject});
-                    db.pushRecommendation(res, queryObject, state.getters.getCurrentUser.uid);
+                    db.pushRecommendation(
+                        res,
+                        queryObject, 
+                        state.getters.getCurrentUser.uid,
+                        (error)=>{
+                            if(error){
+                                state.dispatch("ADD_MSG",{
+                                    category: "Permission denied",
+                                    msg: "You don't have permission to change the database for this user."
+                                });
+                            }
+                            else{ // write was successfull
+                                state.dispatch("ADD_MSG",{
+                                    category: "Success!",
+                                    msg: "We have saved your recommendation to history."
+                                });
+                            }
+                        });
                 })
                 .catch(err => {
                     state.commit('setError', err.message)
@@ -181,9 +198,23 @@ export default createStore({
          */
         SUBSCRIBE_RESULT_HISTORY(state) {
             const userUID = state.getters.getCurrentUser.uid;
+            const callback = snapshot => state.commit("setHistory", snapshot.val());
+            const callbackOnFailure = () => {
+                db.unsubscribeResultHistory(userUID);
+                state.dispatch("ADD_MSG", {
+                    category: "Permission denied",
+                    msg: "You don't have permission to read from the database of this user. Access to history has been terminated."
+                })
+            }
+            // const callbackOnFailure = () => {
+            //     db.unsubscribeResultHistory(userUID);
+            //     alert("You don't have permission to read from the database of this user." 
+            //         + "\nAccess to history has been terminated.");
+            // }
             db.subscribeResultHistory(
                 userUID,
-                snapshot => state.commit("setHistory", snapshot.val())
+                callback,
+                callbackOnFailure
             );
             return () => db.unsubscribeResultHistory(userUID);
         },
