@@ -1,6 +1,7 @@
 <template>
     <div id="search">
         <h1 id="title">Search Form</h1>
+        {{querySliders}}
         <form>
             <div id="genreContainer">
                 <div>
@@ -20,18 +21,23 @@
                 </div>
             </div>
 
+        <!-- container for each slider -->
             <div class="slideContainer"
                 v-for="slider in querySliders" :key="slider.name"
                 v-bind:class="{'disabled':isDisabled(slider.name)}"
                 >
-                <h2 class="sliderTitle">{{slider.name + ": " + Math.round(((slider.value-slider.min)/slider.max)*100)+ "%"}}</h2>
+                <h2 class="sliderTitle">{{slider.name + ": " + Math.round(slider.value * slider.scale)+ slider.unit}}</h2>
+
                 <a class="descButton" v-if="isDesc(slider.name)" @click="changeDesc(slider.name)">-</a>
                 <a class="descButton" v-else @click="changeDesc(slider.name)">+</a>
                 <span class="description" v-if="isDesc(slider.name)" >{{slider.desc}}</span>
+
                 <div class="disableButton" @click="changeDisabled(slider.name)">
                     <span class="disableText" v-if="isDisabled(slider.name)">Enable</span>
                     <span class="disableText" v-else>Disable</span>
                 </div>
+
+                <!-- slider -->
                 <input type="range"
                     class="slider"
                     v-bind:disabled="isDisabled(slider.name)" 
@@ -41,7 +47,7 @@
                     v-model="slider.value" />                       
             </div>
 
-            <div class="slideContainer" 
+            <!-- <div class="slideContainer" 
                 v-bind:class="{'disabled':isDisabledSpec(loudness.name)}">
                 <h2 class="sliderTitle">{{loudness.name + ": " + loudness.value + " db"}}</h2>
                 <div class="disableButton" @click="changeDisabledSpec(loudness.name)">
@@ -71,13 +77,15 @@
                     :max="tempo.max" 
                     :step="1" 
                     v-model="tempo.value" /> 
-            </div>
+            </div> -->
 
         </form>
         <div id="sideBar">
             <span>
                 Here you can find recommendations of songs to your liking.
             </span>
+            <p>Select at least one genre to perform a search</p>
+
             <div class="bigButton" id="recButton" @click="getRec">
                 Get Recommendation
             </div>
@@ -121,16 +129,22 @@ export default {
                     min: 0,
                     max: 1,
                     enabled: true,
+                    step: 1/100,
+                    scale: 100,
+                    unit: "%",
                     description: false,
                     desc: "A confidence measure from 0 to 100% of whether the" 
                         + "track is acoustic."
                 },
-                danceability:{
+                danceability: {
                     value: 0.5,
                     name: "danceability",
                     min: 0,
                     max: 1,
                     enabled: true,
+                    step: 1/100,
+                    scale: 100,
+                    unit: "%",
                     description: false,
                     desc: "Danceability describes how suitable a track is for "
                         + "dancing based on a combination of musical elements "
@@ -143,6 +157,9 @@ export default {
                     min: 0,
                     max: 1,
                     enabled: true,
+                    step: 1/100,
+                    scale: 100,
+                    unit: "%",
                     description: false,
                     desc: "Energy represents a perceptual measure of intensity"
                         + " and activity. Typically, energetic tracks feel fast,"
@@ -155,6 +172,9 @@ export default {
                     min: 0,
                     max: 1,
                     enabled: true,
+                    step: 1/100,
+                    scale: 100,
+                    unit: "%",
                     description: false,
                     desc: "Predicts whether a track contains no vocals. “Ooh” and"
                         + " “aah” sounds are treated as instrumental in this"
@@ -171,6 +191,9 @@ export default {
                     min: 0,
                     max: 1,
                     enabled: true,
+                    step: 1/100,
+                    scale: 100,
+                    unit: "%",
                     description: false,
                     desc: "Detects the presence of an audience in the recording."
                         + " Higher liveness values represent an increased"
@@ -184,6 +207,9 @@ export default {
                     min: 0,
                     max: 100,
                     enabled: true,
+                    step: 1,
+                    scale: 1,
+                    unit: "%",
                     description: false,
                     desc: "The popularity of the track. The value will be between 0"
                         + " and 100%, with 100% being the most popular. The popularity"
@@ -197,6 +223,9 @@ export default {
                     min: 0,
                     max: 1,
                     enabled: true,
+                    step: 1/100,
+                    scale: 100,
+                    unit: "%",
                     description: false,
                     desc: "Speechiness detects the presence of spoken words in a track."
                         + " The more exclusively speech-like the recording (e.g. talk"
@@ -214,33 +243,44 @@ export default {
                     min: 0,
                     max: 1,
                     enabled: true,
+                    step: 1/100,
+                    scale: 100,
+                    unit: "%",
                     description: false,
                     desc: "Describing the musical positiveness conveyed by a track."
                         + " Tracks with high valence sound more positive (e.g. happy,"
                         + " cheerful, euphoric), while tracks with low valence sound"
                         + " more negative (e.g. sad, depressed, angry)."
+                },
+                tempo: {
+                    value: 130,
+                    name: "tempo",
+                    min: 10,
+                    max: 250,
+                    enabled: true,
+                    step: 1,
+                    scale: 1,
+                    unit: "BPM",
+                    description: false,
+                    desc: "Specify the amount of beats per minute the songs should have."
+                },
+                loudness: {
+                    value: -30,
+                    name: "loudness",
+                    min: -60,
+                    max: 0,
+                    enabled: true,
+                    step: 1,
+                    scale: 1,
+                    unit: "%",
+                    description: false,
+                    desc: "The overall loudness of a track in decibels (dB). Loudness"
+                            + " values are averaged across the entire track and are"
+                            + " useful for comparing relative loudness of tracks."
+                            + " Loudness is the quality of a sound that is the primary"
+                            + " psychological correlate of physical strength (amplitude)."
+                            + " Values typical range between -60 and 0 db."
                 }
-            },
-            tempo: {
-                value: 130,
-                name: "BPM",
-                min: 10,
-                max: 250,
-                enabled: true,
-                desc: ""
-            },
-            loudness: {
-                value: -30,
-                name: "loudness",
-                min: -60,
-                max: 0,
-                enabled: true,
-                desc: "he overall loudness of a track in decibels (dB). Loudness"
-                        + " values are averaged across the entire track and are"
-                        + " useful for comparing relative loudness of tracks."
-                        + " Loudness is the quality of a sound that is the primary"
-                        + " psychological correlate of physical strength (amplitude)."
-                        + " Values typical range between -60 and 0 db."
             },
             seedGenres: [],
         }
@@ -284,8 +324,9 @@ export default {
                 console.log(err);
                 this.$store.dispatch("ADD_MSG", {
                     category: "Recomendation",
-                    msg: "Something went wrong, check if your search is correctly filled"
-                    })
+                    msg: "Something went wrong, check if your search is correctly filled",
+                    color: "red"
+                })
             });
         },
         reroute(location){
@@ -315,7 +356,8 @@ export default {
             else {
                 this.$store.dispatch("ADD_MSG", {
                     category: "Genres",
-                    msg: "You can only pick 5 genres"
+                    msg: "You can only pick 5 genres",
+                    color: "red"
                 })
             }
         },
@@ -471,7 +513,7 @@ form{
     width: auto;
     max-width: 180px;
     margin: 3px;
-    padding: 10px;
+    padding: 12px 15px 9px;
     text-align: center;
     transition: .12s;
     background-color: rgb(24, 27, 26);
