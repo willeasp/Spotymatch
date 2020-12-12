@@ -106,7 +106,6 @@ export default {
                 .catch((err) => {
                     this.error = err.message;
                     this.errorCode = err.code;
-                    console.log(err);
                 });
         },
 
@@ -119,7 +118,6 @@ export default {
                 .catch((err) => {
                     this.error = err.message;
                     this.errorCode = err.code;
-                    console.log(err);
                 });
         },
 
