@@ -288,7 +288,6 @@ export default {
                 this.reroute("Result");
             })
             .catch(err=>{
-                console.log(err);
                 this.$store.dispatch("ADD_MSG", {
                     category: "Recomendation",
                     msg: "Something went wrong, check if your search is correctly filled",
