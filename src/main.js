@@ -57,8 +57,8 @@ store.subscribeAction({
     error: (action, state, error) => {
         action; state; error;
         // add action here, if we want to
-        /* console.log("Error Action: " + action.type + 
+        console.error("Error Action: " + action.type + 
         "\n\rCode: " + error.code + 
-        "\n\rMessage: " + error.message); */
+        "\n\rMessage: " + error.message);
     }
 });
