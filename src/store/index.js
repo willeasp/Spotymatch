@@ -156,7 +156,9 @@ export default createStore({
             .catch(err => console.error(err, "Could not log out user"));
             localStorage.clear();
         },
-
+        /**
+         * Set the user in the store
+         */
         SET_USER(state, user) {
             state.commit("setUser", user);
         },
@@ -172,6 +174,28 @@ export default createStore({
                     error = err
                 });
             if(error) throw error; 
+        },
+        /**
+         * Reset the password of a user email
+         * @param {*} email Email of the user to reset
+         */
+        USER_RESET_PASSWORD(state, email) {
+            console.log("reset password");
+            fb.passwordReset(email)
+            .then(function(res) {
+                console.log(res);
+                state.dispatch("ADD_MSG", {
+                    category: "Success!",
+                    msg: "An email for resetting the password was sent to " + email,
+                });
+            })
+            .catch(function(err) {
+                console.log("fail");
+                state.dispatch("ADD_MSG", {
+                    category: "Error",
+                    msg: "Password reset: " + err.message,
+                });
+            })
         },
         /**
          * Fetches user history from firbase

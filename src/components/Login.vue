@@ -1,4 +1,5 @@
 <template>
+    <Popup/>
     <div class="title text">
         <div class="header">
             <h1>Welcome to Sp<img
@@ -58,16 +59,22 @@
                     searches for future reference.
                 </p>
             </div>
+            <div class="forgot-password">
+                Forgot your password?
+                <a @click="passwordReset">Reset password</a>
+            </div>
         </form>
     </div>
 </template>
 
 <script>
 import Error from "./Error";
+import Popup from "./Popup";
 export default {
     name: "Login",
     components: {
         Error,
+        Popup
     },
     data() {
         return {
@@ -126,6 +133,10 @@ export default {
         setIsUser(status) {
             this.isUser = status;
         },
+
+        passwordReset() {
+            this.$store.dispatch("USER_RESET_PASSWORD", this.email);
+        }
     },
 };
 </script>
@@ -320,5 +331,12 @@ a:visited {
     margin: 0px;
     vertical-align: middle;
     height: 4vw;
+}
+
+.forgot-password a {
+    color: inherit;
+}
+.forgot-password a:hover {
+    color: rgb(65, 65, 65);
 }
 </style>
