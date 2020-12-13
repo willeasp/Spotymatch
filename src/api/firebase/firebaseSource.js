@@ -39,12 +39,7 @@ const db = {
      *                     be subscribed to
      * @param {*} callback callback that will be triggered
      */
-    subscribeResultHistory : (userUID, callback) => {
-        const callbackOnFailure = () => {
-            db.unsubscribeResultHistory(userUID);
-            alert("You don't have permission to read from the database of this user." 
-                + "\nAccess to history has been terminated.");
-        }
+    subscribeResultHistory : (userUID, callback, callbackOnFailure) => {
         return database.ref('USERS/' + userUID).on('value', callback, callbackOnFailure);
     },
     /**
@@ -62,11 +57,11 @@ const db = {
      * @param {*}  queryObject object containing the query information
      * @param {*}  userUID userUID for user that should update its database
      */
-    pushRecommendation : (spotifyRec, queryObject, userUID) => {
-        const onCompleteCallback = (Error) => {
-            if (Error) alert("You don't have permission to change the database for this user.");
-            //else write was successful
-        }
+    pushRecommendation : (spotifyRec, queryObject, userUID, onCompleteCallback) => {
+        // const onCompleteCallback = (Error) => {
+        //     if (Error) alert("You don't have permission to change the database for this user.");
+        //     //else write was successful
+        // }
         database.ref("USERS/" + userUID).push({
             "songs": spotifyRec.tracks,
             "seeds": queryObject,

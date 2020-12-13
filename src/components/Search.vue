@@ -48,10 +48,15 @@
 
         </form>
         <div id="sideBar">
-            <span>
-                Here you can find recommendations of songs to your liking. <br>
-                Select at least one genre to perform a search.
-            </span>
+            <h2>Here you can find recommendations of songs to your liking. <br></h2>
+            <h3> 
+                Step by step introduction: <br><br>
+                1.  Select one to five genres of the resulting recomendation songs. <br>
+                    <font color="red">Select at least one genre to perform a search.</font> <br><br>
+                2.  Select the charesteristics of the songs with the sliders, you can disable specific attributes if you do not care of them. <br>
+                    If you do not know what the diffrent attributes mean you have a plus button which shows a description. <br><br>
+                3.  Get your recomended songs for the settings on the "GET RECOMENDATION" button.<br>
+            </h3>
 
             <div class="bigButton" id="recButton" @click="getRec">
                 Get Recommendation
@@ -165,7 +170,7 @@ export default {
                     desc: "Detects the presence of an audience in the recording."
                         + " Higher liveness values represent an increased"
                         + " probability that the track was performed live. A value"
-                        + " above 0.8 provides strong likelihood that the track is"
+                        + " above 80% provides strong likelihood that the track is"
                         + " live."
                 },
                 popularity: {

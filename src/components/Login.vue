@@ -106,7 +106,6 @@ export default {
                 .catch((err) => {
                     this.error = err.message;
                     this.errorCode = err.code;
-                    console.log(err);
                 });
         },
 
@@ -119,7 +118,6 @@ export default {
                 .catch((err) => {
                     this.error = err.message;
                     this.errorCode = err.code;
-                    console.log(err);
                 });
         },
 
@@ -309,13 +307,7 @@ a:visited {
     direction: left;
     unicode-bidi: bidi-override;
 }
-/* 
-.header h1 {
-    overflow: auto;
-    width: 50%;
-    position: relative;
-}
- */
+
 .header img {
     margin: 0px;
     vertical-align: middle;
