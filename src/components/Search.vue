@@ -51,11 +51,11 @@
             <h2>Here you can find recommendations of songs to your liking. <br></h2>
             <h3> 
                 Step by step introduction: <br><br>
-                1.  Select one to five genres of the resulting recomendation songs. <br>
+                1.  Select one to five genres of the resulting recommendation songs. <br>
                     <font color="red">Select at least one genre to perform a search.</font> <br><br>
-                2.  Select the charesteristics of the songs with the sliders, you can disable specific attributes if you do not care of them. <br>
-                    If you do not know what the diffrent attributes mean you have a "arrow button" which shows a description. <br><br>
-                3.  Get your recomended songs for the settings on the "GET RECOMENDATION" button.<br>
+                2.  Select the characteristics of the songs with the sliders, you can disable specific attributes if you do not care of them. <br>
+                    If you do not know what the different attributes mean you have an "arrow button" which shows a description. <br><br>
+                3.  Get your recommended songs by clicking the "GET RECOMMENDATION" button.<br>
             </h3>
 
             <div :class="{'disabledButton':noGenres()}" class="bigButton" id="recButton" @click="getRec">
