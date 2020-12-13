@@ -303,7 +303,7 @@ export default {
             .catch(()=>{
                 this.$store.dispatch("ADD_MSG", {
                     category: "Recomendation",
-                    msg: "Something went wrong, check if your search is correctly filled",
+                    msg: "Something went wrong, check if your search is correctly filled or try again later",
                     color: "red"
                 })
             });
