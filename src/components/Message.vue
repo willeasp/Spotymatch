@@ -1,8 +1,8 @@
 <template>
-    <div @click="removeMsg" class="format">
+    <div @click="removeMsg" class="format slide-top">
         <div>
-            <p class="messageType">{{ msg["category"] }}</p>
-            <p class="messageText">{{ msg["msg"] }}</p>
+            <h1 class="category">{{ msg["category"] }}</h1>
+            <p class="message">{{ msg["msg"] }}</p>
         </div>
     </div>
 </template>
@@ -18,44 +18,20 @@ export default {
             type: Object,
         },
     },
-    data() {
-        return {
-            timeout: null,
-        };
-    },
+    
     methods: {
         removeMsg() {
             this.$store.dispatch("REMOVE_MSG", this.msg["id"]);
         },
     },
     mounted() {
-        this.timeout = setTimeout(() => {
+        setTimeout(() => {
             this.$store.dispatch("REMOVE_MSG", this.msg["id"]);
-        }, 10000);
+        }, 3000);
     },
 };
 </script>
 
 <style scoped>
-.format {
-    text-align: center;
-}
-.messageType {
-    font-size: x-large;
-    color: rgb(67, 67, 67);
-}
-.messageText {
-    font-size: medium;
-}
-.removeBtn {
-    background: rgb(67, 67, 67, 0.5);
-    height: 30px;
-    width: 30px;
-    line-height: 30px;
-    border-radius: 6px;
-}
 
-.format:hover {
-    cursor: pointer;
-}
 </style>

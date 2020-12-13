@@ -51,11 +51,8 @@ export default createStore({
             state.viewingHistory = newViewHistory;
         },
         pushMessage(state, msgObject){
-            state.popupMessages.push({
-                category : msgObject["category"],
-                msg : msgObject["msg"],
-                id: popupMessageId++
-            })
+            msgObject.id = popupMessageId++;
+            state.popupMessages.push(msgObject);
         },
         deleteMessage(state, msgId){
             state.popupMessages = state.popupMessages.filter(msg=> msg["id"] !== msgId);
