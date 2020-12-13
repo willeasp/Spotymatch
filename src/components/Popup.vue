@@ -67,6 +67,7 @@ export default {
     cursor: pointer;
 }
 .notifications {
+    z-index: 5;
     position: fixed;
     width: 100%;
     top: calc(1rem + 30px);
