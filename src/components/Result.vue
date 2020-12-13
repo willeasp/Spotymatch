@@ -27,18 +27,12 @@
         </div>
             <span class="songCard"  v-for="track in tracks" v-bind:key="track">
                 <div class="songNumber"> 
-                    
-                    <div v-show="!isHovered(track.name)"> 
+                    <div v-show="!isClicked(track.name)"> 
                         <div class="play noselect" v-if="track.preview_url" @click="playPreview(track.preview_url, track.name)"> &#9658; </div> 
                     </div>
-                    <div class="pause noselect" @click="playPreview(track.preview_url, track.name)" v-show="isHovered(track.name)"> &#9612; &#9612;</div>
-                    
+                    <div class="pause noselect" @click="playPreview(track.preview_url, track.name)" v-show="isClicked(track.name)"> &#9612; &#9612;</div>
                 </div>
-                
-                <div class="image"> 
-                    <img v-bind:src="track.album.images[0].url">
-                </div>
-                
+                <div class="image"> <img v-bind:src="track.album.images[0].url"> </div>
                 <div class="songInfo"> 
                     <h2>{{track.name}} </h2>
                     <h3> {{track.album.name}} </h3>
@@ -49,9 +43,8 @@
                     <div class="explicit" v-if="track.explicit">Explicit</div>    
                 </div>
                 <div class="playin noselect"> 
-                    <img v-show="isHovered(track.name)" src="https://open.scdn.co/cdn/images/equaliser-animated-green.73b73928.gif">
+                    <img v-show="isClicked(track.name)" src="https://open.scdn.co/cdn/images/equaliser-animated-green.73b73928.gif">
                 </div>
-                <!-- <div class="preview" v-if="track.preview_url">Click on album cover for preview</div> -->
                 <h3 class="songDuration noselect"> Duration {{formatMilliseconds(track.duration_ms)}}</h3>
             </span>
         </div>
@@ -69,7 +62,8 @@ export default {
             enableList: false,
             preview: null,
             interval: null,
-            hover: [],
+            clicked: [],
+            currentTrack: null,
         };
     },
     props: {
@@ -130,11 +124,16 @@ export default {
         playPreview(link, trackid) {
             if(this.preview){
                 this.stopPreview();
+                if(trackid === this.currentTrack) {
+                    this.currentTrack = null;
+                    link = null;
+                }
             }
-            else if (link) {
+            if (link && trackid !== this.currentTrack) {
                 this.preview = new Audio(link);
+                this.currentTrack = trackid;
                 this.preview.volume = 0.3;
-                this.hover.push(trackid);
+                this.clicked.push(trackid);
 
                 this.preview.play().then(() => {
                     this.interval = setInterval(() => {
@@ -144,30 +143,31 @@ export default {
                 })
                 .catch(err => {
                     if(err.name === 'NotAllowedError'){
-                        this.$store.dispatch('ADD_MSG', {category: 'Permission Error', msg: 'Autoplay is disabled in browser is, please disable to play on mouse hover'})
+                        this.$store.dispatch('ADD_MSG', {category: 'Permission Error', msg: 'Autoplay is disabled in browser is'})
                     }
                     else if (err.name === 'AbortError'){
-                        this.$store.dispatch('ADD_MSG', {category: 'Error', msg: 'Preview did not have enough time to load before stopping'})
+                        this.$store.dispatch('ADD_MSG', {category: 'Error', msg: 'Preview did not have enough time to load before pausing'})
                     }
                 });
             }
+            
         },
         stopPreview() {
             if (this.preview) {
                 clearInterval(this.interval);
                 this.preview.pause();
-                this.preview = null;
-                this.hover = [];
+                this.preview = null;     
+                this.clicked = [];
             }
         },
         load() {
-            let load = this.$store.state.loading;
+            let load = this.$store.getters.getLoading;
             if (!load) this.populateData();
             else this.enableList = false;
             return load;
         },
-        isHovered(trackid){
-            if(this.hover.includes(trackid)) return true;
+        isClicked(trackid){
+            if(this.clicked.includes(trackid)) return true;
             else return false;
         }
     },
