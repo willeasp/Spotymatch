@@ -27,8 +27,8 @@
                 >
                 <h2 class="sliderTitle">{{slider.name + ": " + Math.round(slider.value * slider.scale)+ slider.unit}}</h2>
 
-                <a class="descButton" v-if="isDesc(slider.name)" @click="changeDesc(slider.name)">-</a>
-                <a class="descButton" v-else @click="changeDesc(slider.name)">+</a>
+                <a class="descButton" v-if="isDesc(slider.name)" @click="changeDesc(slider.name)">&#x25B2;</a>
+                <a class="descButton" v-else @click="changeDesc(slider.name)">&#x25BC;</a>
                 <span class="description" v-if="isDesc(slider.name)" >{{slider.desc}}</span>
 
                 <div class="disableButton" @click="changeDisabled(slider.name)">
@@ -54,7 +54,7 @@
                 1.  Select one to five genres of the resulting recomendation songs. <br>
                     <font color="red">Select at least one genre to perform a search.</font> <br><br>
                 2.  Select the charesteristics of the songs with the sliders, you can disable specific attributes if you do not care of them. <br>
-                    If you do not know what the diffrent attributes mean you have a plus button which shows a description. <br><br>
+                    If you do not know what the diffrent attributes mean you have a "arrow button" which shows a description. <br><br>
                 3.  Get your recomended songs for the settings on the "GET RECOMENDATION" button.<br>
             </h3>
 
@@ -552,21 +552,19 @@ form{
         );   
 }
 .descButton{
-    width: 18px;
+    width: 40px;
     margin-left: 20px;
     margin-right: 20px;
-    border-radius: 40px;
-    box-shadow: 1px 1px 3px;
     text-align: center;
-    background: -webkit-gradient(
-        linear,
-        left top,
-        right bottom,
-        from(#6192ce79),
-        to(#be31a46e)
-        );
     color: black;
     font-weight: bold;
+    font-size: 25px;
+}
+.descButton:hover{
+    cursor: pointer;
+}
+.descButton:active{
+    color:rgb(58, 58, 58);
 }
 .description{
     margin-left: 5%;
