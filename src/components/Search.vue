@@ -58,7 +58,7 @@
                 3.  Get your recomended songs for the settings on the "GET RECOMENDATION" button.<br>
             </h3>
 
-            <div class="bigButton" id="recButton" @click="getRec">
+            <div :class="{'disabledButton':noGenres()}" class="bigButton" id="recButton" @click="getRec">
                 Get Recommendation
             </div>
             <div class="bigButton" id="resetButton" @click="reset">
@@ -280,6 +280,14 @@ export default {
     },
     methods: {
         getRec(){
+            if(this.noGenres()){
+                this.$store.dispatch("ADD_MSG", {
+                    category: "No Genres",
+                    msg: "Must select at least one genre to get a recommendation",
+                    color: "red"
+                })
+                return; 
+            }
             let searchQuery = {
                 "seed_genres": this.seedGenres
             };
@@ -362,6 +370,9 @@ export default {
         },
         isDesc(slider){
             return this.querySliders[slider].description;
+        },
+        noGenres(){
+            return this.seedGenres < 1;
         }
     },
 
@@ -695,6 +706,8 @@ background: -webkit-gradient(
     text-shadow: 1px 1px 5px rgba(104, 32, 109, 0.788)
 }
 
+
+
 .bigButton{
     margin: 0 auto;
     margin-top: 20px;
@@ -717,14 +730,14 @@ background: -webkit-gradient(
     box-shadow: 2px 2px 5px;
 }
 
-.bigButton:hover{
+.bigButton:hover:not(.disabledButton){
     cursor: pointer;
     background-color:  rgba(133, 46, 150, 0.699);
     color: white;
     box-shadow: 5px 5px 15px;
     
 }
-.bigButton:active{
+.bigButton:active:not(.disabledButton){
     background-color: rgb(197, 151, 206);
 }
 #recButton{
@@ -732,5 +745,11 @@ background: -webkit-gradient(
 }
 #resetButton{
     flex:0;
+}
+.disabledButton{
+    background-color: rgba(83, 83, 83, 0.438);
+}
+.disabledButton:hover{
+    background-color: rgba(139, 36, 36, 0.774);
 }
 </style>
