@@ -280,7 +280,7 @@ export default {
             .then(()=>{
                 this.reroute("Result");
             })
-            .catch(err=>{
+            .catch(()=>{
                 this.$store.dispatch("ADD_MSG", {
                     category: "Recomendation",
                     msg: "Something went wrong, check if your search is correctly filled"
