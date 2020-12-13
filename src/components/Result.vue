@@ -143,7 +143,7 @@ export default {
                 })
                 .catch(err => {
                     if(err.name === 'NotAllowedError'){
-                        this.$store.dispatch('ADD_MSG', {category: 'Permission Error', msg: 'Autoplay is disabled in browser is'})
+                        this.$store.dispatch('ADD_MSG', {category: 'Permission Error', msg: 'Autoplay is disabled in browser'})
                     }
                     else if (err.name === 'AbortError'){
                         this.$store.dispatch('ADD_MSG', {category: 'Error', msg: 'Preview did not have enough time to load before pausing'})
