@@ -109,7 +109,6 @@ export default createStore({
                 .catch(err => {
                     error = err;
                     state.commit('setError', err.message)
-                    console.log(err.message);
                 });
             state.commit('setLoading', false);
             if(error) throw error;

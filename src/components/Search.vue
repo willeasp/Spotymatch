@@ -27,7 +27,7 @@
                 <h2 class="sliderTitle">{{slider.name + ": " + Math.round(((slider.value-slider.min)/slider.max)*100)+ "%"}}</h2>
                 <a class="descButton" v-if="isDesc(slider.name)" @click="changeDesc(slider.name)">-</a>
                 <a class="descButton" v-else @click="changeDesc(slider.name)">+</a>
-                <span class="description" v-if="isDesc(slider.name)" >{{slider.desc}}</span>
+                <div class="description" v-if="isDesc(slider.name)" >{{slider.desc}}</div>
                 <div class="disableButton" @click="changeDisabled(slider.name)">
                     <span class="disableText" v-if="isDisabled(slider.name)">Enable</span>
                     <span class="disableText" v-else>Disable</span>
@@ -123,7 +123,7 @@ export default {
                     enabled: true,
                     description: false,
                     desc: "A confidence measure from 0 to 100% of whether the" 
-                        + "track is acoustic."
+                        + "track is acoustic. 100% represents high confidence the track is acoustic."
                 },
                 danceability:{
                     value: 0.5,
@@ -281,7 +281,6 @@ export default {
                 this.reroute("Result");
             })
             .catch(err=>{
-                console.log(err);
                 this.$store.dispatch("ADD_MSG", {
                     category: "Recomendation",
                     msg: "Something went wrong, check if your search is correctly filled"
