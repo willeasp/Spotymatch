@@ -5,10 +5,13 @@ if(!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
 const fireauth = firebase.auth;
+const analytics = firebase.analytics();
 
 const fb = {    
-    createUser: (email, password)=> 
-        fireauth().createUserWithEmailAndPassword(email, password)
+    createUser: (email, password)=> {
+        analytics.logEvent('login');
+        return fireauth().createUserWithEmailAndPassword(email, password)
+    }
     ,
     signInUser: (email, password)=> 
         fireauth().signInWithEmailAndPassword(email, password)
