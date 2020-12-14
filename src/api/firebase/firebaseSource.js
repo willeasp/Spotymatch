@@ -24,6 +24,9 @@ const fb = {
     currentUser: ()=>
         fireauth().currentUser
     ,
+    passwordReset: (emailAddress)=>
+        fireauth().sendPasswordResetEmail(emailAddress)
+    ,
 }
 
 const database = firebase.database();
