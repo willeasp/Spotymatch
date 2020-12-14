@@ -178,7 +178,7 @@ export default createStore({
          */
         USER_RESET_PASSWORD(state, email) {
             fb.passwordReset(email)
-            .then(function(res) {
+            .then(function() {
                 state.dispatch("ADD_MSG", {
                     category: "Success!",
                     msg: "An email for resetting the password was sent to " + email,
