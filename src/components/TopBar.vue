@@ -1,6 +1,5 @@
 <template>
     <div class="topnav">
-        <RouteButton routeName="Welcome" text="Welcome"/>
         <RouteButton routeName="Search" text="Search"/>
         <RouteButton routeName="Result" text="Result"/>
         <RouteButton routeName="History" text="History"/>
@@ -48,6 +47,8 @@ export default {
         transition-property: background-color,border-color,color,box-shadow,filter;
         transition-duration: .3s;
         cursor: pointer;
+        user-select: none;
+        -ms-user-select: none;
     }
 
     /* Change the color of links on hover */
