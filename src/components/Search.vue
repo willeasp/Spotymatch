@@ -57,12 +57,13 @@
                     If you do not know what the different attributes mean you have an "arrow button" which shows a description. <br><br>
                 3.  Get your recommended songs by clicking the "GET RECOMMENDATION" button.<br>
             </h3>
-
-            <div :class="{'disabledButton':noGenres()}" class="bigButton" id="recButton" @click="getRec">
-                Get Recommendation
-            </div>
-            <div class="bigButton" id="resetButton" @click="reset">
-                Reset
+            <div id="buttonContainer">
+                <div :class="{'disabledButton':noGenres()}" class="bigButton" id="recButton" @click="getRec">
+                    Get Recommendation
+                </div>
+                <div class="bigButton" id="resetButton" @click="reset">
+                    Reset
+                </div>
             </div>
         </div>
     </div> 
@@ -699,11 +700,16 @@ background: -webkit-gradient(
     -ms-overflow-style: none;
     scrollbar-width: none; 
 }
+#buttonContainer{
+    width: 80%;
+    height: 20%;
+    margin-bottom:20px;
+    
+}
 
 .bigButton{
-    margin: 0 auto;
-    margin-top: 20px;
-    height: 50px;
+    margin:15%;
+    height: 20px;
     width: 80%;
     max-width: 300px;
     padding: 20px;
@@ -717,10 +723,10 @@ background: -webkit-gradient(
     font-weight: bold;
     white-space: nowrap;
     vertical-align:middle;
-    /* font-size: 20px; */
     transition: 0.2s;
     box-shadow: 2px 2px 5px;
     font-size: 1.35vw;
+    font-weight: bold;
 }
 
 .bigButton:hover:not(.disabledButton){
