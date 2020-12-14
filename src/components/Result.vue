@@ -186,6 +186,9 @@ export default {
             return Object.keys(search).length > 0;
         }
     },
+    beforeUnmount() {
+        if(this.preview) this.preview.pause();  
+    },
 };
 </script>
 
