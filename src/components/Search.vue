@@ -250,7 +250,10 @@ export default {
                     scale: 1,
                     unit: "BPM",
                     description: false,
-                    desc: "Specify the amount of beats per minute the songs should have."
+                    desc: "The overall estimated tempo of a track in beats per minute"
+                        + " (BPM). In musical terminology, tempo is the speed or pace"
+                        + " of a given piece and derives directly from the average"
+                        + " beat duration."
                 },
                 loudness: {
                     value: -30,
