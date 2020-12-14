@@ -706,7 +706,7 @@ background: -webkit-gradient(
     height: 50px;
     width: 80%;
     max-width: 300px;
-    padding: 15px;
+    padding: 20px;
     text-align: center;
     background-color: rgb(253, 253, 253);
     border-radius: 50px;
@@ -717,9 +717,10 @@ background: -webkit-gradient(
     font-weight: bold;
     white-space: nowrap;
     vertical-align:middle;
-    font-size: 20px;
+    /* font-size: 20px; */
     transition: 0.2s;
     box-shadow: 2px 2px 5px;
+    font-size: 1.35vw;
 }
 
 .bigButton:hover:not(.disabledButton){
