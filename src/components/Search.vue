@@ -65,7 +65,11 @@
                 <h3> 
                     Step by step introduction: <br><br>
                     1.  Select one to five genres of the resulting recommendation songs. <br>
-                        <font color="red">Select at least one genre to perform a search.</font> <br><br>
+                </h3>
+                <h3 class="red">
+                        Select at least one genre to perform a search. <br><br>
+                </h3>
+                <h3>
                     2.  Select the characteristics of the songs with the sliders, you can disable specific attributes if you do not care of them. <br>
                         If you do not know what the different attributes mean you have an "arrow button" which shows a description. <br><br>
                     3.  Get your recommended songs by clicking the "GET RECOMMENDATION" button.<br>
@@ -710,12 +714,17 @@ background: -webkit-gradient(
     position: fixed;
     overflow-y: scroll;
     -ms-overflow-style: none;
-    -webkit-overflow-scrolling: none;
     scrollbar-width: none; 
 }
 #sidebar::-webkit-scrollbar {
   display: none;
 }
+
+.red{
+    color: red;
+    background-color: transparent;
+}
+
 #buttonContainer{
     width: 80%;
     height: 20%;
