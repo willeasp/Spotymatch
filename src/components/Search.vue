@@ -65,7 +65,11 @@
                 <h3> 
                     Step by step introduction: <br><br>
                     1.  Select one to five genres of the resulting recommendation songs. <br>
-                        <font color="red">Select at least one genre to perform a search.</font> <br><br>
+                </h3>
+                <h3 class="red">
+                        Select at least one genre to perform a search. <br><br>
+                </h3>
+                <h3>
                     2.  Select the characteristics of the songs with the sliders, you can disable specific attributes if you do not care of them. <br>
                         If you do not know what the different attributes mean you have an "arrow button" which shows a description. <br><br>
                     3.  Get your recommended songs by clicking the "GET RECOMMENDATION" button.<br>
@@ -117,7 +121,7 @@ export default {
                     scale: 100,
                     unit: "%",
                     description: false,
-                    desc: "A confidence measure from 0 to 100% of whether the" 
+                    desc: "A confidence measure from 0 to 100% of whether the " 
                         + "track is acoustic. 100% represents high confidence the track is acoustic."
                 },
                 danceability: {
@@ -246,7 +250,10 @@ export default {
                     scale: 1,
                     unit: "BPM",
                     description: false,
-                    desc: "Specify the amount of beats per minute the songs should have."
+                    desc: "The overall estimated tempo of a track in beats per minute"
+                        + " (BPM). In musical terminology, tempo is the speed or pace"
+                        + " of a given piece and derives directly from the average"
+                        + " beat duration.\n"
                 },
                 loudness: {
                     value: -30,
@@ -494,6 +501,7 @@ form{
     -ms-user-select: none;
     user-select: none;
     cursor: pointer;
+    white-space: nowrap;
 }
 #genreReset:active{
     background-color: rgb(142, 177, 206);
@@ -581,6 +589,7 @@ form{
     margin-left: 5%;
     margin-right: 5%;
     margin-bottom: 5%;
+    min-width: 90%;
 }
 .disableButton{
     width: 70px;
@@ -708,10 +717,19 @@ background: -webkit-gradient(
         );       border-radius: 15px;
     box-shadow: 5px 5px 10px;
     position: fixed;
-    overflow-y: scroll;
+    overflow-y: auto;
     -ms-overflow-style: none;
     scrollbar-width: none; 
 }
+#sidebar::-webkit-scrollbar {
+  display: none;
+}
+
+.red{
+    color: red;
+    background-color: transparent;
+}
+
 #buttonContainer{
     width: 80%;
     height: 20%;
@@ -782,5 +800,8 @@ background: -webkit-gradient(
         from(#6192ce79),
         to(#be31a46e)
         );
+}
+h2{
+    margin-top: 15%;
 }
 </style>
