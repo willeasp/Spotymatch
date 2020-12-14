@@ -284,6 +284,9 @@ export default createStore({
         },
         getPopupMessages(state){
             return state.popupMessages;
+        },
+        getLoading(state){
+            return state.loading;
         }
     },
     modules: {
