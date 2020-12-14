@@ -60,7 +60,8 @@
                     Reset
                 </div>
             </div>
-            <div >
+            <div id="textContainer">
+                <span>
                 <h2>Here you can find recommendations of songs to your liking. <br></h2>
                 <h3> 
                     Step by step introduction: <br><br>
@@ -74,6 +75,7 @@
                         If you do not know what the different attributes mean you have an "arrow button" which shows a description. <br><br>
                     3.  Get your recommended songs by clicking the "GET RECOMMENDATION" button.<br>
                 </h3>
+                </span>
             </div>
         </div>
     </div> 
@@ -724,24 +726,29 @@ background: -webkit-gradient(
 #sidebar::-webkit-scrollbar {
   display: none;
 }
-
+#textContainer{
+    height: auto;
+    position: relative;
+}
+#sidebar > h3, #sidebar > h2{
+    height: 300px;
+}
 .red{
     color: red;
     background-color: transparent;
 }
 
 #buttonContainer{
-    width: 80%;
-    height: 20%;
-    margin-bottom:5%;
-    
+    width: 100%;
+    height: 170px;
+    position: relative;
 }
 
 .bigButton{
-    margin:15%;
     height: 20px;
+    margin: 0 auto;
     width: 80%;
-    max-width: 300px;
+    max-width: 350px;
     padding: 20px;
     text-align: center;
     background-color: rgb(253, 253, 253);
@@ -753,9 +760,9 @@ background: -webkit-gradient(
     font-weight: bold;
     transition: 0.2s;
     box-shadow: 2px 2px 5px;
-    font-size: 1.35vw;
+    font-size: (20px + 1.35vw);
+    
     font-weight: bold; 
-    margin-bottom: 0;
     margin-top:5%;    
     line-height: 90%;
 }
@@ -801,7 +808,5 @@ background: -webkit-gradient(
         to(#be31a46e)
         );
 }
-h2{
-    margin-top: 15%;
-}
+
 </style>
