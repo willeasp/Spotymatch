@@ -46,7 +46,7 @@
                     v-bind:disabled="isDisabled(slider.name)" 
                     :min="slider.min" 
                     :max="slider.max" 
-                    :step="slider.max/100" 
+                    :step="slider.step" 
                     v-model="slider.value" />                       
             </div>
 
@@ -337,13 +337,11 @@ export default {
             this.seedGenres = [];
         },
         changeSelected(genre){
-            if (this.seedGenres.length < 5) {
-                if (this.isSelected(genre)){
-                    this.seedGenres = this.seedGenres.filter(word => word !== genre);
-                }
-                else {
-                    this.seedGenres = this.seedGenres.length < 5 ? [...this.seedGenres, genre] : this.seedGenres;
-                }
+            if (this.isSelected(genre)){
+                this.seedGenres = this.seedGenres.filter(word => word !== genre);
+            }
+            else if ( this.seedGenres.length < 5) {
+                this.seedGenres = this.seedGenres.length < 5 ? [...this.seedGenres, genre] : this.seedGenres;
             }
             else {
                 this.$store.dispatch("ADD_MSG", {
@@ -555,7 +553,7 @@ form{
     user-select: none;
     box-shadow: 5px 5px 10px;
     border:none;
-
+    z-index: 0;
 }
 .slideContainer:not(.disabled){
     background: linear-gradient(
@@ -759,8 +757,6 @@ background: -webkit-gradient(
     flex:0;
     height:auto;
     
-}
-#resetButton{
 }
 
 .disabledButton{
