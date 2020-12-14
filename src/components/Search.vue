@@ -709,8 +709,8 @@ background: -webkit-gradient(
     z-index: 1;
     top: 0;
     right: 0;
-    margin-top: 5%;
-    margin-right:5%;
+    margin-top: 70px;
+    margin-right:3%;
     margin-bottom:5%;
     background: linear-gradient(
             90deg,
