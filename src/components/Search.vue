@@ -1,12 +1,15 @@
 <template>
     <div id="search">
+        <div class="loadingBackgorund" v-if="loading">
+                <Loading class="loading" />
+        </div>
         <h1 id="title">Search Form</h1>
         <form>
             <div id="genreContainer">
                 <div>
                     <input id="genreSearch" type="text" 
                         v-model="searchInput" placeholder="Filter genres"/>
-                    <a id="genreReset" @click="genreReset">
+                    <a id="genreReset" @click="genreReset" >
                         Reset Genres
                     </a>
                 </div>
@@ -18,6 +21,7 @@
                         {{genre}}
                     </a>
                 </div>
+                
             </div>
 
         <!-- container for each slider -->
@@ -57,7 +61,6 @@
                     If you do not know what the different attributes mean you have an "arrow button" which shows a description. <br><br>
                 3.  Get your recommended songs by clicking the "GET RECOMMENDATION" button.<br>
             </h3>
-
             <div :class="{'disabledButton':noGenres()}" class="bigButton" id="recButton" @click="getRec">
                 Get Recommendation
             </div>
@@ -71,9 +74,14 @@
 
 <script >
 
+import Loading from "./Loading.vue";
+
+
 export default {
     name: "Search",
-
+    components: {
+        Loading
+    },
     data(){
         return {
             genres:["acoustic", "afrobeat", "alt-rock", "alternative", "ambient", 
@@ -275,7 +283,10 @@ export default {
         filterdGenres(){
             const search = this.searchInput.toLowerCase();
             return this.genres.filter(genre => genre.includes(search));
-        }
+        },
+        loading(){
+            return  this.$store.getters.getLoading;
+        },
         
     },
     methods: {
@@ -684,7 +695,7 @@ background: -webkit-gradient(
     flex-direction: column;
     padding: 10px;
     width: 25%;
-    height: 80%;
+    height: 85%;
     z-index: 1;
     top: 48px;
     right: 0;
@@ -749,5 +760,23 @@ background: -webkit-gradient(
 }
 .disabledButton:hover{
     background-color: rgba(139, 36, 36, 0.774);
+}
+.loading{
+    padding: 20px;
+    text-align: center;
+    z-index: 1;
+    position: fixed;
+    top: 50%;
+    right:50%;
+    width: 10%;
+    background-color: blue;
+    border-radius: 100%;
+    background: -webkit-gradient(
+        linear,
+        left top,
+        right bottom,
+        from(#6192ce79),
+        to(#be31a46e)
+        );
 }
 </style>
