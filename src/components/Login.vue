@@ -168,7 +168,7 @@ h2 {
 form {
     margin: 0 auto;
     width: 500px;
-    height: 500px;
+    overflow: auto;
     border: 5px solid rgb(0, 0, 0);
     background: #141414;
     text-align: center;
@@ -320,19 +320,16 @@ a:visited {
     direction: left;
     unicode-bidi: bidi-override;
 }
-/* 
-.header h1 {
-    overflow: auto;
-    width: 50%;
-    position: relative;
-}
- */
+
 .header img {
     margin: 0px;
     vertical-align: middle;
     height: 4vw;
 }
 
+.forgot-password{
+    margin: 8px;
+}
 .forgot-password a {
     color: inherit;
 }
