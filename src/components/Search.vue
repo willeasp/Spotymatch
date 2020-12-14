@@ -52,20 +52,24 @@
 
         </form>
         <div id="sideBar">
-            <h2>Here you can find recommendations of songs to your liking. <br></h2>
-            <h3> 
-                Step by step introduction: <br><br>
-                1.  Select one to five genres of the resulting recommendation songs. <br>
-                    <font color="red">Select at least one genre to perform a search.</font> <br><br>
-                2.  Select the characteristics of the songs with the sliders, you can disable specific attributes if you do not care of them. <br>
-                    If you do not know what the different attributes mean you have an "arrow button" which shows a description. <br><br>
-                3.  Get your recommended songs by clicking the "GET RECOMMENDATION" button.<br>
-            </h3>
-            <div :class="{'disabledButton':noGenres()}" class="bigButton" id="recButton" @click="getRec">
-                Get Recommendation
+            <div id="buttonContainer">
+                <div :class="{'disabledButton':noGenres()}" class="bigButton" id="recButton" @click="getRec">
+                    Get Recommendation
+                </div>
+                <div class="bigButton" id="resetButton" @click="reset">
+                    Reset
+                </div>
             </div>
-            <div class="bigButton" id="resetButton" @click="reset">
-                Reset
+            <div >
+                <h2>Here you can find recommendations of songs to your liking. <br></h2>
+                <h3> 
+                    Step by step introduction: <br><br>
+                    1.  Select one to five genres of the resulting recommendation songs. <br>
+                        <font color="red">Select at least one genre to perform a search.</font> <br><br>
+                    2.  Select the characteristics of the songs with the sliders, you can disable specific attributes if you do not care of them. <br>
+                        If you do not know what the different attributes mean you have an "arrow button" which shows a description. <br><br>
+                    3.  Get your recommended songs by clicking the "GET RECOMMENDATION" button.<br>
+                </h3>
             </div>
         </div>
     </div> 
@@ -324,11 +328,9 @@ export default {
         },
         reset(){
             Object.keys(this.querySliders).forEach(key=>{
-                this.querySliders[key].value = this.querySliders[key].max/2;
+                this.querySliders[key].value = (this.querySliders[key].max-this.querySliders[key].min)/2+this.querySliders[key].min;
                 this.querySliders[key].enabled = true;
             });
-            this.tempo.value = (this.tempo.max-this.tempo.min)/2 + this.tempo.min;
-            this.loudness.value = this.loudness.min/2;
             this.genreReset();
         },
         genreReset(){
@@ -689,18 +691,18 @@ background: -webkit-gradient(
     opacity: 1;
 }
 
-
 #sideBar{
     display: flex;
     flex-direction: column;
-    padding: 10px;
     width: 25%;
     height: 85%;
+    padding: 20px;
     z-index: 1;
-    top: 48px;
+    top: 0;
     right: 0;
     margin-top: 5%;
     margin-right:5%;
+    margin-bottom:5%;
     background: linear-gradient(
             90deg,
             rgba(247, 247, 247, 1) 0%,
@@ -708,22 +710,23 @@ background: -webkit-gradient(
         );       border-radius: 15px;
     box-shadow: 5px 5px 10px;
     position: fixed;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none; 
 }
-#sideBar span{
-    margin: 15px auto;
-    color: rgb(39, 39, 39);
-    text-shadow: 1px 1px 5px rgba(104, 32, 109, 0.788)
+#buttonContainer{
+    width: 80%;
+    height: 20%;
+    margin-bottom:5%;
+    
 }
-
-
 
 .bigButton{
-    margin: 0 auto;
-    margin-top: 20px;
-    height: 50px;
+    margin:15%;
+    height: 20px;
     width: 80%;
     max-width: 300px;
-    padding: 15px;
+    padding: 20px;
     text-align: center;
     background-color: rgb(253, 253, 253);
     border-radius: 50px;
@@ -732,11 +735,13 @@ background: -webkit-gradient(
     user-select: none;
     text-transform: uppercase;
     font-weight: bold;
-    white-space: nowrap;
-    vertical-align:middle;
-    font-size: 20px;
     transition: 0.2s;
     box-shadow: 2px 2px 5px;
+    font-size: 1.35vw;
+    font-weight: bold; 
+    margin-bottom: 0;
+    margin-top:5%;    
+    line-height: 90%;
 }
 
 .bigButton:hover:not(.disabledButton){
@@ -744,17 +749,20 @@ background: -webkit-gradient(
     background-color:  rgba(133, 46, 150, 0.699);
     color: white;
     box-shadow: 5px 5px 15px;
-    
 }
+
 .bigButton:active:not(.disabledButton){
     background-color: rgb(197, 151, 206);
 }
+
 #recButton{
     flex:0;
+    height:auto;
+    
 }
 #resetButton{
-    flex:0;
 }
+
 .disabledButton{
     background-color: rgba(83, 83, 83, 0.438);
 }
