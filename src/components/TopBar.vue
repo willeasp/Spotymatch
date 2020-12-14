@@ -34,6 +34,7 @@ export default {
         position: fixed;
         width: 100%;
         background-color: #121212;
+        z-index: 100;
     }
 
     /* Style the links inside the navigation bar */
