@@ -678,7 +678,6 @@ background: -webkit-gradient(
     opacity: 1;
 }
 
-
 #sideBar{
     display: flex;
     flex-direction: column;
@@ -686,10 +685,11 @@ background: -webkit-gradient(
     width: 25%;
     height: 80%;
     z-index: 1;
-    top: 48px;
+    top: 0;
     right: 0;
     margin-top: 5%;
     margin-right:5%;
+    margin-bottom:5%;
     background: linear-gradient(
             90deg,
             rgba(247, 247, 247, 1) 0%,
@@ -697,14 +697,10 @@ background: -webkit-gradient(
         );       border-radius: 15px;
     box-shadow: 5px 5px 10px;
     position: fixed;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none; 
 }
-#sideBar span{
-    margin: 15px auto;
-    color: rgb(39, 39, 39);
-    text-shadow: 1px 1px 5px rgba(104, 32, 109, 0.788)
-}
-
-
 
 .bigButton{
     margin: 0 auto;
@@ -743,6 +739,7 @@ background: -webkit-gradient(
 }
 #resetButton{
     flex:0;
+    margin-bottom: 20px;
 }
 .disabledButton{
     background-color: rgba(83, 83, 83, 0.438);
