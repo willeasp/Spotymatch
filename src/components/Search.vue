@@ -52,15 +52,6 @@
 
         </form>
         <div id="sideBar">
-            <h2>Here you can find recommendations of songs to your liking. <br></h2>
-            <h3> 
-                Step by step introduction: <br><br>
-                1.  Select one to five genres of the resulting recommendation songs. <br>
-                    <font color="red">Select at least one genre to perform a search.</font> <br><br>
-                2.  Select the characteristics of the songs with the sliders, you can disable specific attributes if you do not care of them. <br>
-                    If you do not know what the different attributes mean you have an "arrow button" which shows a description. <br><br>
-                3.  Get your recommended songs by clicking the "GET RECOMMENDATION" button.<br>
-            </h3>
             <div id="buttonContainer">
                 <div :class="{'disabledButton':noGenres()}" class="bigButton" id="recButton" @click="getRec">
                     Get Recommendation
@@ -68,6 +59,17 @@
                 <div class="bigButton" id="resetButton" @click="reset">
                     Reset
                 </div>
+            </div>
+            <div >
+                <h2>Here you can find recommendations of songs to your liking. <br></h2>
+                <h3> 
+                    Step by step introduction: <br><br>
+                    1.  Select one to five genres of the resulting recommendation songs. <br>
+                        <font color="red">Select at least one genre to perform a search.</font> <br><br>
+                    2.  Select the characteristics of the songs with the sliders, you can disable specific attributes if you do not care of them. <br>
+                        If you do not know what the different attributes mean you have an "arrow button" which shows a description. <br><br>
+                    3.  Get your recommended songs by clicking the "GET RECOMMENDATION" button.<br>
+                </h3>
             </div>
         </div>
     </div> 
@@ -692,9 +694,9 @@ background: -webkit-gradient(
 #sideBar{
     display: flex;
     flex-direction: column;
-    padding: 10px;
     width: 25%;
     height: 85%;
+    padding: 20px;
     z-index: 1;
     top: 0;
     right: 0;
@@ -715,7 +717,7 @@ background: -webkit-gradient(
 #buttonContainer{
     width: 80%;
     height: 20%;
-    margin-bottom:20px;
+    margin-bottom:5%;
     
 }
 
@@ -733,12 +735,12 @@ background: -webkit-gradient(
     user-select: none;
     text-transform: uppercase;
     font-weight: bold;
-    white-space: nowrap;
-    vertical-align:middle;
     transition: 0.2s;
     box-shadow: 2px 2px 5px;
     font-size: 1.35vw;
-    font-weight: bold;
+    font-weight: bold; 
+    margin-bottom: 0;
+    margin-top:5%;
 }
 
 .bigButton:hover:not(.disabledButton){
@@ -746,18 +748,18 @@ background: -webkit-gradient(
     background-color:  rgba(133, 46, 150, 0.699);
     color: white;
     box-shadow: 5px 5px 15px;
-    
 }
+
 .bigButton:active:not(.disabledButton){
     background-color: rgb(197, 151, 206);
 }
+
 #recButton{
     flex:0;
+    height:auto;
+    
 }
-#resetButton{
-    flex:0;
-    margin-bottom: 20px;
-}
+
 .disabledButton{
     background-color: rgba(83, 83, 83, 0.438);
 }
