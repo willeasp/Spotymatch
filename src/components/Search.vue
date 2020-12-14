@@ -712,7 +712,7 @@ background: -webkit-gradient(
         );       border-radius: 15px;
     box-shadow: 5px 5px 10px;
     position: fixed;
-    overflow-y: scroll;
+    overflow-y: auto;
     -ms-overflow-style: none;
     scrollbar-width: none; 
 }
