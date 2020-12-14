@@ -313,11 +313,9 @@ export default {
         },
         reset(){
             Object.keys(this.querySliders).forEach(key=>{
-                this.querySliders[key].value = this.querySliders[key].max/2;
+                this.querySliders[key].value = (this.querySliders[key].max-this.querySliders[key].min)/2+this.querySliders[key].min;
                 this.querySliders[key].enabled = true;
             });
-            this.tempo.value = (this.tempo.max-this.tempo.min)/2 + this.tempo.min;
-            this.loudness.value = this.loudness.min/2;
             this.genreReset();
         },
         genreReset(){
