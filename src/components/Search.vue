@@ -121,7 +121,7 @@ export default {
                     scale: 100,
                     unit: "%",
                     description: false,
-                    desc: "A confidence measure from 0 to 100% of whether the" 
+                    desc: "A confidence measure from 0 to 100% of whether the " 
                         + "track is acoustic. 100% represents high confidence the track is acoustic."
                 },
                 danceability: {
@@ -589,6 +589,7 @@ form{
     margin-left: 5%;
     margin-right: 5%;
     margin-bottom: 5%;
+    min-width: 90%;
 }
 .disableButton{
     width: 70px;
