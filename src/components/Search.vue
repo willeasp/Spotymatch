@@ -740,7 +740,8 @@ background: -webkit-gradient(
     font-size: 1.35vw;
     font-weight: bold; 
     margin-bottom: 0;
-    margin-top:5%;
+    margin-top:5%;    
+    line-height: 90%;
 }
 
 .bigButton:hover:not(.disabledButton){
@@ -758,6 +759,8 @@ background: -webkit-gradient(
     flex:0;
     height:auto;
     
+}
+#resetButton{
 }
 
 .disabledButton{
