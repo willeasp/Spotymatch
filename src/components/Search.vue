@@ -498,6 +498,7 @@ form{
     -ms-user-select: none;
     user-select: none;
     cursor: pointer;
+    white-space: nowrap;
 }
 #genreReset:active{
     background-color: rgb(142, 177, 206);
