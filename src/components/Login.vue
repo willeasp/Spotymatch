@@ -166,7 +166,7 @@ h2 {
 form {
     margin: 0 auto;
     width: 500px;
-    height: 500px;
+    overflow: auto;
     border: 5px solid rgb(0, 0, 0);
     background: #141414;
     text-align: center;
@@ -325,6 +325,9 @@ a:visited {
     height: 4vw;
 }
 
+.forgot-password{
+    margin: 8px;
+}
 .forgot-password a {
     color: inherit;
 }

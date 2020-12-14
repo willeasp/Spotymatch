@@ -177,17 +177,14 @@ export default createStore({
          * @param {*} email Email of the user to reset
          */
         USER_RESET_PASSWORD(state, email) {
-            console.log("reset password");
             fb.passwordReset(email)
             .then(function(res) {
-                console.log(res);
                 state.dispatch("ADD_MSG", {
                     category: "Success!",
                     msg: "An email for resetting the password was sent to " + email,
                 });
             })
             .catch(function(err) {
-                console.log("fail");
                 state.dispatch("ADD_MSG", {
                     category: "Error",
                     msg: "Password reset: " + err.message,
