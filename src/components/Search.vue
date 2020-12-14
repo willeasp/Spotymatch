@@ -710,7 +710,11 @@ background: -webkit-gradient(
     position: fixed;
     overflow-y: scroll;
     -ms-overflow-style: none;
+    -webkit-overflow-scrolling: none;
     scrollbar-width: none; 
+}
+#sidebar::-webkit-scrollbar {
+  display: none;
 }
 #buttonContainer{
     width: 80%;
@@ -782,5 +786,8 @@ background: -webkit-gradient(
         from(#6192ce79),
         to(#be31a46e)
         );
+}
+h2{
+    margin-top: 15%;
 }
 </style>
