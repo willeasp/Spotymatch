@@ -1,5 +1,8 @@
 <template>
     <div id="search">
+        <div class="loadingBackgorund" v-if="loading">
+                <Loading class="loading" />
+        </div>
         <h1 id="title">Search Form</h1>
         <form>
             <div id="genreContainer">
@@ -63,9 +66,6 @@
             </div>
             <div class="bigButton" id="resetButton" @click="reset">
                 Reset
-            </div>
-            <div class="loading" v-if="loading">
-                <Loading />
             </div>
         </div>
     </div> 
@@ -764,5 +764,19 @@ background: -webkit-gradient(
 .loading{
     padding: 20px;
     text-align: center;
+    z-index: 1;
+    position: fixed;
+    top: 50%;
+    right:50%;
+    width: 10%;
+    background-color: blue;
+    border-radius: 100%;
+    background: -webkit-gradient(
+        linear,
+        left top,
+        right bottom,
+        from(#6192ce79),
+        to(#be31a46e)
+        );
 }
 </style>
