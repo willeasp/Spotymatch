@@ -588,8 +588,8 @@ form{
 .description{
     margin-left: 5%;
     margin-right: 5%;
-    margin-bottom: 5%;
-    min-width: 90%;
+    margin-bottom: 20px;
+    width: 90%;
 }
 .disableButton{
     width: 70px;
