@@ -16,7 +16,6 @@ export default createStore({
         route: window.location.hash.substring(1),
         error: null, //if request recommendation throws error
         loading: false, //request recommendation loading
-        doneLoading: false,  // request recommendation done loading
         popupMessages: [] // poppup messages are stored here example {msg: "bonk", category: "error", id:5}
     },
     mutations: {
@@ -284,6 +283,9 @@ export default createStore({
         },
         getPopupMessages(state){
             return state.popupMessages;
+        },
+        getLoading(state){
+            return state.loading;
         }
     },
     modules: {
