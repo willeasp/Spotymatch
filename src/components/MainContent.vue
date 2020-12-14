@@ -2,11 +2,6 @@
     <TopBar/>
     <Popup/>
 
-    <template v-if="route === 'Welcome'">
-        <div class="notTopBar">
-            <Welcome/>
-        </div>
-    </template>
     <template v-if="route === 'Search'">
         <div class="notTopBar">
             <Search/>
@@ -27,7 +22,6 @@
 
 <script>
 import TopBar from './TopBar';
-import Welcome from './Welcome';
 import Search from './Search';
 import Result from './Result';
 import History from './History';
@@ -38,7 +32,6 @@ export default {
 
     components: {
         TopBar,
-        Welcome,
         Search,
         Result,
         History,

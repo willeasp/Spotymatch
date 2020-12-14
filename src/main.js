@@ -38,8 +38,8 @@ firebase.auth().onAuthStateChanged((user)=>{
 
 // subscribe to hashchanges so that the routing will follow
 function hashChange() {
-    if(! ["#Welcome", "#Search", "#Result", "#History", "#Login"].find(knownRoute=> window.location.hash === knownRoute)) {
-        window.location.hash="Welcome";
+    if(! ["#Search", "#Result", "#History", "#Login"].find(knownRoute=> window.location.hash === knownRoute)) {
+        window.location.hash="Search";
     }
     
     store.dispatch("SET_ROUTE", window.location.hash.substring(1));
